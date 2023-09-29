@@ -13,7 +13,6 @@ namespace WallDesigner
         GameObject inEditeObject;
         List<FunctionItem> allFItems;
 
-        private List<Type> availableClasses;
 
         public WallEditorController() 
         {
