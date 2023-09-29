@@ -19,7 +19,9 @@ namespace WallDesigner
         {
             holder = new GameObject("Holder");
             holder.AddComponent<Camera>();
-            
+
+            allFItems = new List<FunctionItem>();
+
             inEditeObject = new GameObject("InEdit");
             inEditeObject.AddComponent<MeshFilter>();
             inEditeObject.AddComponent<MeshRenderer>();
