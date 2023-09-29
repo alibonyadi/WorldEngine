@@ -7,7 +7,7 @@ public class WallDesignedEditor : EditorWindow
 
     WallEditorController walleditor;
     RightClickMenu menuController;
-    [MenuItem("WorldEngine/WallEditor")]
+    [UnityEditor.MenuItem("WorldEngine/WallEditor")]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow(typeof(WallDesignedEditor));
@@ -20,16 +20,18 @@ public class WallDesignedEditor : EditorWindow
         if (GUILayout.Button("Initialize WallEdiotr"))
         {
             walleditor = new WallEditorController();
-            menuController = new RightClickMenu();
+            //menuController = new RightClickMenu( walleditor.GetAllFunctionItems() );
         }
 
         if (Event.current.type == EventType.ContextClick)
         {
-            GenericMenu menu = new GenericMenu();
+            //GenericMenu menu = new GenericMenu();
+            GenericMenu menu = menuController.GetAllMenuItems();
             menu.AddItem(new GUIContent("Option 1"), false, OnOption1Selected);
             menu.AddItem(new GUIContent("Option 2"), false, OnOption2Selected);
             menu.ShowAsContext();
         }
+        
 
     }
 

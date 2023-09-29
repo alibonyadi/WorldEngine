@@ -1,16 +1,50 @@
-﻿using System;
+﻿using Assets.WorldSystem.WallDesigner.Scripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor;
+using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace WallDesigner
 {
     public class RightClickMenu
     {
-        public RightClickMenu() 
+        List<RCMenuItem> menuItems;
+        public RightClickMenu(List<FunctionItem> item) 
         {
+            Update(item);
+        }
 
+        public void Update(List<FunctionItem> item) 
+        {
+            menuItems = new List<RCMenuItem>();
+            //menuItems.Clear();
+
+            for (int i = 0; i < item.Count; i++)
+            {
+                RCMenuItem menuItem = new RCMenuItem();
+                menuItem.Name = item[i].GetName();
+                menuItem.action = item[i].GetAction();
+                menuItems.Add(menuItem);
+            }
+        }
+
+
+        public GenericMenu GetAllMenuItems()
+        {
+            GenericMenu gmenu = new GenericMenu();
+
+            for (int i = 0; i < menuItems.Count; i++)
+            {
+                gmenu.AddItem(new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke );
+            }
+
+            return gmenu;
         }
     }
+
+    
 }

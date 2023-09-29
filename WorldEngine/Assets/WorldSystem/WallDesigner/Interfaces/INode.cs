@@ -1,7 +1,7 @@
 ﻿
 namespace Assets.WorldSystem.Interfaces
 {
-    internal interface INode
+    public interface INode
     {
         public bool IsConnected { get; set; }
 

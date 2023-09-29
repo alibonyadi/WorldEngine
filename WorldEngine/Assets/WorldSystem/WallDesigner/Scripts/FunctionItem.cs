@@ -1,17 +1,18 @@
 ﻿using Assets.WorldSystem.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using static UnityEditor.Progress;
 
-namespace Assets.WorldSystem.WallDesigner.Scripts
+namespace WallDesigner
 {
-    abstract class FunctionItem : MonoBehaviour
+    abstract public class FunctionItem : MonoBehaviour
     {
         public string Name { get; set; }
         public string Description { get; set; }
 
         public Vector2 position { get; set; }
+
+        public Action action { get; set; }
 
         public Rect rect { get; set; }
 
@@ -37,6 +38,11 @@ namespace Assets.WorldSystem.WallDesigner.Scripts
             GiveNodes = giveNodes;
             CalculateRect();
         }
+
+
+        public string GetName() => Name;
+        public Action GetAction() => action;
+
 
         private void CalculateRect()
         {
