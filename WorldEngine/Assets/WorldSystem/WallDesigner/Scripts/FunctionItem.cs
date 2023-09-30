@@ -1,5 +1,4 @@
-﻿using Assets.WorldSystem.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +8,7 @@ namespace WallDesigner
     abstract public class FunctionItem : MonoBehaviour
     {
         public string Name { get; set; }
+        public string ClassName { get; set; }
         public string Description { get; set; }
 
         public Vector2 position { get; set; }
@@ -17,13 +17,14 @@ namespace WallDesigner
 
         public Rect rect { get; set; }
 
-        public List<INode> GetNodes;
-        public List<INode> GiveNodes;
+        public List<Node> GetNodes;
+        public List<Node> GiveNodes;
 
         public FunctionItem()
         {
             Name = "";
-            Description = "";
+            ClassName = "FunctionItem";
+            Description = "the Base class for Functions";
             this.position = new Vector2();
             this.rect = new Rect();
             //GetNodes = getNodes;
@@ -55,7 +56,7 @@ namespace WallDesigner
         public Action GetAction() => action;
 
 
-        private void CalculateRect()
+        protected void CalculateRect()
         {
             int maxNode = Mathf.Max(GetNodes.Count, GiveNodes.Count);
 
@@ -68,14 +69,20 @@ namespace WallDesigner
         {
             GUI.Box(rect, Name);
             GUI.color = Color.red;
-            for(int i=0;i< GetNodes.Count;i++)
+            if (GetNodes.Count > 0)
             {
-                GUI.Box(new Rect(rect.x - 10, rect.y - 5 + (- 15 * i),10,10), "");
+                for (int i = 0; i < GetNodes.Count; i++)
+                {
+                    GUI.Box(new Rect(rect.x - 10, rect.y - 5 + (-15 * i), 10, 10), "");
+                }
             }
 
-            for(int i=0; i< GiveNodes.Count;i++)
+            if (GiveNodes.Count > 0)
             {
-                GUI.Box(new Rect(rect.x+rect.width, rect.y - 5 + (-15 * i), 10, 10), "");
+                for (int i = 0; i < GiveNodes.Count; i++)
+                {
+                    GUI.Box(new Rect(rect.x + rect.width, rect.y - 5 + (-15 * i), 10, 10), "");
+                }
             }
         }
     }

@@ -1,18 +1,20 @@
-using Assets.WorldSystem.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
-public class secundFunction : FunctionItem, IFunctionItem
+public class SecondFunction : FunctionItem, IFunctionItem
 {
-    public secundFunction()
+    public SecondFunction()
     {
-        Name = "SecondFunction";
+        Name = "second Function";
+        ClassName = typeof(SecondFunction).FullName;
         action = Execute;
     }
+
     public void Execute()
     {
         Debug.Log("SecondFunction Executed!!!");
     }
+
 }

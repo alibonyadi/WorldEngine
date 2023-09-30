@@ -1,5 +1,5 @@
 ﻿
-namespace Assets.WorldSystem.Interfaces
+namespace WallDesigner
 {
     public interface INode
     {

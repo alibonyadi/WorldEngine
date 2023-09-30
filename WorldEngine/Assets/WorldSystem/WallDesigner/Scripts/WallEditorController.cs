@@ -9,18 +9,19 @@ namespace WallDesigner
     public class WallEditorController
     {
         Mesh mesh;
-        GameObject holder;
+        GameObject holder;//Camera and root for Objects instantiated
         GameObject inEditeObject;
         List<FunctionItem> allFItems;
         List<FunctionItem> allFunctions;
         List<Action> FIMenuFunctions;
-
+        public bool IsInitialized { get; set; }
 
         public WallEditorController() 
         {
             holder = new GameObject("Holder");
             holder.AddComponent<Camera>();
 
+            allFunctions = new List<FunctionItem>();
             allFItems = new List<FunctionItem>();
 
             inEditeObject = new GameObject("InEdit");
@@ -33,14 +34,27 @@ namespace WallDesigner
             inEditeObject.transform.Rotate(0, 180, 0);
             mesh = new Mesh();
             inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
-            
+            IsInitialized = true;
             RefreshClasses();
             //allFItems =
         }
 
+
+
+        public void DrawFunctionItemGUI()
+        {
+            if (allFItems.Count > 0)
+            {
+                for (int i = 0; i < allFItems.Count; i++)
+                {
+                    allFItems[i].Draw();
+                }
+            }
+        }
+
         private void RefreshClasses()
         {
-            allFItems.Clear();
+            allFunctions.Clear();
 
             string path = Application.dataPath + "/WorldSystem/WallDesigner/Functions";
             string[] files = Directory.GetFiles(path, "*.cs");
@@ -54,8 +68,8 @@ namespace WallDesigner
 
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
-                    FunctionItem item = Activator.CreateInstance(type) as FunctionItem;
-                    Debug.Log(item);
+                    FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
+                    Debug.Log(item.GetName());
                     allFunctions.Add(item);
                 }
             }
@@ -76,7 +90,7 @@ namespace WallDesigner
 
         public void CreateAction(object index)
         {
-            Type type = Type.GetType(allFunctions[(int)index].Name);
+            Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
             allFItems.Add(item);
         }

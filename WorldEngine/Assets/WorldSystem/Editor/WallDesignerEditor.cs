@@ -7,6 +7,7 @@ public class WallDesignedEditor : EditorWindow
 
     WallEditorController walleditor;
     RightClickMenu menuController;
+    bool IsInitialized=false;
     [UnityEditor.MenuItem("WorldEngine/WallEditor")]
     public static void ShowWindow()
     {
@@ -17,10 +18,18 @@ public class WallDesignedEditor : EditorWindow
     {
         GUILayout.Label("My Custom Editor Window", EditorStyles.boldLabel);
 
-        if (GUILayout.Button("Initialize WallEdiotr"))
+        if (!IsInitialized)
         {
-            walleditor = new WallEditorController();
-            menuController = new RightClickMenu( walleditor);
+            if (GUILayout.Button("Initialize WallEdiotr"))
+            {
+                IsInitialized = true;
+                walleditor = new WallEditorController();
+                menuController = new RightClickMenu(walleditor);
+            }
+        }
+        else
+        {
+            walleditor.DrawFunctionItemGUI();
         }
 
         if (Event.current.type == EventType.ContextClick)
@@ -30,10 +39,5 @@ public class WallDesignedEditor : EditorWindow
             menu.ShowAsContext();
         }
 
-    }
-
-    public void AddToInstanceList(int item)
-    {
-        //walleditor.al
     }
 }

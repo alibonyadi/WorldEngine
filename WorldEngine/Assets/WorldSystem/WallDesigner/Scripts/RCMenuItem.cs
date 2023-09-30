@@ -7,6 +7,4 @@ namespace WallDesigner
         public string Name { get; set; }
         public Action<object> action;
     }
-
-    
 }

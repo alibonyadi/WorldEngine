@@ -1,21 +1,23 @@
-using Assets.WorldSystem.Interfaces;
-
-public class Node : INode
+namespace WallDesigner
 {
-    public bool IsConnected{ get; set; }
-
-    public IFunctionItem AttachedFunctionItem { get; set; }
-    public Node ConnectedNode { get; set; }
-
-    public IFunctionItem GetConnectedItem()
+    public class Node : INode
     {
-        return AttachedFunctionItem==null?null: AttachedFunctionItem;
+        public bool IsConnected { get; set; }
+
+        public IFunctionItem AttachedFunctionItem { get; set; }
+        public Node ConnectedNode { get; set; }
+
+        public IFunctionItem GetConnectedItem()
+        {
+            return AttachedFunctionItem == null ? null : AttachedFunctionItem;
+        }
+
+        public Node()
+        {
+            IsConnected = false;
+            AttachedFunctionItem = null;
+            ConnectedNode = null;
+        }
     }
 
-    Node() 
-    {
-        IsConnected = false; 
-        AttachedFunctionItem = null;
-        ConnectedNode = null;
-    }
 }
