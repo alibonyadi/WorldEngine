@@ -11,6 +11,8 @@ namespace WallDesigner
         public string ClassName { get; set; }
         public string Description { get; set; }
 
+        public Color basecolor;
+
         public Vector2 position { get; set; }
 
         public Action action { get; set; }
@@ -27,6 +29,7 @@ namespace WallDesigner
             Description = "the Base class for Functions";
             this.position = new Vector2();
             this.rect = new Rect();
+            basecolor = Color.white;
             //GetNodes = getNodes;
             //GiveNodes = giveNodes;
         }
@@ -67,7 +70,16 @@ namespace WallDesigner
 
         public void Draw()
         {
-            GUI.Box(rect, Name);
+
+
+            GUI.skin.box.normal.background = Texture2D.whiteTexture;
+            GUI.color = basecolor;
+            GUI.contentColor = Color.black;
+            if (GUI.RepeatButton(rect, Name))
+            {
+                position = Event.current.mousePosition;
+                rect = new Rect(position.x - rect.width*0.5f, position.y- rect.height*0.5f, rect.width, rect.height);
+            }
             GUI.color = Color.red;
             if (GetNodes.Count > 0)
             {

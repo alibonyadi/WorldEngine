@@ -14,6 +14,7 @@ namespace WallDesigner
         List<FunctionItem> allFItems;
         List<FunctionItem> allFunctions;
         List<Action> FIMenuFunctions;
+        Vector2 mousePos;
         public bool IsInitialized { get; set; }
 
         public WallEditorController() 
@@ -43,6 +44,7 @@ namespace WallDesigner
 
         public void DrawFunctionItemGUI()
         {
+            mousePos = Event.current.mousePosition;
             if (allFItems.Count > 0)
             {
                 for (int i = 0; i < allFItems.Count; i++)
@@ -92,6 +94,7 @@ namespace WallDesigner
         {
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
+            item.position = mousePos;
             allFItems.Add(item);
         }
     }
