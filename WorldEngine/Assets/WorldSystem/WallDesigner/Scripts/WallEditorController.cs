@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using WallDesigner;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace WallDesigner
 {
@@ -95,6 +96,7 @@ namespace WallDesigner
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
             item.position = mousePos;
+            item.rect = new Rect(mousePos.x, mousePos.y, item.rect.width, item.rect.height);
             allFItems.Add(item);
         }
     }
