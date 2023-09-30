@@ -12,7 +12,6 @@ public class SampleFunction : FunctionItem , IFunctionItem
         action = Execute;
     }
 
-
     public void Execute()
     {
         Debug.Log("First Function Executed!!!");

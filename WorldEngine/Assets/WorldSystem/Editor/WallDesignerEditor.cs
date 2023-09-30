@@ -29,7 +29,6 @@ public class WallDesignedEditor : EditorWindow
             GenericMenu menu = menuController.GetAllMenuItems();
             menu.ShowAsContext();
         }
-        
 
     }
 

@@ -54,7 +54,8 @@ namespace WallDesigner
 
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
-                    FunctionItem item = (FunctionItem) Activator.CreateInstance(type);
+                    FunctionItem item = Activator.CreateInstance(type) as FunctionItem;
+                    Debug.Log(item);
                     allFunctions.Add(item);
                 }
             }
