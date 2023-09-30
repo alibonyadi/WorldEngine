@@ -5,7 +5,7 @@ namespace WallDesigner
     public struct RCMenuItem
     {
         public string Name { get; set; }
-        public Action action;
+        public Action<object> action;
     }
 
     

@@ -12,6 +12,8 @@ namespace WallDesigner
         GameObject holder;
         GameObject inEditeObject;
         List<FunctionItem> allFItems;
+        List<FunctionItem> allFunctions;
+        List<Action> FIMenuFunctions;
 
 
         public WallEditorController() 
@@ -53,7 +55,7 @@ namespace WallDesigner
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
                     FunctionItem item = (FunctionItem) Activator.CreateInstance(type);
-                    allFItems.Add(item);
+                    allFunctions.Add(item);
                 }
             }
 
@@ -61,7 +63,21 @@ namespace WallDesigner
 
         public List<FunctionItem> GetAllFunctionItems()
         {
-            return allFItems;
+            return allFunctions;
+        }
+
+        public Action<object> GetCreateAction()
+        {
+            Action<object> action = null;
+            action = CreateAction;
+            return action;
+        }
+
+        public void CreateAction(object index)
+        {
+            Type type = Type.GetType(allFunctions[(int)index].Name);
+            FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
+            allFItems.Add(item);
         }
     }
 }

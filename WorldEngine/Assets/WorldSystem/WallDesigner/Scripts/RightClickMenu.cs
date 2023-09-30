@@ -9,21 +9,22 @@ namespace WallDesigner
     public class RightClickMenu
     {
         List<RCMenuItem> menuItems;
-        public RightClickMenu(List<FunctionItem> item) 
+        public RightClickMenu(WallEditorController CTRL) 
         {
-            Update(item);
+            Update(CTRL);
         }
 
-        public void Update(List<FunctionItem> item) 
+        public void Update(WallEditorController CTRL) 
         {
             menuItems = new List<RCMenuItem>();
+            List<FunctionItem> item = CTRL.GetAllFunctionItems();
             //menuItems.Clear();
 
             for (int i = 0; i < item.Count; i++)
             {
                 RCMenuItem menuItem = new RCMenuItem();
                 menuItem.Name = item[i].GetName();
-                menuItem.action = item[i].GetAction();
+                menuItem.action = CTRL.GetCreateAction();
                 menuItems.Add(menuItem);
             }
             Debug.Log("Menu Updated!!");
@@ -36,11 +37,16 @@ namespace WallDesigner
 
             for (int i = 0; i < menuItems.Count; i++)
             {
-                
-                gmenu.AddItem(new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke );
+                //gmenu.AddItem(new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke );
+                gmenu.AddItem( new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke, i);
             }
 
             return gmenu;
+        }
+
+        public void tempfunction(object a)
+        {
+
         }
     }
 

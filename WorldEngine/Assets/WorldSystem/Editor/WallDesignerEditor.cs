@@ -20,7 +20,7 @@ public class WallDesignedEditor : EditorWindow
         if (GUILayout.Button("Initialize WallEdiotr"))
         {
             walleditor = new WallEditorController();
-            menuController = new RightClickMenu( walleditor.GetAllFunctionItems() );
+            menuController = new RightClickMenu( walleditor);
         }
 
         if (Event.current.type == EventType.ContextClick)
@@ -33,4 +33,8 @@ public class WallDesignedEditor : EditorWindow
 
     }
 
+    public void AddToInstanceList(int item)
+    {
+        //walleditor.al
+    }
 }
