@@ -112,7 +112,7 @@ namespace WallDesigner
             {
                 for (int i = 0; i < GetNodes.Count; i++)
                 {
-                    GUI.Button(new Rect(rect.x - 10, rect.y - 5 - (+15 * i), 10, 10), "");
+                    GUI.Button(new Rect(rect.x - 10, rect.y + 5 + (+15 * i), 10, 10), "");
                 }
             }
 
@@ -120,7 +120,7 @@ namespace WallDesigner
             {
                 for (int i = 0; i < GiveNodes.Count; i++)
                 {
-                    GUI.Button(new Rect(rect.x + rect.width, rect.y - 5 + (-15 * i), 10, 10), "");
+                    GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * i), 10, 10), "");
                 }
             }
         }
