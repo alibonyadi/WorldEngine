@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 namespace WallDesigner
 {
     abstract public class FunctionItem : MonoBehaviour
     {
+        private bool isDragging = false;
         public string Name { get; set; }
         public string ClassName { get; set; }
         public string Description { get; set; }
@@ -17,7 +19,7 @@ namespace WallDesigner
 
         public Action action { get; set; }
 
-        public Rect rect { get; set; }
+        public Rect rect;
 
         public List<Node> GetNodes;
         public List<Node> GiveNodes;
@@ -75,17 +77,42 @@ namespace WallDesigner
             GUI.skin.box.normal.background = Texture2D.whiteTexture;
             GUI.color = basecolor;
             GUI.contentColor = Color.black;
+
             if (GUI.RepeatButton(rect, Name))
             {
                 position = Event.current.mousePosition;
-                rect = new Rect(position.x - rect.width*0.5f, position.y- rect.height*0.5f, rect.width, rect.height);
+                rect = new Rect(position.x - rect.width * 0.5f, position.y - rect.height * 0.5f, rect.width, rect.height);
             }
+
+
+            if (GUI.RepeatButton(rect, Name))
+            {
+                if (!isDragging)
+                {
+                    isDragging = true;
+                    position = Event.current.mousePosition;
+                    //rect = new Rect(position.x - rect.width * 0.5f, position.y - rect.height * 0.5f, rect.width, rect.height);
+                }
+            }
+            else
+            {
+                isDragging = false;
+            }
+
+            if(isDragging)
+            {
+                Vector2 dragDelta = Event.current.mousePosition - position;
+                //rect = new Rect(rect.x + dragDelta.x,);
+                rect.x += dragDelta.x;
+                rect.y += dragDelta.y;
+            }
+
             GUI.color = Color.red;
             if (GetNodes.Count > 0)
             {
                 for (int i = 0; i < GetNodes.Count; i++)
                 {
-                    GUI.Box(new Rect(rect.x - 10, rect.y - 5 + (-15 * i), 10, 10), "");
+                    GUI.Button(new Rect(rect.x - 10, rect.y - 5 - (+15 * i), 10, 10), "");
                 }
             }
 
@@ -93,8 +120,27 @@ namespace WallDesigner
             {
                 for (int i = 0; i < GiveNodes.Count; i++)
                 {
-                    GUI.Box(new Rect(rect.x + rect.width, rect.y - 5 + (-15 * i), 10, 10), "");
+                    GUI.Button(new Rect(rect.x + rect.width, rect.y - 5 + (-15 * i), 10, 10), "");
                 }
+            }
+        }
+
+        void DragButton(Rect buttonRect)
+        {
+            switch (Event.current.type)
+            {
+                case EventType.Repaint:
+                    GUI.RepeatButton(buttonRect, "Button ");
+                    break;
+                case EventType.MouseDrag:
+                    buttonRect.x += Event.current.delta.x;
+                    buttonRect.y += Event.current.delta.y;
+                    break;
+                case EventType.MouseUp:
+                    GUIUtility.hotControl = 0;
+                    EditorGUIUtility.SetWantsMouseJumping(0);
+                    Event.current.Use();
+                    break;
             }
         }
     }
