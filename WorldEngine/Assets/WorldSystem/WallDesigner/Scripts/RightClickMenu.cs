@@ -26,6 +26,7 @@ namespace WallDesigner
                 menuItem.action = item[i].GetAction();
                 menuItems.Add(menuItem);
             }
+            Debug.Log("Menu Updated!!");
         }
 
 
@@ -35,6 +36,7 @@ namespace WallDesigner
 
             for (int i = 0; i < menuItems.Count; i++)
             {
+                
                 gmenu.AddItem(new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke );
             }
 

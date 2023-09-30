@@ -1,6 +1,7 @@
 ﻿using Assets.WorldSystem.Interfaces;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace WallDesigner
@@ -19,6 +20,16 @@ namespace WallDesigner
         public List<INode> GetNodes;
         public List<INode> GiveNodes;
 
+        public FunctionItem()
+        {
+            Name = "";
+            Description = "";
+            this.position = new Vector2();
+            this.rect = new Rect();
+            //GetNodes = getNodes;
+            //GiveNodes = giveNodes;
+        }
+        /*
         public FunctionItem(string name,string description, Vector2 position, List<INode> getNodes, List<INode> giveNodes, Rect rect)
         {
             Name = name;
@@ -37,7 +48,7 @@ namespace WallDesigner
             GetNodes = getNodes;
             GiveNodes = giveNodes;
             CalculateRect();
-        }
+        }*/
 
 
         public string GetName() => Name;

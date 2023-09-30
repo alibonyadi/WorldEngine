@@ -27,21 +27,10 @@ public class WallDesignedEditor : EditorWindow
         {
             //GenericMenu menu = new GenericMenu();
             GenericMenu menu = menuController.GetAllMenuItems();
-            menu.AddItem(new GUIContent("Option 1"), false, OnOption1Selected);
-            menu.AddItem(new GUIContent("Option 2"), false, OnOption2Selected);
             menu.ShowAsContext();
         }
         
 
     }
 
-    void OnOption1Selected()
-    {
-        Debug.Log("Option 1 selected");
-    }
-
-    void OnOption2Selected()
-    {
-        Debug.Log("Option 2 selected");
-    }
 }
