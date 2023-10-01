@@ -107,12 +107,18 @@ namespace WallDesigner
                 rect.y += dragDelta.y;
             }
 
-            GUI.color = Color.red;
             if (GetNodes.Count > 0)
             {
                 for (int i = 0; i < GetNodes.Count; i++)
                 {
-                    GUI.Button(new Rect(rect.x - 10, rect.y + 5 + (+15 * i), 10, 10), "");
+                    GUI.color = GetNodes[i].color;
+                    if (GUI.Button(new Rect(rect.x - 10, rect.y + 5 + (+15 * i), 10, 10), ""))
+                    {
+                        Debug.Log(i + "s Get node Pressed!!!");
+                        GetNodes[i].clicked = true;
+                        GetNodes[i].color = Color.green;
+
+                    }
                 }
             }
 
@@ -120,27 +126,15 @@ namespace WallDesigner
             {
                 for (int i = 0; i < GiveNodes.Count; i++)
                 {
-                    GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * i), 10, 10), "");
-                }
-            }
-        }
+                    GUI.color = GiveNodes[i].color;
 
-        void DragButton(Rect buttonRect)
-        {
-            switch (Event.current.type)
-            {
-                case EventType.Repaint:
-                    GUI.RepeatButton(buttonRect, "Button ");
-                    break;
-                case EventType.MouseDrag:
-                    buttonRect.x += Event.current.delta.x;
-                    buttonRect.y += Event.current.delta.y;
-                    break;
-                case EventType.MouseUp:
-                    GUIUtility.hotControl = 0;
-                    EditorGUIUtility.SetWantsMouseJumping(0);
-                    Event.current.Use();
-                    break;
+                    if(GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * i), 10, 10), ""))
+                    {
+                        Debug.Log(i + "s Give node Pressed!!!");
+                        GiveNodes[i].clicked = true;
+                        GiveNodes[i].color = Color.green;
+                    }
+                }
             }
         }
     }
