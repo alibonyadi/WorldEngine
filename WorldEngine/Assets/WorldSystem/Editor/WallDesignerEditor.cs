@@ -7,6 +7,7 @@ public class WallDesignedEditor : EditorWindow
 
     WallEditorController walleditor;
     RightClickMenu menuController;
+    ConnectLineController connectLineController;
     bool IsInitialized=false;
     [UnityEditor.MenuItem("WorldEngine/WallEditor")]
     public static void ShowWindow()
@@ -25,6 +26,7 @@ public class WallDesignedEditor : EditorWindow
                 IsInitialized = true;
                 walleditor = new WallEditorController();
                 menuController = new RightClickMenu(walleditor);
+                connectLineController = new ConnectLineController();
             }
         }
         else
@@ -39,6 +41,7 @@ public class WallDesignedEditor : EditorWindow
             menu.ShowAsContext();
         }
 
+        Repaint();
     }
 
 

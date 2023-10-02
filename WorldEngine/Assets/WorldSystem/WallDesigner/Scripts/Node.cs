@@ -7,6 +7,7 @@ namespace WallDesigner
         public bool IsConnected { get; set; }
         public Color color;
         public bool clicked = false;
+        public Vector3 position = Vector3.zero;
         public IFunctionItem AttachedFunctionItem { get; set; }
         public Node ConnectedNode { get; set; }
 
@@ -16,6 +17,28 @@ namespace WallDesigner
         }
 
         public Node()
+        {
+            IsConnected = false;
+            color = Color.red;
+            AttachedFunctionItem = null;
+            ConnectedNode = null;
+        }
+    }
+
+    public class GetNode:Node
+    {
+        public GetNode()
+        {
+            IsConnected = false;
+            color = Color.red;
+            AttachedFunctionItem = null;
+            ConnectedNode = null;
+        }
+    }
+
+    public class GiveNode:Node
+    {
+        public GiveNode()
         {
             IsConnected = false;
             color = Color.red;

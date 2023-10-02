@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
-public class DrawPlane : FunctionItem , IFunctionItem
+
+public class DrawPlane : FunctionItem, IFunctionItem
 {
+    private Mesh outputMesh;
     public DrawPlane()
     {
         Name = "Draw Plane";
+        outputMesh = new Mesh();
         ClassName = typeof(DrawPlane).FullName;
         basecolor = Color.white;
         action = Execute;
@@ -17,7 +20,7 @@ public class DrawPlane : FunctionItem , IFunctionItem
         GiveNodes.Add((Node)node);
         //position = new Vector2(200, 200);
         CalculateRect();
-        rect = new Rect(position.x,position.y, rect.width,rect.height);
+        rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
     public void Execute()

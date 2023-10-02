@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using WallDesigner;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace WallDesigner
 {
@@ -40,9 +38,6 @@ namespace WallDesigner
             RefreshClasses();
             //allFItems =
         }
-
-
-
         public void DrawFunctionItemGUI()
         {
             mousePos = Event.current.mousePosition;
@@ -54,7 +49,6 @@ namespace WallDesigner
                 }
             }
         }
-
         private void RefreshClasses()
         {
             allFunctions.Clear();
@@ -78,19 +72,16 @@ namespace WallDesigner
             }
 
         }
-
         public List<FunctionItem> GetAllFunctionItems()
         {
             return allFunctions;
         }
-
         public Action<object> GetCreateAction()
         {
             Action<object> action = null;
             action = CreateAction;
             return action;
         }
-
         public void CreateAction(object index)
         {
             Type type = Type.GetType(allFunctions[(int)index].ClassName);

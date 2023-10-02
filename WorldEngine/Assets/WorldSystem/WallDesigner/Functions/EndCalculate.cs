@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
-public class EndCalculate : FunctionItem , IFunctionItem
+public class EndCalculate : FunctionItem, IFunctionItem
 {
     public EndCalculate()
     {
@@ -13,11 +13,12 @@ public class EndCalculate : FunctionItem , IFunctionItem
         action = Execute;
         GiveNodes = new List<Node>();
         GetNodes = new List<Node>();
-        Node node = new Node();
+        GetNode node = new GetNode();
+        node.AttachedFunctionItem = this;
         GetNodes.Add((Node)node);
         //position = new Vector2(200, 200);
         CalculateRect();
-        rect = new Rect(position.x,position.y, rect.width,rect.height);
+        rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
     public void Execute()
