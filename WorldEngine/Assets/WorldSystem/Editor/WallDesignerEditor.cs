@@ -17,7 +17,7 @@ public class WallDesignedEditor : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("My Custom Editor Window", EditorStyles.boldLabel);
+        GUILayout.Label("Right Click For Menu!!!", EditorStyles.boldLabel);
 
         if (!IsInitialized)
         {
@@ -26,7 +26,6 @@ public class WallDesignedEditor : EditorWindow
                 IsInitialized = true;
                 walleditor = new WallEditorController();
                 menuController = new RightClickMenu(walleditor);
-                connectLineController = new ConnectLineController();
             }
         }
         else

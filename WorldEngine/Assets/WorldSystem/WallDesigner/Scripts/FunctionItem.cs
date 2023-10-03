@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 namespace WallDesigner
 {
-    abstract public class FunctionItem : MonoBehaviour
+    abstract public class FunctionItem
     {
         private bool isDragging = false;
         public string Name { get; set; }
         public string ClassName { get; set; }
         public string Description { get; set; }
-
         public Color basecolor;
-
         public Vector2 position { get; set; }
-
         public Action action { get; set; }
-
         public Rect rect;
-
         public List<Node> GetNodes;
         public List<Node> GiveNodes;
-
         public FunctionItem()
         {
             Name = "";
@@ -32,119 +27,100 @@ namespace WallDesigner
             this.position = new Vector2();
             this.rect = new Rect();
             basecolor = Color.white;
-            //GetNodes = getNodes;
-            //GiveNodes = giveNodes;
         }
-
         public string GetName() => Name;
         public Action GetAction() => action;
-
-
         protected void CalculateRect()
         {
             int maxNode = Mathf.Max(GetNodes.Count, GiveNodes.Count);
-
             float heigh = maxNode * 10 + 25;
             float width = 150;
-            rect = new Rect(0,0,width,heigh);
+            rect = new Rect(0, 0, width, heigh);
         }
-
         public void Draw()
         {
-
-
             GUI.skin.box.normal.background = Texture2D.whiteTexture;
             GUI.color = basecolor;
             GUI.contentColor = Color.black;
-
-            MoveOnDrag();
-
-            if (GetNodes.Count > 0)
-            {
-                for (int i = 0; i < GetNodes.Count; i++)
-                {
-                    GetNodes[i].position = new Vector3(rect.x - 10, rect.y + 5 + (+15 * i), 0);
-                    DrawNodeLine(GetNodes[i]);
-                    GUI.color = GetNodes[i].color;
-                    if (GUI.Button(new Rect(rect.x - 10, rect.y + 5 + (+15 * i), 10, 10), ""))
-                    {
-                        Debug.Log(i + "s Get node Pressed!!!");
-                        GetNodes[i].clicked = true;
-                        GetNodes[i].color = Color.green;
-
-                    }
-                }
-            }
-
-            if (GiveNodes.Count > 0)
-            {
-                
-                for (int i = 0; i < GiveNodes.Count; i++)
-                {
-                    GiveNodes[i].position = new Vector3(rect.x + rect.width, rect.y + 5 + (15 * i),0);
-                    DrawNodeLine(GiveNodes[i]);
-                    GUI.color = GiveNodes[i].color;
-
-                    if (GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * i), 10, 10), ""))
-                    {
-                        Debug.Log(i + "s Give node Pressed!!!");
-                        GiveNodes[i].clicked = true;
-                        GiveNodes[i].color = Color.green;
-                    }
-                }
-            }
+            DrawAndDrag();
+            DrawNodes();
         }
-
-        private void MoveOnDrag()
+        private void DrawAndDrag()
         {
             if (GUI.RepeatButton(rect, Name))
             {
                 position = Event.current.mousePosition;
                 rect = new Rect(position.x - rect.width * 0.5f, position.y - rect.height * 0.5f, rect.width, rect.height);
             }
-
-
-            if (GUI.RepeatButton(rect, Name))
+        }
+        private void DrawNodes()
+        {
+            if (GetNodes.Count > 0)
             {
-                if (!isDragging)
+                for (int i = 0; i < GetNodes.Count; i++)
                 {
-                    isDragging = true;
-                    position = Event.current.mousePosition;
-                    //rect = new Rect(position.x - rect.width * 0.5f, position.y - rect.height * 0.5f, rect.width, rect.height);
+                    DrawGetNode(i);
                 }
             }
-            else
-            {
-                isDragging = false;
-            }
 
-            if (isDragging)
+            if (GiveNodes.Count > 0)
             {
-                Vector2 dragDelta = Event.current.mousePosition - position;
-                //rect = new Rect(rect.x + dragDelta.x,);
-                rect.x += dragDelta.x;
-                rect.y += dragDelta.y;
+                for (int i = 0; i < GiveNodes.Count; i++)
+                {
+                    GiveNodes[i].position = new Vector3(rect.x + rect.width + 5, rect.y + 5 + (15 * i) + 5, 0);
+                    DrawNodeLine(GiveNodes[i], false);
+                    GUI.color = GiveNodes[i].color;
+                    if (GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * i), 10, 10), ""))
+                    {
+                        if (ConnectLineController.Instance.IsLineInDraw())
+                        {
+                            Debug.Log(i + "s Give node Pressed!!!");
+                            GiveNodes[i].clicked = true;
+                            GiveNodes[i].color = Color.green;
+                        }
+
+                    }
+                }
             }
         }
+        private void DrawGetNode(int index)
+        {
+            GetNodes[index].position = new Vector3(rect.x - 10 + 5, rect.y + 5 + (+15 * index) + 5, 0);
+            DrawNodeLine(GetNodes[index], true);
+            GUI.color = GetNodes[index].color;
+            if (GUI.Button(new Rect(rect.x - 10, rect.y + 5 + (+15 * index), 10, 10), ""))
+            {
+                NodeClicked(GetNodes[index], true);
+            }
+        }
+        private void NodeClicked(Node node,bool isGetNode)
+        {
+            if (!ConnectLineController.Instance.IsLineInDraw())
+            {
+                node.clicked = true;
+                node.color = Color.green;
+                ConnectLineController.Instance.isLineInDraw = true;
+                ConnectLineController.Instance.SetInDragNode(node);
+            }
+            else if (ConnectLineController.Instance.GetInDragNode() == node)
+            {
+                node.clicked = false;
+                node.color = Color.red;
+                ConnectLineController.Instance.isLineInDraw = false;
+                ConnectLineController.Instance.SetInDragNode(null);
+            }
+            else if( ( ConnectLineController.Instance.isGetNodeInDraw() && isGetNode) || (!ConnectLineController.Instance.isGetNodeInDraw() && !isGetNode))
+            {
 
-        private void DrawNodeLine(Node node)
+            }
+            
+        }
+        private void DrawNodeLine(Node node,bool isGetNode)
         {
             if(node.clicked)
             {
-                DrawLine(node.position, Event.current.mousePosition, Color.yellow, 1);
+                ConnectLineController.DrawLine(node.position, Event.current.mousePosition, Color.yellow, 1);
             }
-        }
-
-        private void DrawLine(Vector3 start, Vector3 end, Color color, float width)
-        {
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(0, 0, color);
-            texture.Apply();
-
-            float angle = Mathf.Atan2(end.y - start.y, end.x - start.x) * Mathf.Rad2Deg;
-            GUIUtility.RotateAroundPivot(angle, start);
-            GUI.DrawTexture(new Rect(start.x, start.y, (end - start).magnitude, width), texture);
-            GUIUtility.RotateAroundPivot(-angle, start);
         }
     }
 }

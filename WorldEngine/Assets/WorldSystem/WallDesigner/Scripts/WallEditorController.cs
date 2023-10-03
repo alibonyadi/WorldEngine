@@ -13,6 +13,7 @@ namespace WallDesigner
         List<FunctionItem> allFItems;
         List<FunctionItem> allFunctions;
         List<Action> FIMenuFunctions;
+        public ConnectLineController connectLineController;
         Vector2 mousePos;
         public bool IsInitialized { get; set; }
 
