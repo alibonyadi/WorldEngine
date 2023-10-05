@@ -60,6 +60,16 @@ namespace WallDesigner
                 ConnectTwoNode(node);
             }
         }
+        public void CheckClick()
+        {
+            if(isLineInDraw)
+            {
+                inDragNode.clicked = false;
+                inDragNode.color = inDragNode.ConnectedNode == null ? Color.red : Color.blue;
+                ConnectLineController.Instance.SetInDragNode(null);
+                isLineInDraw = false;
+            }
+        }
         private static void CheckNotLineInDrawState(Node node, bool isGetNode)
         {
             if(!isGetNode || (isGetNode && node.ConnectedNode == null))

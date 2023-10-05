@@ -41,6 +41,11 @@ public class WallDesignedEditor : EditorWindow
             menu.ShowAsContext();
         }
 
+        if(Event.current.type == EventType.MouseUp)
+        {
+            ConnectLineController.Instance.CheckClick();
+        }
+
         Repaint();
     }
 
