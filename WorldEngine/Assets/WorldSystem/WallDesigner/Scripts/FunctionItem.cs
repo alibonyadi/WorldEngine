@@ -62,7 +62,6 @@ namespace WallDesigner
                     DrawGetNode(i);
                 }
             }
-
             if (GiveNodes.Count > 0)
             {
                 for (int i = 0; i < GiveNodes.Count; i++)
@@ -71,7 +70,7 @@ namespace WallDesigner
                 }
             }
         }
-
+        //this two method can be one and get array as argument
         private void DrawGiveNode(int index)
         {
             GiveNodes[index].position = new Vector3(rect.x + rect.width + 5, rect.y + 5 + (15 * index) + 5, 0);
@@ -79,18 +78,9 @@ namespace WallDesigner
             GUI.color = GiveNodes[index].color;
             if (GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * index), 10, 10), ""))
             {
-
-                NodeClicked(GiveNodes[index], false);
-                /*if (ConnectLineController.Instance.IsLineInDraw())
-                {
-                    Debug.Log(index + "s Give node Pressed!!!");
-                    GiveNodes[index].clicked = true;
-                    GiveNodes[index].color = Color.green;
-                }*/
-
+                ConnectLineController.NodeClicked(GiveNodes[index], false);
             }
         }
-
         private void DrawGetNode(int index)
         {
             GetNodes[index].position = new Vector3(rect.x - 10 + 5, rect.y + 5 + (+15 * index) + 5, 0);
@@ -98,31 +88,14 @@ namespace WallDesigner
             GUI.color = GetNodes[index].color;
             if (GUI.Button(new Rect(rect.x - 10, rect.y + 5 + (+15 * index), 10, 10), ""))
             {
-                NodeClicked(GetNodes[index], true);
+                ConnectLineController.NodeClicked(GetNodes[index], true);
+            }
+            
+            if (GetNodes[index].ConnectedNode != null)
+            {
+                ConnectLineController.DrawLine(GetNodes[index].ConnectedNode.position, GetNodes[index].position, Color.green, 2);
             }
         }
-        private void NodeClicked(Node node,bool isGetNode)
-        {
-            if (!ConnectLineController.Instance.IsLineInDraw())
-            {
-                node.clicked = true;
-                node.color = Color.green;
-                ConnectLineController.Instance.isLineInDraw = true;
-                ConnectLineController.Instance.SetInDragNode(node);
-            }
-            else if (ConnectLineController.Instance.GetInDragNode() == node)
-            {
-                node.clicked = false;
-                node.color = Color.red;
-                ConnectLineController.Instance.isLineInDraw = false;
-                ConnectLineController.Instance.SetInDragNode(null);
-            }
-            else if( ( ConnectLineController.Instance.isGetNodeInDraw() && isGetNode) || (!ConnectLineController.Instance.isGetNodeInDraw() && !isGetNode))
-            {
-
-            }
-        }
-
         private void DrawNodeLine(Node node,bool isGetNode)
         {
             if(node.clicked)

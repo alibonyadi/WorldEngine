@@ -28,5 +28,4 @@ namespace WallDesigner
         public void SetController(WallEditorController c) => controller = c;
         public WallEditorController GetController() => controller;
     }
-
 }

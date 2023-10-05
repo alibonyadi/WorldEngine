@@ -17,15 +17,12 @@ namespace WallDesigner
         public ConnectLineController connectLineController;
         Vector2 mousePos;
         public bool IsInitialized { get; set; }
-
         private WallEditorController() 
         {
             holder = new GameObject("Holder");
             holder.AddComponent<Camera>();
-
             allFunctions = new List<FunctionItem>();
             allFItems = new List<FunctionItem>();
-
             inEditeObject = new GameObject("InEdit");
             inEditeObject.AddComponent<MeshFilter>();
             inEditeObject.AddComponent<MeshRenderer>();
@@ -36,11 +33,10 @@ namespace WallDesigner
             inEditeObject.transform.Rotate(0, 180, 0);
             mesh = new Mesh();
             inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
-            IsInitialized = true;
+            //IsInitialized = true;
             RefreshClasses();
             //allFItems =
         }
-
         public static WallEditorController Instance
         {
             get
@@ -52,7 +48,6 @@ namespace WallDesigner
                 return instance;
             }
         }
-
         public void DrawFunctionItemGUI()
         {
             mousePos = Event.current.mousePosition;
@@ -67,10 +62,8 @@ namespace WallDesigner
         private void RefreshClasses()
         {
             allFunctions.Clear();
-
             string path = Application.dataPath + "/WorldSystem/WallDesigner/Functions";
             string[] files = Directory.GetFiles(path, "*.cs");
-
             foreach (string file in files)
             {
                 string className = Path.GetFileNameWithoutExtension(file);
@@ -85,12 +78,8 @@ namespace WallDesigner
                     allFunctions.Add(item);
                 }
             }
-
         }
-        public List<FunctionItem> GetAllFunctionItems()
-        {
-            return allFunctions;
-        }
+        public List<FunctionItem> GetAllFunctionItems() => allFunctions;
         public Action<object> GetCreateAction()
         {
             Action<object> action = null;

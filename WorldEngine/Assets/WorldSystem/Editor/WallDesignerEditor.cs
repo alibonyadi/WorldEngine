@@ -19,11 +19,12 @@ public class WallDesignedEditor : EditorWindow
     {
         GUILayout.Label("Right Click For Menu!!!", EditorStyles.boldLabel);
 
-        if (!IsInitialized)
+        if (!WallEditorController.Instance.IsInitialized)
         {
             if (GUILayout.Button("Initialize WallEdiotr"))
             {
                 IsInitialized = true;
+                WallEditorController.Instance.IsInitialized = true;
                 walleditor = WallEditorController.Instance;
                 menuController = new RightClickMenu(walleditor);
             }
@@ -42,6 +43,5 @@ public class WallDesignedEditor : EditorWindow
 
         Repaint();
     }
-
 
 }
