@@ -14,7 +14,6 @@ namespace WallDesigner
         {
             isLineInDraw = false;
             inDragNode = new Node();
-
         }
 
         public static ConnectLineController Instance

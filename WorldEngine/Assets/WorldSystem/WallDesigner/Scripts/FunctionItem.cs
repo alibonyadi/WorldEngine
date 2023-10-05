@@ -67,22 +67,30 @@ namespace WallDesigner
             {
                 for (int i = 0; i < GiveNodes.Count; i++)
                 {
-                    GiveNodes[i].position = new Vector3(rect.x + rect.width + 5, rect.y + 5 + (15 * i) + 5, 0);
-                    DrawNodeLine(GiveNodes[i], false);
-                    GUI.color = GiveNodes[i].color;
-                    if (GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * i), 10, 10), ""))
-                    {
-                        if (ConnectLineController.Instance.IsLineInDraw())
-                        {
-                            Debug.Log(i + "s Give node Pressed!!!");
-                            GiveNodes[i].clicked = true;
-                            GiveNodes[i].color = Color.green;
-                        }
-
-                    }
+                    DrawGiveNode(i);
                 }
             }
         }
+
+        private void DrawGiveNode(int index)
+        {
+            GiveNodes[index].position = new Vector3(rect.x + rect.width + 5, rect.y + 5 + (15 * index) + 5, 0);
+            DrawNodeLine(GiveNodes[index], false);
+            GUI.color = GiveNodes[index].color;
+            if (GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * index), 10, 10), ""))
+            {
+
+                NodeClicked(GiveNodes[index], false);
+                /*if (ConnectLineController.Instance.IsLineInDraw())
+                {
+                    Debug.Log(index + "s Give node Pressed!!!");
+                    GiveNodes[index].clicked = true;
+                    GiveNodes[index].color = Color.green;
+                }*/
+
+            }
+        }
+
         private void DrawGetNode(int index)
         {
             GetNodes[index].position = new Vector3(rect.x - 10 + 5, rect.y + 5 + (+15 * index) + 5, 0);
@@ -113,8 +121,8 @@ namespace WallDesigner
             {
 
             }
-            
         }
+
         private void DrawNodeLine(Node node,bool isGetNode)
         {
             if(node.clicked)

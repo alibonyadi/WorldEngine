@@ -8,6 +8,7 @@ namespace WallDesigner
     public class WallEditorController
     {
         Mesh mesh;
+        private static WallEditorController instance;
         GameObject holder;//Camera and root for Objects instantiated
         GameObject inEditeObject;
         List<FunctionItem> allFItems;
@@ -17,7 +18,7 @@ namespace WallDesigner
         Vector2 mousePos;
         public bool IsInitialized { get; set; }
 
-        public WallEditorController() 
+        private WallEditorController() 
         {
             holder = new GameObject("Holder");
             holder.AddComponent<Camera>();
@@ -39,6 +40,19 @@ namespace WallDesigner
             RefreshClasses();
             //allFItems =
         }
+
+        public static WallEditorController Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new WallEditorController();
+                }
+                return instance;
+            }
+        }
+
         public void DrawFunctionItemGUI()
         {
             mousePos = Event.current.mousePosition;

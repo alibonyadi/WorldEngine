@@ -24,7 +24,7 @@ public class WallDesignedEditor : EditorWindow
             if (GUILayout.Button("Initialize WallEdiotr"))
             {
                 IsInitialized = true;
-                walleditor = new WallEditorController();
+                walleditor = WallEditorController.Instance;
                 menuController = new RightClickMenu(walleditor);
             }
         }
