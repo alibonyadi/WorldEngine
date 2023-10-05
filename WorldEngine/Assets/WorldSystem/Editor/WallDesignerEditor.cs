@@ -4,7 +4,6 @@ using WallDesigner;
 
 public class WallDesignedEditor : EditorWindow
 {
-
     WallEditorController walleditor;
     RightClickMenu menuController;
     ConnectLineController connectLineController;
@@ -14,25 +13,43 @@ public class WallDesignedEditor : EditorWindow
     {
         EditorWindow.GetWindow(typeof(WallDesignedEditor));
     }
-
     private void OnGUI()
     {
-        GUILayout.Label("Right Click For Menu!!!", EditorStyles.boldLabel);
+        
+       GUILayout.Label("Right Click For Menu!!!", EditorStyles.boldLabel);
 
-        if (!WallEditorController.Instance.IsInitialized)
+       if (!WallEditorController.Instance.IsInitialized)
         {
             if (GUILayout.Button("Initialize WallEdiotr"))
             {
                 IsInitialized = true;
                 WallEditorController.Instance.IsInitialized = true;
                 walleditor = WallEditorController.Instance;
-                menuController = new RightClickMenu(walleditor);
+                menuController = new RightClickMenu();
             }
         }
         else
         {
+            if(walleditor == null)
+                walleditor = WallEditorController.Instance;
+            /*int selected = 0;
+            string[] menus = { "Reset", "Draw", "ccc" };
+            selected = GUILayout.Toolbar(selected, menus);*/
+
+            if (GUILayout.Button("Reset"))
+            {
+                walleditor.Reset();
+            }
+            if (GUILayout.Button("Draw"))
+            {
+
+            }
+
+            walleditor.autoDraw = GUILayout.Toggle(walleditor.autoDraw, "Auto Draw");
+
             walleditor.DrawFunctionItemGUI();
         }
+
 
         if (Event.current.type == EventType.ContextClick)
         {
@@ -40,13 +57,11 @@ public class WallDesignedEditor : EditorWindow
             GenericMenu menu = menuController.GetAllMenuItems();
             menu.ShowAsContext();
         }
-
-        if(Event.current.type == EventType.MouseUp)
+        if (Event.current.type == EventType.MouseUp)
         {
-            ConnectLineController.Instance.CheckClick();
+            ConnectLineController.Instance.CheckWindowsClick();
         }
-
+        
         Repaint();
     }
-
 }

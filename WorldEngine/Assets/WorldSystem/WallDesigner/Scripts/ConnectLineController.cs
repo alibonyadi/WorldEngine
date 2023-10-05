@@ -60,7 +60,7 @@ namespace WallDesigner
                 ConnectTwoNode(node);
             }
         }
-        public void CheckClick()
+        public void CheckWindowsClick()
         {
             if(isLineInDraw)
             {

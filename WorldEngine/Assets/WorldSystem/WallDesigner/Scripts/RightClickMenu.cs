@@ -9,11 +9,10 @@ namespace WallDesigner
     public class RightClickMenu
     {
         List<RCMenuItem> menuItems;
-        public RightClickMenu(WallEditorController CTRL) 
+        public RightClickMenu() 
         {
-            Update(CTRL);
+            Update(WallEditorController.Instance);
         }
-
         public void Update(WallEditorController CTRL) 
         {
             menuItems = new List<RCMenuItem>();
@@ -29,8 +28,6 @@ namespace WallDesigner
             }
             Debug.Log("Menu Updated!!");
         }
-
-
         public GenericMenu GetAllMenuItems()
         {
             GenericMenu gmenu = new GenericMenu();
@@ -43,12 +40,9 @@ namespace WallDesigner
 
             return gmenu;
         }
-
         public void tempfunction(object a)
         {
 
         }
-    }
-
-    
+    }  
 }

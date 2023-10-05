@@ -14,9 +14,13 @@ namespace WallDesigner
         List<FunctionItem> allFItems;
         List<FunctionItem> allFunctions;
         List<Action> FIMenuFunctions;
-        public ConnectLineController connectLineController;
+
+        int EndItemIndex;
+        FunctionItem EndItem;
+
         Vector2 mousePos;
         public bool IsInitialized { get; set; }
+        public bool autoDraw { get; set; }
         private WallEditorController() 
         {
             holder = new GameObject("Holder");
@@ -37,6 +41,16 @@ namespace WallDesigner
             RefreshClasses();
             //allFItems =
         }
+
+        public void Reset()
+        {
+            IsInitialized = false;
+            ConnectLineController.Instance.SetInDragNode(null);
+            allFunctions.Clear();
+            allFItems.Clear();
+            RefreshClasses();
+        }
+
         public static WallEditorController Instance
         {
             get
@@ -77,6 +91,13 @@ namespace WallDesigner
                     Debug.Log(item.GetName());
                     allFunctions.Add(item);
                 }
+
+                if (allFunctions[allFunctions.Count - 1].GetType() == typeof(EndCalculate))
+                {
+                    EndItemIndex = allFunctions.Count - 1;
+                    //CreateAction(EndItemIndex);
+                }
+
             }
         }
         public List<FunctionItem> GetAllFunctionItems() => allFunctions;
@@ -88,11 +109,22 @@ namespace WallDesigner
         }
         public void CreateAction(object index)
         {
+            if (EndItem != null && (int)index == EndItemIndex)
+            {
+                Debug.LogWarning("Just One " + allFunctions[(int)index].ClassName + " can exist!!!");
+                return;
+            }
+
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
             item.position = mousePos;
             item.rect = new Rect(mousePos.x, mousePos.y, item.rect.width, item.rect.height);
+
             allFItems.Add(item);
+            if ((int)index == EndItemIndex)
+            {
+                EndItem = item;
+            }
         }
     }
 }
