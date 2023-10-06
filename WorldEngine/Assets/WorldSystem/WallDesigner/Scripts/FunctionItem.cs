@@ -59,7 +59,6 @@ namespace WallDesigner
             DrawAndDrag();
             DrawNodes();
             DrawAttrebutes();
-
         }
 
         private void DrawAttrebutes()

@@ -11,6 +11,8 @@ public class DrawPlane : FunctionItem, IFunctionItem
     private float width = 1;
     private float height = 1;
 
+
+
     public DrawPlane()
     {
         Init();
@@ -24,18 +26,24 @@ public class DrawPlane : FunctionItem, IFunctionItem
         GiveNodes.Add((Node)node);
         //position = new Vector2(200, 200);
         CalculateRect();
-        rect = new Rect(position.x, position.y, rect.width, rect.height);
-        Rect at1Rect = new Rect(position.x+15,position.y+5,60,15);
+        //rect = new Rect(position.x, position.y, rect.width, rect.height);
+        Rect at1Rect = new Rect(position.x, rect.height/2+position.y,rect.width,rect.height);
         FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        fl1.SetName("width");
         attrebutes.Add(fl1);
-        Rect at2Rect = new Rect(position.x + 15, position.y + 25, 60, 15);
+        Rect at2Rect = new Rect(position.x, rect.height/2+position.y + 15, rect.width, rect.height);
         FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
+        fl2.SetName("heigh");
         attrebutes.Add(fl2);
     }
 
     public Mesh Execute(Mesh mesh)
     {
         mesh = new Mesh();
+        FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
+        FloatAttrebute fa2 = (FloatAttrebute)attrebutes[1];
+        width = fa1.mFloat;
+        height = fa2.mFloat;
 
         Vector3[] vertices = new Vector3[4];
         Vector2[] uv = new Vector2[4];

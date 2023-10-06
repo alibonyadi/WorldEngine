@@ -15,9 +15,7 @@ public class WallDesignedEditor : EditorWindow
     }
     private void OnGUI()
     {
-        
        GUILayout.Label("Right Click For Menu!!!", EditorStyles.boldLabel);
-
        if (!WallEditorController.Instance.IsInitialized)
         {
             if (GUILayout.Button("Initialize WallEdiotr"))
@@ -30,8 +28,11 @@ public class WallDesignedEditor : EditorWindow
         }
         else
         {
+
             if(walleditor == null)
                 walleditor = WallEditorController.Instance;
+
+            walleditor.mousePos = Event.current.mousePosition;
             /*int selected = 0;
             string[] menus = { "Reset", "Draw", "ccc" };
             selected = GUILayout.Toolbar(selected, menus);*/

@@ -18,7 +18,7 @@ namespace WallDesigner
         public int EndItemIndex;
         public FunctionItem EndItem;
 
-        Vector2 mousePos;
+        public Vector2 mousePos;
         public bool IsInitialized { get; set; }
         public bool autoDraw { get; set; }
         private WallEditorController() 
@@ -65,7 +65,6 @@ namespace WallDesigner
         }
         public void DrawFunctionItemGUI()
         {
-            mousePos = Event.current.mousePosition;
             if (allFItems.Count > 0)
             {
                 for (int i = 0; i < allFItems.Count; i++)
@@ -74,6 +73,7 @@ namespace WallDesigner
                 }
             }
         }
+
         private void RefreshClasses()
         {
             allFunctions.Clear();
@@ -119,7 +119,7 @@ namespace WallDesigner
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
             item.position = mousePos;
-            item.rect = new Rect(mousePos.x, mousePos.y, item.rect.width, item.rect.height);
+            item.rect = new Rect(mousePos.x- item.rect.width/2, mousePos.y - item.rect.height / 2, item.rect.width, item.rect.height);
 
             allFItems.Add(item);
             if ((int)index == EndItemIndex)
