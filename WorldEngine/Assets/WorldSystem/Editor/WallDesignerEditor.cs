@@ -42,7 +42,7 @@ public class WallDesignedEditor : EditorWindow
             }
             if (GUILayout.Button("Draw"))
             {
-
+                FunctionProccesor.Instance.ProcessFunctions();
             }
 
             walleditor.autoDraw = GUILayout.Toggle(walleditor.autoDraw, "Auto Draw");

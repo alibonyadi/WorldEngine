@@ -7,24 +7,55 @@ using WallDesigner;
 public class DrawPlane : FunctionItem, IFunctionItem
 {
     private Mesh outputMesh;
+
+    private float width = 1;
+    private float height = 1;
+
     public DrawPlane()
     {
+        Init();
         Name = "Draw Plane";
         outputMesh = new Mesh();
         ClassName = typeof(DrawPlane).FullName;
         basecolor = Color.white;
-        action = Execute;
-        GiveNodes = new List<Node>();
-        GetNodes = new List<Node>();
-        Node node = new Node();
+        myFunction = Execute;
+        GiveNode node = new GiveNode();
+        node.AttachedFunctionItem = this;
         GiveNodes.Add((Node)node);
         //position = new Vector2(200, 200);
         CalculateRect();
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
-    public void Execute()
+    public Mesh Execute(Mesh mesh)
     {
-        Debug.Log("First Function Executed!!!");
+        mesh = new Mesh();
+
+        Vector3[] vertices = new Vector3[4];
+        Vector2[] uv = new Vector2[4];
+        int[] triangles = new int[6];
+
+        vertices[0] = new Vector3(-width / 2, 0, height / 2);
+        vertices[1] = new Vector3(width / 2, 0, height / 2);
+        vertices[2] = new Vector3(width / 2, 0, -height / 2);
+        vertices[3] = new Vector3(-width / 2, 0, -height / 2);
+
+        uv[0] = new Vector2(0, 1);
+        uv[1] = new Vector2(1, 1);
+        uv[2] = new Vector2(1, 0);
+        uv[3] = new Vector2(0, 0);
+
+        triangles[0] = 0;
+        triangles[1] = 1;
+        triangles[2] = 3;
+        triangles[3] = 1;
+        triangles[4] = 2;
+        triangles[5] = 3;
+
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.triangles = triangles;
+
+        return mesh;
     }
-}
+} 

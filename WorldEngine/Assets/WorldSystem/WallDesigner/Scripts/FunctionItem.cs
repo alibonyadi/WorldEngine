@@ -4,10 +4,11 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.UI.CanvasScaler;
 
 namespace WallDesigner
 {
-    abstract public class FunctionItem
+    public abstract partial class FunctionItem
     {
         private bool isDragging = false;
         public string Name { get; set; }
@@ -15,11 +16,19 @@ namespace WallDesigner
         public string Description { get; set; }
         public Color basecolor;
         public Vector2 position { get; set; }
-        public Action action { get; set; }
+        //public Action<Mesh> action { get; set; }
+        public Func<Mesh,Mesh> myFunction { get; set; }
+
         public Rect rect;
         public List<Node> GetNodes;
         public List<Node> GiveNodes;
+        public List<System.Object> attrebutes;
         public FunctionItem()
+        {
+            Init();
+        }
+
+        protected void Init()
         {
             Name = "";
             ClassName = "FunctionItem";
@@ -27,12 +36,16 @@ namespace WallDesigner
             this.position = new Vector2();
             this.rect = new Rect();
             basecolor = Color.white;
+            GiveNodes = new List<Node>();
+            GetNodes = new List<Node>();
+            attrebutes = new List<System.Object>();
         }
         public string GetName() => Name;
-        public Action GetAction() => action;
+        //public Action GetAction() => action;
         protected void CalculateRect()
         {
             int maxNode = Mathf.Max(GetNodes.Count, GiveNodes.Count);
+            maxNode += attrebutes.Count;
             float heigh = maxNode * 10 + 25;
             float width = 150;
             rect = new Rect(0, 0, width, heigh);
@@ -44,7 +57,54 @@ namespace WallDesigner
             GUI.contentColor = Color.black;
             DrawAndDrag();
             DrawNodes();
+            DrawAttrebutes();
         }
+
+        private void DrawAttrebutes()
+        {
+            if (attrebutes.Count > 0)
+            {
+                for (int i = 0; i < attrebutes.Count; i++)
+                {
+                    AttrebuteType AT = AttrebuteCheckType(attrebutes[i]);
+                    DrawAttrebuteOnType(new Vector2(position.x + 20, position.y + i * 15), AT);
+                }
+            }
+        }
+        private AttrebuteType AttrebuteCheckType(System.Object ATObject)
+        {
+            if (ATObject.GetType() == typeof(float))
+                return AttrebuteType.ATFloat;
+            else if(ATObject.GetType() == typeof(int))
+                    return AttrebuteType.ATInt;
+            else if( ATObject.GetType() == typeof(string))
+                return AttrebuteType.ATString;
+            else if( ATObject.GetType() == typeof(bool))
+                return AttrebuteType.ATBool;
+
+            return AttrebuteType.ATString;
+        }
+
+        private void DrawAttrebuteOnType(Vector2 startpos,AttrebuteType type)
+        {
+            switch (type)
+            {
+                case AttrebuteType.ATFloat:
+                    GUI.HorizontalSlider(new Rect(startpos.x,startpos.y,60,10),)
+                    break;
+                case AttrebuteType.ATInt:
+
+                    break;
+                case AttrebuteType.ATString:
+
+                    break;
+
+                case AttrebuteType.ATBool: 
+
+                    break;
+            }
+        }
+
         private void DrawAndDrag()
         {
             if (GUI.RepeatButton(rect, Name))

@@ -8,11 +8,11 @@ namespace WallDesigner
         public Color color;
         public bool clicked = false;
         public Vector3 position = Vector3.zero;
-        public IFunctionItem AttachedFunctionItem { get; set; }
+        public FunctionItem AttachedFunctionItem { get; set; }
         protected WallEditorController controller;
         public Node ConnectedNode { get; set; }
 
-        public IFunctionItem GetConnectedItem()
+        public FunctionItem GetConnectedItem()
         {
             return AttachedFunctionItem == null ? null : AttachedFunctionItem;
         }

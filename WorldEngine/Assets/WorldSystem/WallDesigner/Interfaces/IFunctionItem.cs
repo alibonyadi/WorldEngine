@@ -1,4 +1,6 @@
+using UnityEngine;
+
 public interface IFunctionItem
 {
-    public void Execute();
+    public Mesh Execute(Mesh mesh);
 }

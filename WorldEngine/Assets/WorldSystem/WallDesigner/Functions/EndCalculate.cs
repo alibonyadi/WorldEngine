@@ -10,7 +10,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
         Name = "End Calculate";
         ClassName = typeof(EndCalculate).FullName;
         basecolor = Color.red;
-        action = Execute;
+        myFunction = Execute;
         GiveNodes = new List<Node>();
         GetNodes = new List<Node>();
         GetNode node = new GetNode();
@@ -21,8 +21,9 @@ public class EndCalculate : FunctionItem, IFunctionItem
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
-    public void Execute()
+    public Mesh Execute(Mesh mesh)
     {
-        Debug.Log("END Function Executed!!!");
+        Debug.Log(Name+" Executed!!!");
+        return mesh;
     }
 }

@@ -14,14 +14,15 @@ public class SecondFunction : FunctionItem, IFunctionItem
         GetNodes = new List<Node>();
         Node node = new Node();
         GiveNodes.Add((Node)node);
-        action = Execute;
+        myFunction = Execute;
         CalculateRect();
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
-    public void Execute()
+    public Mesh Execute(Mesh mesh)
     {
         Debug.Log("SecondFunction Executed!!!");
+        return mesh;
     }
 
 }

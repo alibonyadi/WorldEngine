@@ -9,14 +9,14 @@ namespace WallDesigner
     {
         Mesh mesh;
         private static WallEditorController instance;
-        GameObject holder;//Camera and root for Objects instantiated
-        GameObject inEditeObject;
+        public GameObject holder;//Camera and root for Objects instantiated
+        public GameObject inEditeObject;
         List<FunctionItem> allFItems;
         List<FunctionItem> allFunctions;
         List<Action> FIMenuFunctions;
 
-        int EndItemIndex;
-        FunctionItem EndItem;
+        public int EndItemIndex;
+        public FunctionItem EndItem;
 
         Vector2 mousePos;
         public bool IsInitialized { get; set; }
@@ -34,18 +34,19 @@ namespace WallDesigner
             inEditeObject.transform.rotation = holder.transform.rotation;
             inEditeObject.transform.position = holder.transform.position;
             inEditeObject.transform.Translate(0, 0, 5);
-            inEditeObject.transform.Rotate(0, 180, 0);
+            inEditeObject.transform.Rotate(90, 180, 0);
             mesh = new Mesh();
             inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
             //IsInitialized = true;
             RefreshClasses();
-            //allFItems =
+            //allFItems = 
         }
 
         public void Reset()
         {
             IsInitialized = false;
             ConnectLineController.Instance.SetInDragNode(null);
+            EndItem = null;
             allFunctions.Clear();
             allFItems.Clear();
             RefreshClasses();

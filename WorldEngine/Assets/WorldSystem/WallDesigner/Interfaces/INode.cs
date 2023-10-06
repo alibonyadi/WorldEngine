@@ -5,7 +5,7 @@ namespace WallDesigner
     {
         public bool IsConnected { get; set; }
 
-        public IFunctionItem AttachedFunctionItem { get; set; }
-        public IFunctionItem GetConnectedItem();
+        public FunctionItem AttachedFunctionItem { get; set; }
+        public FunctionItem GetConnectedItem();
     }
 }
