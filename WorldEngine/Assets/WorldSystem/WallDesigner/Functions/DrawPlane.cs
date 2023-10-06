@@ -25,6 +25,12 @@ public class DrawPlane : FunctionItem, IFunctionItem
         //position = new Vector2(200, 200);
         CalculateRect();
         rect = new Rect(position.x, position.y, rect.width, rect.height);
+        Rect at1Rect = new Rect(position.x+15,position.y+5,60,15);
+        FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        attrebutes.Add(fl1);
+        Rect at2Rect = new Rect(position.x + 15, position.y + 25, 60, 15);
+        FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
+        attrebutes.Add(fl2);
     }
 
     public Mesh Execute(Mesh mesh)

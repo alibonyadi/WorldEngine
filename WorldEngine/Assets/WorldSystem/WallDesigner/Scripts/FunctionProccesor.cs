@@ -14,7 +14,7 @@ namespace WallDesigner
         private Mesh mesh;
         private static FunctionProccesor instance;
         private FunctionProccesor()
-        {
+        { 
             Items = new Stack<FunctionItem>();
         }
         public static FunctionProccesor Instance

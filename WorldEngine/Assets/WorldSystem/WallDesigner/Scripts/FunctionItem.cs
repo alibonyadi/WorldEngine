@@ -22,7 +22,7 @@ namespace WallDesigner
         public Rect rect;
         public List<Node> GetNodes;
         public List<Node> GiveNodes;
-        public List<System.Object> attrebutes;
+        public List<Attrebute> attrebutes;
         public FunctionItem()
         {
             Init();
@@ -38,8 +38,9 @@ namespace WallDesigner
             basecolor = Color.white;
             GiveNodes = new List<Node>();
             GetNodes = new List<Node>();
-            attrebutes = new List<System.Object>();
+            attrebutes = new List<Attrebute>();
         }
+
         public string GetName() => Name;
         //public Action GetAction() => action;
         protected void CalculateRect()
@@ -58,6 +59,7 @@ namespace WallDesigner
             DrawAndDrag();
             DrawNodes();
             DrawAttrebutes();
+
         }
 
         private void DrawAttrebutes()
@@ -66,42 +68,8 @@ namespace WallDesigner
             {
                 for (int i = 0; i < attrebutes.Count; i++)
                 {
-                    AttrebuteType AT = AttrebuteCheckType(attrebutes[i]);
-                    DrawAttrebuteOnType(new Vector2(position.x + 20, position.y + i * 15), AT);
+                    attrebutes[i].Draw(position);
                 }
-            }
-        }
-        private AttrebuteType AttrebuteCheckType(System.Object ATObject)
-        {
-            if (ATObject.GetType() == typeof(float))
-                return AttrebuteType.ATFloat;
-            else if(ATObject.GetType() == typeof(int))
-                    return AttrebuteType.ATInt;
-            else if( ATObject.GetType() == typeof(string))
-                return AttrebuteType.ATString;
-            else if( ATObject.GetType() == typeof(bool))
-                return AttrebuteType.ATBool;
-
-            return AttrebuteType.ATString;
-        }
-
-        private void DrawAttrebuteOnType(Vector2 startpos,AttrebuteType type)
-        {
-            switch (type)
-            {
-                case AttrebuteType.ATFloat:
-                    GUI.HorizontalSlider(new Rect(startpos.x,startpos.y,60,10),)
-                    break;
-                case AttrebuteType.ATInt:
-
-                    break;
-                case AttrebuteType.ATString:
-
-                    break;
-
-                case AttrebuteType.ATBool: 
-
-                    break;
             }
         }
 
