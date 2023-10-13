@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace WallDesigner
 {
@@ -28,12 +23,10 @@ namespace WallDesigner
         }
     }
 
-
-
-
     public class FloatAttrebute : Attrebute
     {
         public float mFloat;
+        public float temfloat;
         float Min=0;
         float Max=10;
 
@@ -50,6 +43,12 @@ namespace WallDesigner
             GUI.Box(boxRect, "");
             GUI.Label(boxRect, name+":"+ ((int)mFloat));
             mFloat = GUI.HorizontalSlider(new Rect(r.x + 40f,r.y,r.width-30,r.height), mFloat, Min, Max);
+            if (mFloat != temfloat )
+            {
+                temfloat = mFloat;
+                if(WallEditorController.Instance.autoDraw)
+                    FunctionProccesor.Instance.ProcessFunctions();
+            }
         }
     }
 }

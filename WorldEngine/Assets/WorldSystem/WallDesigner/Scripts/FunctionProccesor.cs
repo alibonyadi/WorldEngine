@@ -44,7 +44,7 @@ namespace WallDesigner
 
             FunctionItem item = endItem.GetNodes[0].ConnectedNode.AttachedFunctionItem;
             Items.Push(item);
-            Debug.Log(endItem.GetNodes[0].AttachedFunctionItem);
+            //Debug.Log(endItem.GetNodes[0].AttachedFunctionItem);
             //just for test
             int i = 2;
             while(item.GetNodes != null && item.GetNodes.Count>0)
@@ -58,7 +58,7 @@ namespace WallDesigner
                 else
                     break;
             } 
-            Debug.Log(i + " function added to stack!!!");
+            //Debug.Log(i + " function added to stack!!!");
             //FunctionItem functionItem = Items.Pop();
             Mesh mesh = new Mesh();
             while(Items.Count>0)

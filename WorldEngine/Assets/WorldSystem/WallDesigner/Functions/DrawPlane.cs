@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
@@ -10,7 +8,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
 
     private float width = 1;
     private float height = 1;
-
 
 
     public DrawPlane()

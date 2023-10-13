@@ -23,7 +23,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
 
     public Mesh Execute(Mesh mesh)
     {
-        Debug.Log(Name+" Executed!!!");
+        //Debug.Log(Name+" Executed!!!");
         return mesh;
     }
 }

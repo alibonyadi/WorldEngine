@@ -84,12 +84,12 @@ namespace WallDesigner
                 string className = Path.GetFileNameWithoutExtension(file);
                 Type type = Type.GetType(className);
 
-                Debug.Log(type.FullName);
+                //Debug.Log(type.FullName);
 
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
                     FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
-                    Debug.Log(item.GetName());
+                    //Debug.Log(item.GetName());
                     allFunctions.Add(item);
                 }
 
