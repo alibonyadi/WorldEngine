@@ -5,6 +5,10 @@ using WallDesigner;
 
 public class EndCalculate : FunctionItem, IFunctionItem
 {
+    Mesh EndMesh;
+    Material EndMaterial;
+
+
     public EndCalculate()
     {
         Name = "End Calculate";
@@ -14,6 +18,10 @@ public class EndCalculate : FunctionItem, IFunctionItem
         GiveNodes = new List<Node>();
         GetNodes = new List<Node>();
         GetNode node = new GetNode();
+        node.AttachedFunctionItem = this;
+        GetNodes.Add((Node)node);
+        node = new GetNode();
+        node.color = Color.yellow;
         node.AttachedFunctionItem = this;
         GetNodes.Add((Node)node);
         //position = new Vector2(200, 200);

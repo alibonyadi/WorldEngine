@@ -10,12 +10,13 @@ namespace WallDesigner
 {
     public class FunctionProccesor
     {
-        Stack<FunctionItem> Items;
+        Stack<FunctionItem> MeshItems;
+
         private Mesh mesh;
         private static FunctionProccesor instance;
         private FunctionProccesor()
         { 
-            Items = new Stack<FunctionItem>();
+            MeshItems = new Stack<FunctionItem>();
         }
         public static FunctionProccesor Instance
         {
@@ -40,34 +41,39 @@ namespace WallDesigner
             if (endItem.GetNodes[0].ConnectedNode == null)
                 return;
 
-            Items.Push(endItem);
+            CalculateEndMeshFunctions(endItem);
+
+            DrawEndMesh(mesh);
+            
+        }
+
+        private void CalculateEndMeshFunctions(FunctionItem endItem)
+        {
+            MeshItems.Push(endItem);
 
             FunctionItem item = endItem.GetNodes[0].ConnectedNode.AttachedFunctionItem;
-            Items.Push(item);
+            MeshItems.Push(item);
             //Debug.Log(endItem.GetNodes[0].AttachedFunctionItem);
             //just for test
             int i = 2;
-            while(item.GetNodes != null && item.GetNodes.Count>0)
+            while (item.GetNodes != null && item.GetNodes.Count > 0)
             {
                 if (item.GetNodes[0].ConnectedNode != null)
                 {
                     item = item.GetNodes[0].ConnectedNode.AttachedFunctionItem;
-                    Items.Push(item);
+                    MeshItems.Push(item);
                     i++;
                 }
                 else
                     break;
-            } 
+            }
             //Debug.Log(i + " function added to stack!!!");
             //FunctionItem functionItem = Items.Pop();
             Mesh mesh = new Mesh();
-            while(Items.Count>0)
+            while (MeshItems.Count > 0)
             {
-                mesh = (Mesh)Items.Pop().myFunction(mesh);
+                mesh = (Mesh)MeshItems.Pop().myFunction(mesh);
             }
-
-            DrawEndMesh(mesh);
-            
         }
 
         private static void DrawEndMesh(Mesh mesh)
