@@ -21,7 +21,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
-    public Mesh Execute(Mesh mesh)
+    public object Execute(object mesh)
     {
         //Debug.Log(Name+" Executed!!!");
         return mesh;

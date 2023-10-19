@@ -36,9 +36,9 @@ public class DrawPlane : FunctionItem, IFunctionItem
         attrebutes.Add(fl2);
     }
 
-    public Mesh Execute(Mesh mesh)
+    public object Execute(object mMesh)
     {
-        mesh = new Mesh();
+        Mesh mesh = new Mesh();
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
         FloatAttrebute fa2 = (FloatAttrebute)attrebutes[1];
         width = fa1.mFloat;

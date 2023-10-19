@@ -17,7 +17,7 @@ namespace WallDesigner
         public Color basecolor;
         public Vector2 position { get; set; }
         //public Action<Mesh> action { get; set; }
-        public Func<Mesh,Mesh> myFunction { get; set; }
+        public Func<object, object> myFunction { get; set; }
 
         public Rect rect;
         public List<Node> GetNodes;

@@ -63,7 +63,7 @@ namespace WallDesigner
             Mesh mesh = new Mesh();
             while(Items.Count>0)
             {
-                mesh = Items.Pop().myFunction(mesh);
+                mesh = (Mesh)Items.Pop().myFunction(mesh);
             }
 
             DrawEndMesh(mesh);
