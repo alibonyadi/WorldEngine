@@ -28,7 +28,6 @@ public class WallDesignedEditor : EditorWindow
         }
         else
         {
-
             if(walleditor == null)
                 walleditor = WallEditorController.Instance;
 
@@ -47,6 +46,13 @@ public class WallDesignedEditor : EditorWindow
             }
 
             walleditor.autoDraw = GUILayout.Toggle(walleditor.autoDraw, "Auto Draw");
+            walleditor.WireFrame = GUILayout.Toggle(walleditor.WireFrame, "WireFrame");
+            if(walleditor.WireFrame)
+            {
+                walleditor.holder.GetComponent<Camera>().SetReplacementShader(Shader.Find("VR/SpatialMapping/Wireframe"), "");
+            }
+            else
+                walleditor.holder.GetComponent<Camera>().SetReplacementShader(Shader.Find("Standard"), "");
 
             walleditor.DrawFunctionItemGUI();
         }

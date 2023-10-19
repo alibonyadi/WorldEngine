@@ -12,5 +12,4 @@ namespace WallDesigner
             ConnectedNode = null;
         }
     }
-
 }

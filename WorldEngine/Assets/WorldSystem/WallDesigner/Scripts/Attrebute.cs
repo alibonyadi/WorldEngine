@@ -43,12 +43,15 @@ namespace WallDesigner
             GUI.Box(boxRect, "");
             GUI.Label(boxRect, name+":"+ ((int)mFloat));
             mFloat = GUI.HorizontalSlider(new Rect(r.x + 40f,r.y,r.width-30,r.height), mFloat, Min, Max);
-            if (mFloat != temfloat )
+
+            if (mFloat == temfloat )
             {
-                temfloat = mFloat;
-                if(WallEditorController.Instance.autoDraw)
-                    FunctionProccesor.Instance.ProcessFunctions();
+                return;
             }
+
+            temfloat = mFloat;
+            if (WallEditorController.Instance.autoDraw)
+                FunctionProccesor.Instance.ProcessFunctions();
         }
     }
 }

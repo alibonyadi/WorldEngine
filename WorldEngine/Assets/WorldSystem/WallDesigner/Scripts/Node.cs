@@ -9,7 +9,6 @@ namespace WallDesigner
         public bool clicked = false;
         public Vector3 position = Vector3.zero;
         public FunctionItem AttachedFunctionItem { get; set; }
-        protected WallEditorController controller;
         public Node ConnectedNode { get; set; }
 
         public FunctionItem GetConnectedItem()
@@ -25,7 +24,5 @@ namespace WallDesigner
             ConnectedNode = null;
         }
 
-        public void SetController(WallEditorController c) => controller = c;
-        public WallEditorController GetController() => controller;
     }
 }

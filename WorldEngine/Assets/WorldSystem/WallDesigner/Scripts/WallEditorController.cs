@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace WallDesigner
@@ -14,22 +15,27 @@ namespace WallDesigner
         List<FunctionItem> allFItems;
         List<FunctionItem> allFunctions;
         List<Action> FIMenuFunctions;
-
         public int EndItemIndex;
         public FunctionItem EndItem;
-
         public Vector2 mousePos;
         public bool IsInitialized { get; set; }
         public bool autoDraw { get; set; }
+        public bool WireFrame { get; set; }
         private WallEditorController() 
         {
+            //Material material = new Material(Shader.Find("VR/SpatialMapping/Wireframe"));
+            Material material = new Material(Shader.Find("Standard"));
+     
             holder = new GameObject("Holder");
             holder.AddComponent<Camera>();
+            holder.GetComponent<Camera>().clearFlags= CameraClearFlags.SolidColor;
+            holder.GetComponent<Camera>().backgroundColor= Color.black;
             allFunctions = new List<FunctionItem>();
             allFItems = new List<FunctionItem>();
             inEditeObject = new GameObject("InEdit");
             inEditeObject.AddComponent<MeshFilter>();
             inEditeObject.AddComponent<MeshRenderer>();
+
             inEditeObject.transform.parent = holder.transform;
             inEditeObject.transform.rotation = holder.transform.rotation;
             inEditeObject.transform.position = holder.transform.position;
@@ -37,11 +43,11 @@ namespace WallDesigner
             inEditeObject.transform.Rotate(90, 180, 0);
             mesh = new Mesh();
             inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
+            inEditeObject.GetComponent<MeshRenderer>().material = material;
             //IsInitialized = true;
             RefreshClasses();
             //allFItems = 
         }
-
         public void Reset()
         {
             IsInitialized = false;
@@ -51,7 +57,6 @@ namespace WallDesigner
             allFItems.Clear();
             RefreshClasses();
         }
-
         public static WallEditorController Instance
         {
             get
@@ -73,9 +78,8 @@ namespace WallDesigner
                 }
             }
         }
-
         private void RefreshClasses()
-        {
+        { 
             allFunctions.Clear();
             string path = Application.dataPath + "/WorldSystem/WallDesigner/Functions";
             string[] files = Directory.GetFiles(path, "*.cs");
@@ -83,22 +87,16 @@ namespace WallDesigner
             {
                 string className = Path.GetFileNameWithoutExtension(file);
                 Type type = Type.GetType(className);
-
-                //Debug.Log(type.FullName);
-
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
                     FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
-                    //Debug.Log(item.GetName());
                     allFunctions.Add(item);
                 }
-
                 if (allFunctions[allFunctions.Count - 1].GetType() == typeof(EndCalculate))
                 {
                     EndItemIndex = allFunctions.Count - 1;
                     //CreateAction(EndItemIndex);
                 }
-
             }
         }
         public List<FunctionItem> GetAllFunctionItems() => allFunctions;
