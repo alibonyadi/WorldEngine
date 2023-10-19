@@ -41,39 +41,15 @@ namespace WallDesigner
             if (endItem.GetNodes[0].ConnectedNode == null)
                 return;
 
-            CalculateEndMeshFunctions(endItem);
-
-            DrawEndMesh(mesh);
-            
+            WallPartItem item = new WallPartItem();
+            item = (WallPartItem)endItem.myFunction(item);
+            DrawEndMesh(item.mesh);
+            SetEndMaterials(item.material);
         }
 
-        private void CalculateEndMeshFunctions(FunctionItem endItem)
+        private void SetEndMaterials(Material material)
         {
-            MeshItems.Push(endItem);
-
-            FunctionItem item = endItem.GetNodes[0].ConnectedNode.AttachedFunctionItem;
-            MeshItems.Push(item);
-            //Debug.Log(endItem.GetNodes[0].AttachedFunctionItem);
-            //just for test
-            int i = 2;
-            while (item.GetNodes != null && item.GetNodes.Count > 0)
-            {
-                if (item.GetNodes[0].ConnectedNode != null)
-                {
-                    item = item.GetNodes[0].ConnectedNode.AttachedFunctionItem;
-                    MeshItems.Push(item);
-                    i++;
-                }
-                else
-                    break;
-            }
-            //Debug.Log(i + " function added to stack!!!");
-            //FunctionItem functionItem = Items.Pop();
-            Mesh mesh = new Mesh();
-            while (MeshItems.Count > 0)
-            {
-                mesh = (Mesh)MeshItems.Pop().myFunction(mesh);
-            }
+            WallEditorController.Instance.inEditeObject.GetComponent<MeshRenderer>().material = material;
         }
 
         private static void DrawEndMesh(Mesh mesh)
@@ -86,6 +62,5 @@ namespace WallDesigner
 
             return mesh;
         }
-            
     }
 }

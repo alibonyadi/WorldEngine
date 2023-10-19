@@ -6,5 +6,11 @@ namespace WallDesigner
     {
         public Mesh mesh;
         public Material material;
+
+        public WallPartItem()
+        {
+            mesh = new Mesh();
+            material = new Material("Shader.Find(\"Standard\")");
+        }
     }
 }

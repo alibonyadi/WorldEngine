@@ -4,17 +4,15 @@ using WallDesigner;
 
 public class DrawPlane : FunctionItem, IFunctionItem
 {
-    private Mesh outputMesh;
-
+    private WallPartItem output;
     private float width = 1;
     private float height = 1;
-
 
     public DrawPlane()
     {
         Init();
         Name = "Draw Plane";
-        outputMesh = new Mesh();
+        output = new WallPartItem();
         ClassName = typeof(DrawPlane).FullName;
         basecolor = Color.white;
         myFunction = Execute;
@@ -69,6 +67,8 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.uv = uv;
         mesh.triangles = triangles;
 
-        return mesh;
+
+
+        return output;
     }
 } 

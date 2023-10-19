@@ -5,9 +5,7 @@ using WallDesigner;
 
 public class EndCalculate : FunctionItem, IFunctionItem
 {
-    Mesh EndMesh;
-    Material EndMaterial;
-
+    WallPartItem wallItem;
 
     public EndCalculate()
     {
@@ -15,6 +13,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
         ClassName = typeof(EndCalculate).FullName;
         basecolor = Color.red;
         myFunction = Execute;
+        wallItem = new WallPartItem();
         GiveNodes = new List<Node>();
         GetNodes = new List<Node>();
         GetNode node = new GetNode();
@@ -31,7 +30,10 @@ public class EndCalculate : FunctionItem, IFunctionItem
 
     public object Execute(object mesh)
     {
-        //Debug.Log(Name+" Executed!!!");
-        return mesh;
+        if (GetNodes[0].ConnectedNode == null)
+            return wallItem;
+
+        wallItem = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem);
+        return wallItem;
     }
 }
