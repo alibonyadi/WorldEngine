@@ -19,7 +19,7 @@ namespace WallDesigner
         public FunctionItem EndItem;
         public Vector2 mousePos;
         public bool IsInitialized { get; set; }
-        public bool autoDraw { get; set; }
+        public bool autoDraw { get; set; } = true;
         public bool WireFrame { get; set; }
         private WallEditorController() 
         {

@@ -26,10 +26,12 @@ public class DrawPlane : FunctionItem, IFunctionItem
         //rect = new Rect(position.x, position.y, rect.width, rect.height);
         Rect at1Rect = new Rect(position.x, rect.height/2+position.y,rect.width,rect.height);
         FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        fl1.mFloat = width;
         fl1.SetName("width");
         attrebutes.Add(fl1);
         Rect at2Rect = new Rect(position.x, rect.height/2+position.y + 15, rect.width, rect.height);
         FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
+        fl2.mFloat = height;
         fl2.SetName("heigh");
         attrebutes.Add(fl2);
     }
