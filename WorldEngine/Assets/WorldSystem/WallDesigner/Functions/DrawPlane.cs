@@ -19,6 +19,10 @@ public class DrawPlane : FunctionItem, IFunctionItem
         GiveNode node = new GiveNode();
         node.AttachedFunctionItem = this;
         GiveNodes.Add((Node)node);
+
+        GetNode gnode = new GetNode();
+        gnode.AttachedFunctionItem = this;
+        GetNodes.Add(gnode);
         //position = new Vector2(200, 200);
         CalculateRect();
         //rect = new Rect(position.x, position.y, rect.width, rect.height);
@@ -36,6 +40,10 @@ public class DrawPlane : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh)
     {
+        if (GetNodes[0].ConnectedNode != null)
+            output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output);
+
+
         Mesh mesh = new Mesh();
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
         FloatAttrebute fa2 = (FloatAttrebute)attrebutes[1];
@@ -67,7 +75,7 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.uv = uv;
         mesh.triangles = triangles;
 
-
+        output.mesh = mesh;
 
         return output;
     }

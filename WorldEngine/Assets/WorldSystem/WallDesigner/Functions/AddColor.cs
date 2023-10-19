@@ -25,8 +25,11 @@ public class AddColor : FunctionItem, IFunctionItem
         attrebutes.Add(colorAtt1);
     }
 
-    public object Execute(object color)
+    public object Execute(object item)
     {
-        return outputColor;
+        WallPartItem wallitem = (WallPartItem)item;
+        RandomColorAttrebute att1 = (RandomColorAttrebute)attrebutes[0];
+        wallitem.material.color = att1.mColor;
+        return wallitem;
     }
 }

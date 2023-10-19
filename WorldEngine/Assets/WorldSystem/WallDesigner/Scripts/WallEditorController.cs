@@ -40,7 +40,7 @@ namespace WallDesigner
             inEditeObject.transform.rotation = holder.transform.rotation;
             inEditeObject.transform.position = holder.transform.position;
             inEditeObject.transform.Translate(0, 0, 5);
-            inEditeObject.transform.Rotate(90, 180, 0);
+            inEditeObject.transform.Rotate(270, 0, 0);
             mesh = new Mesh();
             inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
             inEditeObject.GetComponent<MeshRenderer>().material = material;

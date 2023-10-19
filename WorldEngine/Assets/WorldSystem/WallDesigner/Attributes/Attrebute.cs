@@ -6,7 +6,8 @@ namespace WallDesigner
     {
         protected Rect rect = new Rect();
         protected string name;
-        public Attrebute(Rect r) 
+
+        public Attrebute(Rect r)
         {
             rect = r;
             name = "name";
@@ -20,7 +21,5 @@ namespace WallDesigner
         {
             name = n;
         }
-
-
     }
 }
