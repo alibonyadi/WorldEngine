@@ -25,7 +25,7 @@ public class AddTexture : FunctionItem, IFunctionItem
         attrebutes.Add(att1);
     }
 
-    public object Execute(object item)
+    public object Execute(object item, object id)
     {
         WallPartItem wallitem = (WallPartItem)item;
         TextureAttribute att1 = (TextureAttribute)attrebutes[0];

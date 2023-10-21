@@ -20,7 +20,7 @@ public class SecondFunction : FunctionItem, IFunctionItem
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
-    public object Execute(object mesh)
+    public object Execute(object mesh, object id)
     {
         Debug.Log("SecondFunction Executed!!!");
 

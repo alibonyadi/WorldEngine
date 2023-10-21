@@ -28,12 +28,12 @@ public class EndCalculate : FunctionItem, IFunctionItem
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
-    public object Execute(object mesh)
+    public object Execute(object mesh,object id)
     {
         if (GetNodes[0].ConnectedNode == null)
             return wallItem;
 
-        wallItem = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem);
+        wallItem = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem, GetNodes[0].ConnectedNode.id);
         return wallItem;
     }
 }

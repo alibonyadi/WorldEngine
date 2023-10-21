@@ -38,10 +38,10 @@ public class DrawPlane : FunctionItem, IFunctionItem
         attrebutes.Add(fl2);
     }
 
-    public object Execute(object mMesh)
+    public object Execute(object mMesh,object id)
     {
         if (GetNodes[0].ConnectedNode != null)
-            output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output);
+            output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
 
 
         Mesh mesh = new Mesh();

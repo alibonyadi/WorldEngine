@@ -52,7 +52,7 @@ public class WallDesignedEditor : EditorWindow
                 walleditor.holder.GetComponent<Camera>().SetReplacementShader(Shader.Find("VR/SpatialMapping/Wireframe"), "");
             }
             else
-                walleditor.holder.GetComponent<Camera>().SetReplacementShader(Shader.Find("Standard"), "");
+                walleditor.holder.GetComponent<Camera>().SetReplacementShader(Shader.Find("Standard"), ""); 
 
             walleditor.DrawFunctionItemGUI();
         }

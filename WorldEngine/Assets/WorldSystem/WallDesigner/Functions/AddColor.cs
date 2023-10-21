@@ -25,7 +25,7 @@ public class AddColor : FunctionItem, IFunctionItem
         attrebutes.Add(colorAtt1);
     }
 
-    public object Execute(object item)
+    public object Execute(object item, object id)
     {
         WallPartItem wallitem = (WallPartItem)item;
         RandomColorAttrebute att1 = (RandomColorAttrebute)attrebutes[0];

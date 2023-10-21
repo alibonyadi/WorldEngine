@@ -7,7 +7,6 @@ namespace WallDesigner
         public Mesh mesh;
         public Material material;
 
-        [System.Obsolete]
         public WallPartItem()
         {
             mesh = new Mesh();

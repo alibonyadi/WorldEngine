@@ -4,6 +4,7 @@ namespace WallDesigner
 {
     public class Node : INode
     {
+        public int id = 0; 
         public bool IsConnected { get; set; }
         public Color color;
         public bool clicked = false;

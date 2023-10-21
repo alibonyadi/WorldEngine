@@ -42,7 +42,7 @@ namespace WallDesigner
                 return;
 
             WallPartItem item = new WallPartItem();
-            item = (WallPartItem)endItem.myFunction(item);
+            item = (WallPartItem)endItem.myFunction(item,0);
             DrawEndMesh(item.mesh);
             SetEndMaterials(item.material);
         }

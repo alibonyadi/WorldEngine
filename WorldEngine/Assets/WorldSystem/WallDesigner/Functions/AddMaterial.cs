@@ -27,7 +27,7 @@ public class AddMaterial : FunctionItem, IFunctionItem
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
     }
 
-    public object Execute(object material)
+    public object Execute(object material, object id)
     {
         return _material;
     }
