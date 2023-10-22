@@ -18,6 +18,14 @@ public class AddTexture : FunctionItem, IFunctionItem
         GiveNode node = new GiveNode();
         node.AttachedFunctionItem = this;
         GiveNodes.Add((Node)node);
+
+        GetNode gnode = new GetNode();
+        gnode.AttachedFunctionItem = this;
+        gnode.id = 0;
+        GetNodes.Add(gnode);
+
+
+
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
         TextureAttribute att1 = new TextureAttribute(at1Rect);
@@ -27,9 +35,41 @@ public class AddTexture : FunctionItem, IFunctionItem
 
     public object Execute(object item, object id)
     {
-        WallPartItem wallitem = (WallPartItem)item;
+        WallPartItem mitem = new WallPartItem();
         TextureAttribute att1 = (TextureAttribute)attrebutes[0];
-        wallitem.material.mainTexture = att1.texture;
-        return wallitem;
+        Material mat = new Material(Shader.Find("Standard"));
+        mat.mainTexture = att1.texture;
+        if (GetNodes[0].ConnectedNode != null)
+        {
+            mitem = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mitem, GetNodes[0].ConnectedNode.id);
+            if (mitem.material.Count > 0)
+            {
+                for (int i = 0; i < mitem.material.Count; i++)
+                {
+                    mitem.material[i].mainTexture = att1.texture;
+                }
+            }
+            else
+            {
+                mitem.material.Add(mat);
+            }
+            return mitem;
+        }
+        else
+        {
+            WallPartItem wallitem = (WallPartItem)item;
+            if(wallitem.material.Count > 0)
+            {
+                for (int i = 0; i < mitem.material.Count; i++)
+                {
+                    wallitem.material[i].mainTexture = att1.texture;
+                }
+            }
+            else
+            {
+                wallitem.material.Add(mat);
+            }
+            return wallitem;
+        }
     }
 }

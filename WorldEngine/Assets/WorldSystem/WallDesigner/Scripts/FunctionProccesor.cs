@@ -47,9 +47,9 @@ namespace WallDesigner
             SetEndMaterials(item.material);
         }
 
-        private void SetEndMaterials(Material material)
+        private void SetEndMaterials(List<Material> material)
         {
-            WallEditorController.Instance.inEditeObject.GetComponent<MeshRenderer>().material = material;
+            WallEditorController.Instance.inEditeObject.GetComponent<MeshRenderer>().materials = material.ToArray();
         }
 
         private static void DrawEndMesh(Mesh mesh)

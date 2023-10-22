@@ -1,16 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace WallDesigner
 {
     public class WallPartItem
     {
         public Mesh mesh;
-        public Material material;
+        public List<Material> material;
 
         public WallPartItem()
         {
             mesh = new Mesh();
-            material = new Material(Shader.Find("Standard"));
+            //Material mat = new Material(Shader.Find("Standard"));
+            material = new List<Material>();
+            //material.Add(mat); 
         }
     }
 }
