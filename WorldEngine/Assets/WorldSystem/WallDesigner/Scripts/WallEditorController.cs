@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace WallDesigner
 {
@@ -18,6 +19,7 @@ namespace WallDesigner
         public int EndItemIndex;
         public FunctionItem EndItem;
         public Vector2 mousePos;
+        public bool canShowMenu = true;
         public bool IsInitialized { get; set; }
         public bool autoDraw { get; set; } = true;
         public bool WireFrame { get; set; }
@@ -100,6 +102,7 @@ namespace WallDesigner
             }
         }
         public List<FunctionItem> GetAllFunctionItems() => allFunctions;
+        public List<FunctionItem> GetAllCreatedItems() => allFItems;
         public Action<object> GetCreateAction()
         {
             Action<object> action = null;
@@ -116,8 +119,9 @@ namespace WallDesigner
 
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
-            item.position = mousePos;
-            item.rect = new Rect(mousePos.x- item.rect.width/2, mousePos.y - item.rect.height / 2, item.rect.width, item.rect.height);
+            item.position = mousePos - BoardController.Instance.boardPosition;
+            Vector2 tempposition = item.position + BoardController.Instance.boardPosition;
+            item.rect = new Rect(tempposition.x - item.rect.width/2, tempposition.y - item.rect.height / 2, item.rect.width, item.rect.height);
 
             allFItems.Add(item);
             if ((int)index == EndItemIndex)

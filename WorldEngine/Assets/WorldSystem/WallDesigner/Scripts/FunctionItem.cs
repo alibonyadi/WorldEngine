@@ -16,7 +16,7 @@ namespace WallDesigner
         public Color basecolor;
         public Vector2 position { get; set; }
         //public Action<Mesh> action { get; set; }
-        public Func<object, object ,object> myFunction { get; set; }
+        public Func<object, object, object> myFunction { get; set; }
 
         public Rect rect;
         public List<Node> GetNodes;
@@ -60,25 +60,72 @@ namespace WallDesigner
             DrawAttrebutes();
         }
 
+        public void Remove()
+        {
+            ConnectLineController.Instance.isLineInDraw = false;
+            ConnectLineController.Instance.SetInDragNode(null);
+
+            foreach (Node node in GetNodes)
+            {
+                if(node.ConnectedNode != null)
+                {
+                    node.ConnectedNode.ConnectedNode = null;
+                    node.ConnectedNode = null;
+                }
+            }
+
+            foreach (Node node in GiveNodes)
+            {
+                if (node.ConnectedNode != null)
+                {
+                    node.ConnectedNode.ConnectedNode = null;
+                    node.ConnectedNode = null;
+                }
+            }
+
+            WallEditorController.Instance.canShowMenu = false;
+            WallEditorController.Instance.GetAllCreatedItems().Remove(this);
+        }
+
         private void DrawAttrebutes()
         {
             if (attrebutes.Count > 0)
             {
                 for (int i = 0; i < attrebutes.Count; i++)
                 {
-                    attrebutes[i].Draw(position);
+                    attrebutes[i].Draw(position + BoardController.Instance.boardPosition);
                 }
             }
         }
 
+        public void UpdateBoardPos()
+        {
+            Vector2 tempposition = position + BoardController.Instance.boardPosition;
+            rect = new Rect(tempposition.x - rect.width * 0.5f, tempposition.y - rect.height * 0.5f, rect.width, rect.height);
+        }
+
         private void DrawAndDrag()
         {
+
             if (GUI.RepeatButton(rect, Name))
             {
-                position = Event.current.mousePosition;
-                rect = new Rect(position.x - rect.width * 0.5f, position.y - rect.height * 0.5f, rect.width, rect.height);
+                if (Event.current.button == 1)
+                    Remove();
+                else
+                {
+                    isDragging = true;
+                    WEInputManager.Instance.isItemOnDrag = true;
+                    position = Event.current.mousePosition - BoardController.Instance.boardPosition;
+                    rect = new Rect(Event.current.mousePosition.x - rect.width * 0.5f, Event.current.mousePosition.y - rect.height * 0.5f, rect.width, rect.height);
+                }
+            }
+            else if (isDragging)// && Event.current.type == EventType.MouseUp)
+            {
+                isDragging = false;
+                WEInputManager.Instance.isItemOnDrag = false;
             }
         }
+
         private void DrawNodes()
         {
             if (GetNodes.Count > 0)
@@ -96,6 +143,7 @@ namespace WallDesigner
                 }
             }
         }
+
         //this two method can be one and get array as argument
         private void DrawGiveNode(int index)
         {

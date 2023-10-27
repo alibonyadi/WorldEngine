@@ -6,6 +6,7 @@ public class WallDesignedEditor : EditorWindow
 {
     WallEditorController walleditor;
     RightClickMenu menuController;
+    BoardController boardController;
     ConnectLineController connectLineController;
     bool IsInitialized=false;
     [UnityEditor.MenuItem("WorldEngine/WallEditor")]
@@ -24,6 +25,7 @@ public class WallDesignedEditor : EditorWindow
                 WallEditorController.Instance.IsInitialized = true;
                 walleditor = WallEditorController.Instance;
                 menuController = new RightClickMenu();
+                boardController = BoardController.Instance;
             }
         }
         else
@@ -32,6 +34,7 @@ public class WallDesignedEditor : EditorWindow
                 walleditor = WallEditorController.Instance;
 
             walleditor.mousePos = Event.current.mousePosition;
+            BoardController.Instance.BoardControlling();
             /*int selected = 0;
             string[] menus = { "Reset", "Draw", "ccc" };
             selected = GUILayout.Toolbar(selected, menus);*/
@@ -39,11 +42,13 @@ public class WallDesignedEditor : EditorWindow
             if (GUILayout.Button("Reset"))
             {
                 walleditor.Reset();
+                BoardController.Instance.boardPosition = Vector2.zero;
             }
             if (GUILayout.Button("Draw"))
             {
                 FunctionProccesor.Instance.ProcessFunctions();
             }
+            GUILayout.Label(BoardController.Instance.boardPosition.ToString());
 
             walleditor.autoDraw = GUILayout.Toggle(walleditor.autoDraw, "Auto Draw");
             walleditor.WireFrame = GUILayout.Toggle(walleditor.WireFrame, "WireFrame");
@@ -63,7 +68,11 @@ public class WallDesignedEditor : EditorWindow
             //GenericMenu menu = new GenericMenu();
             GenericMenu menu = menuController.GetAllMenuItems();
             menu.ShowAsContext();
+
+
+
         }
+
         if (Event.current.type == EventType.MouseUp)
         {
             ConnectLineController.Instance.CheckWindowsClick();
