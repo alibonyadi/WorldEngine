@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
@@ -23,8 +24,6 @@ public class AddTexture : FunctionItem, IFunctionItem
         gnode.AttachedFunctionItem = this;
         gnode.id = 0;
         GetNodes.Add(gnode);
-
-
 
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
@@ -60,10 +59,18 @@ public class AddTexture : FunctionItem, IFunctionItem
             WallPartItem wallitem = (WallPartItem)item;
             if(wallitem.material.Count > 0)
             {
-                for (int i = 0; i < mitem.material.Count; i++)
+                //int count = wallitem.material.Count;
+                //wallitem.material.Clear();
+                List<Material> mats = new List<Material>();
+                for (int i = 0; i < wallitem.material.Count; i++)
                 {
-                    wallitem.material[i].mainTexture = att1.texture;
+                    Material mat1 = new Material(Shader.Find("Standard"));
+                    mat1.color = wallitem.material[i].color;
+                    mat1.mainTexture = att1.texture;
+                    mats.Add(mat1);
                 }
+                wallitem.material.Clear();
+                wallitem.material = mats;
             }
             else
             {

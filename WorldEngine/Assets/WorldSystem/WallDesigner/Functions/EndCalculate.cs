@@ -33,6 +33,8 @@ public class EndCalculate : FunctionItem, IFunctionItem
         if (GetNodes[0].ConnectedNode == null)
             return wallItem;
 
+        wallItem.material.Clear();
+
         wallItem = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem, GetNodes[0].ConnectedNode.id);
         return wallItem;
     }

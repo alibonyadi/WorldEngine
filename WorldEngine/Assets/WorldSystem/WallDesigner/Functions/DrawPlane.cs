@@ -40,10 +40,12 @@ public class DrawPlane : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh,object id)
     {
+
         if (GetNodes[0].ConnectedNode != null)
             output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
         else
         {
+            output.material.Clear();
             Material material = new Material(Shader.Find("Standard"));
             output.material.Add(material);
         }
@@ -84,7 +86,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.triangles = triangles;
 
         output.mesh = mesh;
-        
 
         return output;
     }

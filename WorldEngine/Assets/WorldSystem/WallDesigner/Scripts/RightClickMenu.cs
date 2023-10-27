@@ -37,12 +37,11 @@ namespace WallDesigner
                 //gmenu.AddItem(new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke );
                 gmenu.AddItem( new GUIContent(menuItems[i].Name), false, menuItems[i].action.Invoke, i);
             }
-
             return gmenu;
         }
         public void tempfunction(object a)
         {
 
         }
-    }  
+    }
 }

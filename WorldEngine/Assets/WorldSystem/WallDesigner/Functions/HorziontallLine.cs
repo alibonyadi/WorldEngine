@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,13 +48,15 @@ public class HorziontallLine : FunctionItem, IFunctionItem
     {
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
         distance = fa1.mFloat;
-        if (mMesh == null)
-            return null;
 
-        WallPartItem wpi = (WallPartItem)mMesh;
-        
+        //WallPartItem wpi = (WallPartItem)mMesh;
+
+        WallPartItem wpi = new WallPartItem();
+
         if (GetNodes[0].ConnectedNode != null)
             wpi = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+
+        Debug.Log("Slice Get material Count= " + wpi.material.Count);
 
         Mesh mesh = wpi.mesh;
         //List<Material material = wpi.material;
@@ -208,19 +211,35 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         lowerMesh.RecalculateNormals();
         lowerMesh.RecalculateBounds();
 
+        List<Material> mats = new List<Material>();
+        if (wpi.material.Count > 0)
+        {
+            //int count = wallitem.material.Count;
+            //wallitem.material.Clear();
+            
+            for (int i = 0; i < wpi.material.Count; i++)
+            {
+                Material mat1 = new Material(Shader.Find("Standard"));
+                mat1.color = wpi.material[i].color;
+                if(wpi.material[i].mainTexture !=null)
+                    mat1.mainTexture = wpi.material[i].mainTexture;
+                mats.Add(mat1);
+            }
+            //wpi.material.Clear();
+            //wpi.material = mats;
+        }
 
-        Debug.Log("id = "+id +" --u v c:"+ upperMesh.vertices.Length + " --L v c:" + lowerMesh.vertices.Length+ "cutZ = "+cutZ);
 
         if ((int)id == 0)
         {
             UpperPart.mesh = upperMesh;
-            UpperPart.material = wpi.material;
+            UpperPart.material = mats;
             return UpperPart;
         }
         else
         {
             LowerPart.mesh = lowerMesh;
-            LowerPart.material = wpi.material;
+            LowerPart.material = mats;
             return LowerPart;
         }
     }

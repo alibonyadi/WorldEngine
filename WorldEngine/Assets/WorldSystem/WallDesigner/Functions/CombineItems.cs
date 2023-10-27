@@ -45,12 +45,15 @@ public class CombineItems : FunctionItem, IFunctionItem
         else
             item = null;
 
+        //Debug.Log("first Call material count:"+item.material.Count);
+
         WallPartItem item2 = new WallPartItem();
         if (GetNodes[1].ConnectedNode != null)
             item2 = (WallPartItem)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[1].ConnectedNode.id);
         else
             item2 = null;
 
+        //Debug.Log("first Call material count item2:"+item2.material.Count);
 
         if (item == null && item2 != null)
         {
@@ -64,6 +67,8 @@ public class CombineItems : FunctionItem, IFunctionItem
         }
         else if(item2 != null && item != null)
         {
+            Debug.Log(item.material.Count);
+            Debug.Log(item2.material.Count);
             Debug.Log("2 nodes !!!");
             return CombineTwoItem(item.mesh,item2.mesh,item.material,item2.material);
         }
@@ -76,9 +81,40 @@ public class CombineItems : FunctionItem, IFunctionItem
 
     public WallPartItem CombineTwoItem(Mesh mesh1, Mesh mesh2, List<Material> materials1, List<Material> materials2)
     {
-        CombineInstance[] combine = new CombineInstance[2];
+       
+        int submeshCount1 = mesh1.subMeshCount;
+        int submeshCount2 = mesh2.subMeshCount;
 
-        combine[0].mesh = mesh1;
+        Debug.Log("sub1="+submeshCount1 + "--- sub2=" + submeshCount2);
+
+        CombineInstance[] combineInstances1 = new CombineInstance[submeshCount1+ submeshCount2];
+        //CombineInstance[] combineInstances2 = new CombineInstance[submeshCount2];
+
+        for (int i = 0; i < submeshCount1; i++)
+        {
+            combineInstances1[i] = new CombineInstance();
+            combineInstances1[i].mesh = mesh1;
+            combineInstances1[i].transform = Matrix4x4.identity;
+            combineInstances1[i].subMeshIndex = i;
+        }
+
+        // Populate the arrays with data from the second mesh
+        for (int i = submeshCount1; i < submeshCount2 + submeshCount1; i++)
+        {
+            combineInstances1[i] = new CombineInstance();
+            combineInstances1[i].mesh = mesh2;
+            combineInstances1[i].transform = Matrix4x4.identity;
+            combineInstances1[i].subMeshIndex = i - submeshCount1;
+        }
+
+        //CombineInstance[] combineInstances3 = new CombineInstance[submeshCount1+ submeshCount2];
+
+        Mesh combinedMesh = new Mesh();
+
+        combinedMesh.CombineMeshes(combineInstances1,false,false);
+        //combinedMesh.CombineMeshes(combineInstances2,false,false);
+
+        /*combine[0].mesh = mesh1;
         combine[0].transform = Matrix4x4.identity;
         combine[0].subMeshIndex = 0;
 
@@ -87,7 +123,7 @@ public class CombineItems : FunctionItem, IFunctionItem
         combine[1].subMeshIndex = 0;
 
         Mesh combinedMesh = new Mesh();
-        combinedMesh.CombineMeshes(combine, false, false);
+        combinedMesh.CombineMeshes(combine, false, false);*/
 
         List<Material> combinedMaterials = new List<Material>();
 

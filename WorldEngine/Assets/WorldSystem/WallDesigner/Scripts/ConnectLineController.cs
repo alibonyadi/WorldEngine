@@ -73,10 +73,30 @@ namespace WallDesigner
         {
             if(!isGetNode || (isGetNode && node.ConnectedNode == null))
             {
-                node.clicked = true;
-                node.color = Color.green;
-                ConnectLineController.Instance.isLineInDraw = true;
-                ConnectLineController.Instance.SetInDragNode(node);
+                if( Event.current.button == 0 )
+                {
+                    node.clicked = true;
+                    node.color = Color.green;
+                    ConnectLineController.Instance.isLineInDraw = true;
+                    ConnectLineController.Instance.SetInDragNode(node);
+                }
+                else
+                {
+                    node.ConnectedNode.ConnectedNode = null;
+                    node.ConnectedNode = null;
+                    node.clicked = false;
+                    ConnectLineController.Instance.isLineInDraw = false;
+                    ConnectLineController.Instance.SetInDragNode(null);
+                }
+                
+            }
+            else if(Event.current.button >= 1 )
+            {
+                node.ConnectedNode.ConnectedNode = null;
+                node.ConnectedNode = null;
+                node.clicked = false;
+                ConnectLineController.Instance.isLineInDraw = false;
+                ConnectLineController.Instance.SetInDragNode(null);
             }
         }
         private static void ConnectTwoNode(Node node)

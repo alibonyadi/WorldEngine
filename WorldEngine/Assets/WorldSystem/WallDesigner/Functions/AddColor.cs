@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
@@ -44,7 +45,7 @@ public class AddColor : FunctionItem, IFunctionItem
             {
                 for (int i = 0; i < mitem.material.Count; i++)
                 {
-                    mitem.material[i] = mat;
+                    mitem.material[i].color = att1.mColor;
                 }
             }
             else
@@ -55,10 +56,29 @@ public class AddColor : FunctionItem, IFunctionItem
         }
         else
         {
-            Debug.Log(mitem.material.Count);
-            //WallPartItem wallitem = (WallPartItem)item;
-            mitem.material.Add(mat);
-            return mitem;
+            WallPartItem wallitem = (WallPartItem)item;
+            if (wallitem.material.Count > 0)
+            {
+                //int count = wallitem.material.Count;
+                //wallitem.material.Clear();
+                List<Material> mats = new List<Material>();
+                for (int i = 0; i < wallitem.material.Count; i++)
+                {
+                    Material mat1 = new Material(Shader.Find("Standard"));
+                    if(wallitem.material[i].mainTexture != null)
+                        mat1.mainTexture = wallitem.material[i].mainTexture;
+                    mat1.color = att1.mColor;
+                    mats.Add(mat1);
+                }
+
+                //wallitem.material.Clear();
+                wallitem.material = mats;
+            }
+            else
+            {
+                wallitem.material.Add(mat);
+            }
+            return wallitem;
         }
     }
 }
