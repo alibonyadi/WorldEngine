@@ -48,6 +48,14 @@ public class WallDesignedEditor : EditorWindow
             {
                 FunctionProccesor.Instance.ProcessFunctions();
             }
+            if (GUILayout.Button("SaveWall"))
+            {
+                SaveLoadManager.SaveAllItems();
+            }
+            if (GUILayout.Button("LoadWall"))
+            {
+                SaveLoadManager.LoadAllItems();
+            }
             GUILayout.Label(BoardController.Instance.boardPosition.ToString());
 
             walleditor.autoDraw = GUILayout.Toggle(walleditor.autoDraw, "Auto Draw");
@@ -68,8 +76,6 @@ public class WallDesignedEditor : EditorWindow
             //GenericMenu menu = new GenericMenu();
             GenericMenu menu = menuController.GetAllMenuItems();
             menu.ShowAsContext();
-
-
 
         }
 

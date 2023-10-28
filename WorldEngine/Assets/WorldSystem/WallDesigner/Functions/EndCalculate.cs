@@ -29,6 +29,19 @@ public class EndCalculate : FunctionItem, IFunctionItem
         rect = new Rect(position.x, position.y, rect.width, rect.height);
     }
 
+    public override SerializedFunctionItem SaveSerialize()
+    {
+        SerializedFunctionItem item = new SerializedFunctionItem();
+        item.name = Name;
+        item.ClassName = ClassName;
+        if (GetNodes[0].ConnectedNode != null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+        return item;
+    }
+
     public object Execute(object mesh,object id)
     {
         if (GetNodes[0].ConnectedNode == null)

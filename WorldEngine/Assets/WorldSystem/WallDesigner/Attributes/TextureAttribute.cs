@@ -1,13 +1,16 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public class TextureAttribute : Attrebute
     {
-        string adress;
+        public string adress;
         string tempAdress;
+        [NonSerialized]
         public Texture2D texture;
 
         public TextureAttribute(Rect r) : base(r)
@@ -32,9 +35,10 @@ namespace WallDesigner
                 }
             }
 
-            if(texture!=null)
-                GUI.DrawTexture(new Rect(ButtonRect.x,ButtonRect.y+20,50,50), texture);
-
+            if (texture != null)
+            {
+                GUI.DrawTexture(new Rect(ButtonRect.x, ButtonRect.y + 20, 50, 50), texture);
+            }
             if (adress == tempAdress)
                 return;
 

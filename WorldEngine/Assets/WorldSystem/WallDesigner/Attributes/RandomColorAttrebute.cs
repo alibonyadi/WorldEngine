@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public class RandomColorAttrebute : Attrebute
     {
+        [NonSerialized]
         public Color mColor;
+        [NonSerialized]
         public Color temColor;
         float R = 1;
         float G = 1;
@@ -24,9 +28,9 @@ namespace WallDesigner
             GUI.color = mColor;
             if(GUI.Button(ButtonRect, "RandomColor"))
             {
-                R = Random.value; 
-                G = Random.value;
-                B = Random.value;
+                R = UnityEngine.Random.value; 
+                G = UnityEngine.Random.value;
+                B = UnityEngine.Random.value;
             }
 
             GUI.Box(boxRect,"");

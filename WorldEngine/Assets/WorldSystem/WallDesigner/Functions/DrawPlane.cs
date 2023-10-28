@@ -38,6 +38,39 @@ public class DrawPlane : FunctionItem, IFunctionItem
         attrebutes.Add(fl2);
     }
 
+
+    public override SerializedFunctionItem SaveSerialize()
+    {
+        SerializedFunctionItem item = new SerializedFunctionItem();
+        item.name = Name;
+        item.ClassName = ClassName;
+        item.attributeName.Add("FloatAttrebute");
+        item.attributeName.Add("FloatAttrebute");
+
+        FloatAttrebute att1 = (FloatAttrebute)attrebutes[0];
+        string stringtexturePath = att1.mFloat.ToString();
+        item.attributeValue.Add(stringtexturePath);
+
+        FloatAttrebute att2 = (FloatAttrebute)attrebutes[1];
+        string stringtexturePath2 = att2.mFloat.ToString();
+        item.attributeValue.Add(stringtexturePath2);
+
+        if (GetNodes[0].ConnectedNode != null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+
+        if (GiveNodes[0].ConnectedNode != null)
+        {
+            int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGiveNodeNumber);
+        }
+
+        return item;
+    }
+
+
     public object Execute(object mMesh,object id)
     {
 

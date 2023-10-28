@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using UnityEngine;
 
 namespace WallDesigner
@@ -10,7 +11,9 @@ namespace WallDesigner
         public Color color;
         public bool clicked = false;
         public Vector3 position = Vector3.zero;
+        [XmlElement("AttachedFunctionItem")]
         public FunctionItem AttachedFunctionItem { get; set; }
+        [XmlElement("ConnectedNode")]
         public Node ConnectedNode { get; set; }
 
         public FunctionItem GetConnectedItem()

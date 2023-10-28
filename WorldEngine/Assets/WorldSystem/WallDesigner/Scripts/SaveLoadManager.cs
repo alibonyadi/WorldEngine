@@ -1,34 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
+using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using WallDesigner;
 using System.Text;
+using System.Xml.Serialization;
+using System.Xml;
+using System;
 
 
 public class SaveLoadManager
 {
-    public static void SaveData(string path, SaveData saveData)
+    public static void SaveAllItems()
     {
-        string jsonData = JsonUtility.ToJson(saveData);
-        File.WriteAllText(path, jsonData);
-    }
+        List<SerializedFunctionItem> functionItems = new List<SerializedFunctionItem>();
 
-    public static SaveData LoadData(string path)
-    {
-        SaveData saveData = new SaveData();
-        if (File.Exists(path))
+        foreach(FunctionItem item in WallEditorController.Instance.GetAllCreatedItems())
         {
-            string jsonData = File.ReadAllText(path);
-            saveData = JsonUtility.FromJson<SaveData>(jsonData);
+            functionItems.Add(item.SaveSerialize());
         }
-        return saveData;
+        string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
+        SaveToXml(path+"/TestSave1.Wall", functionItems);
     }
-}
 
-[System.Serializable]
-public class SaveData
-{
-    public List<FunctionItem> functionItemList;
+    public static void LoadAllItems()
+    {
+        string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
+        List<SerializedFunctionItem> functionItems = LoadSerializedFunctionItemList(path+ "/TestSave1.Wall");
+
+        List<FunctionItem> functions = new List<FunctionItem>();
+
+        foreach (SerializedFunctionItem item in functionItems)
+        {
+            Type type = Type.GetType(item.ClassName);
+            if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
+            {
+                FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type);
+                fitem.LoadSerializedAttributes(item);
+                functions.Add(fitem);
+            }
+        }
+
+    }
+
+    public static void SaveToXml(string path, List<SerializedFunctionItem> functionItems)
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(List<SerializedFunctionItem>));
+        using (XmlWriter writer = XmlWriter.Create(path))
+        {
+            serializer.Serialize(writer, functionItems);
+        }
+    }
+
+    public static List<SerializedFunctionItem> LoadSerializedFunctionItemList(string filePath)
+    {
+        List<SerializedFunctionItem> itemList = new List<SerializedFunctionItem>();
+
+        XmlSerializer serializer = new XmlSerializer(typeof(List<SerializedFunctionItem>));
+
+        using (FileStream stream = new FileStream(filePath, FileMode.Open))
+        {
+            itemList = (List<SerializedFunctionItem>)serializer.Deserialize(stream);
+        }
+
+        return itemList;
+    }
+
+    
+
+    public static void SaveFunctionItemList(List<FunctionItem> functionItems)
+    {
+        
+        foreach(FunctionItem item in functionItems)
+        {
+
+        }
+    }
+
+    
 }

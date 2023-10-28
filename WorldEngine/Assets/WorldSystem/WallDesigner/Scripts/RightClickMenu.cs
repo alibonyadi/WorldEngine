@@ -26,7 +26,6 @@ namespace WallDesigner
                 menuItem.action = CTRL.GetCreateAction();
                 menuItems.Add(menuItem);
             }
-            Debug.Log("Menu Updated!!");
         }
         public GenericMenu GetAllMenuItems()
         {

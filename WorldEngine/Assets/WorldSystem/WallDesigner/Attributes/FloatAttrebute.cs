@@ -2,6 +2,7 @@
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public class FloatAttrebute : Attrebute
     {
         public float mFloat;

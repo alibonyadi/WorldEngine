@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
@@ -5,6 +6,7 @@ using WallDesigner;
 [System.Serializable]
 public class AddColor : FunctionItem, IFunctionItem
 {
+    [NonSerialized]
     private Color outputColor;
 
     public AddColor()
@@ -28,11 +30,64 @@ public class AddColor : FunctionItem, IFunctionItem
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
         RandomColorAttrebute colorAtt1 = new RandomColorAttrebute(at1Rect);
-        colorAtt1.mColor = Random.ColorHSV();
+        colorAtt1.mColor = UnityEngine.Random.ColorHSV();
         colorAtt1.SetName("Random Color");
         attrebutes.Add(colorAtt1);
     }
 
+    public override void LoadSerializedAttributes(SerializedFunctionItem item)
+    {
+        Name = item.name;
+        ClassName = item.ClassName;
+
+        RandomColorAttrebute att = (RandomColorAttrebute)attrebutes[0];
+        att.mColor = parseColor(item.attributeValue[0]);
+        attrebutes[0] = att;
+    }
+
+    private Color parseColor(string colorString)
+    {
+        Debug.Log(colorString);
+        //Color myColor = Color.white;
+        //string colorString = myColor.ToString(); // this returns "RGBA(1.000, 1.000, 1.000, 1.000)"
+
+        string[] colorValues = colorString.Split('(', ',', ')'); // this splits the string into an array containing ["RGBA", "1.000", "1.000", "1.000", "1.000"]
+
+        float r = float.Parse(colorValues[1]);
+        float g = float.Parse(colorValues[2]);
+        float b = float.Parse(colorValues[3]);
+        float a = float.Parse(colorValues[4]);
+
+        Color parsedColor = new Color(r, g, b, a); // create the new color object from the parsed values
+        return parsedColor;
+    }
+
+    public override SerializedFunctionItem SaveSerialize()
+    {
+        SerializedFunctionItem item = new SerializedFunctionItem();
+        item.name = Name;
+        item.ClassName = ClassName;
+        item.attributeName.Add("RandomColorAttrebute");
+
+        RandomColorAttrebute att1 = (RandomColorAttrebute)attrebutes[0];
+        string stringcolor = att1.mColor.ToString();
+        item.attributeValue.Add(stringcolor);
+
+        if (GetNodes[0].ConnectedNode!=null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+
+        if (GiveNodes[0].ConnectedNode != null)
+        {
+            int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGiveNodeNumber);
+        }
+        
+        return item;
+    }
+     
     public object Execute(object item, object id)
     {
         WallPartItem mitem = new WallPartItem();

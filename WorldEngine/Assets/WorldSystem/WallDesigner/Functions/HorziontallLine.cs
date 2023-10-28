@@ -40,6 +40,38 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         attrebutes.Add(fl1);
     }
 
+    public override SerializedFunctionItem SaveSerialize()
+    {
+        SerializedFunctionItem item = new SerializedFunctionItem();
+        item.name = Name;
+        item.ClassName = ClassName;
+        item.attributeName.Add("FloatAttrebute");
+
+        FloatAttrebute att1 = (FloatAttrebute)attrebutes[0];
+        string stringtexturePath = att1.mFloat.ToString();
+        item.attributeValue.Add(stringtexturePath);
+
+        if (GetNodes[0].ConnectedNode != null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+
+        if (GiveNodes[0].ConnectedNode != null)
+        {
+            int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGiveNodeNumber);
+        }
+
+        if (GiveNodes[1].ConnectedNode != null)
+        {
+            int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[1].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGiveNodeNumber);
+        }
+
+        return item;
+    }
+
     public object Execute(object mMesh,object id)
     {
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
@@ -52,7 +84,6 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         if (GetNodes[0].ConnectedNode != null)
             wpi = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
-        Debug.Log("Slice Get material Count= " + wpi.material.Count);
 
         Mesh mesh = wpi.mesh;
         //List<Material material = wpi.material;

@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public class WallPartItem
     {
+        [NonSerialized]
         public Mesh mesh;
+        [NonSerialized]
         public List<Material> material;
 
         public WallPartItem()

@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public abstract class Attrebute
     {
+        [NonSerialized]
         protected Rect rect = new Rect();
         protected string name;
 

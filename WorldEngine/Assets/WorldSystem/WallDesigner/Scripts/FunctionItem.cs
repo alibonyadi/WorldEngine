@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Xml.Serialization;
 using UnityEditor;
 using UnityEngine;
 using static UnityEngine.UI.CanvasScaler;
@@ -14,13 +15,17 @@ namespace WallDesigner
         public string Name { get; set; }
         public string ClassName { get; set; }
         public string Description { get; set; }
+        [NonSerialized]
         public Color basecolor;
-        public Vector2 position { get; set; }
+        [NonSerialized]
+        public Vector2 position;
         //public Action<Mesh> action { get; set; }
         public Func<object, object, object> myFunction { get; set; }
-
+        [NonSerialized]
         public Rect rect;
+        [XmlArray("GetNodes"), XmlArrayItem("GetNode")]
         public List<Node> GetNodes;
+        [XmlArray("GiveNodes"), XmlArrayItem("GiveNode")]
         public List<Node> GiveNodes;
         public List<Attrebute> attrebutes;
         public FunctionItem()
@@ -39,6 +44,22 @@ namespace WallDesigner
             GiveNodes = new List<Node>();
             GetNodes = new List<Node>();
             attrebutes = new List<Attrebute>();
+        }
+
+        public virtual SerializedFunctionItem SaveSerialize()
+        {
+            SerializedFunctionItem item = new SerializedFunctionItem();
+
+            item.name = Name;
+            item.ClassName = ClassName;
+
+            return item;
+        }
+
+        public virtual void LoadSerializedAttributes(SerializedFunctionItem item)
+        {
+            Name = item.name;
+            ClassName = item.ClassName;
         }
 
         public string GetName() => Name;

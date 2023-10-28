@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
@@ -5,6 +6,7 @@ using WallDesigner;
 [System.Serializable]
 public class AddTexture : FunctionItem, IFunctionItem
 {
+    [NonSerialized]
     private Texture outputTexture;
 
      
@@ -30,7 +32,37 @@ public class AddTexture : FunctionItem, IFunctionItem
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
         TextureAttribute att1 = new TextureAttribute(at1Rect);
         att1.SetName(Name);
+        //Debug.Log(att1.texture.ToString());
         attrebutes.Add(att1);
+    }
+
+    public override SerializedFunctionItem SaveSerialize()
+    {
+        SerializedFunctionItem item = new SerializedFunctionItem();
+        item.name = Name;
+        item.ClassName = ClassName;
+        item.attributeName.Add("TextureAttribute");
+
+        TextureAttribute att1 = (TextureAttribute)attrebutes[0];
+        if (att1.texture != null)
+        {
+            string stringtexturePath = att1.adress;
+            item.attributeValue.Add(stringtexturePath);
+        }
+
+        if (GetNodes[0].ConnectedNode != null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+
+        if (GiveNodes[0].ConnectedNode != null)
+        {
+            int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGiveNodeNumber);
+        }
+
+        return item;
     }
 
     public object Execute(object item, object id)

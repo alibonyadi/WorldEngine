@@ -81,7 +81,7 @@ namespace WallDesigner
             }
         }
         private void RefreshClasses()
-        { 
+        {
             allFunctions.Clear();
             string path = Application.dataPath + "/WorldSystem/WallDesigner/Functions";
             string[] files = Directory.GetFiles(path, "*.cs");

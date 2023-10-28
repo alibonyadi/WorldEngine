@@ -37,6 +37,34 @@ public class CombineItems : FunctionItem, IFunctionItem
 
     }
 
+    public override SerializedFunctionItem SaveSerialize()
+    {
+        SerializedFunctionItem item = new SerializedFunctionItem();
+        item.name = Name;
+        item.ClassName = ClassName;
+
+
+        if (GetNodes[0].ConnectedNode != null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+
+        if (GetNodes[1].ConnectedNode != null)
+        {
+            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[1].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGetNodeNumber);
+        }
+
+        if (GiveNodes[0].ConnectedNode != null)
+        {
+            int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
+            item.getnodeConnected.Add(connectedGiveNodeNumber);
+        }
+
+        return item;
+    }
+
     public object Execute(object mesh, object id)
     {
         WallPartItem item = new WallPartItem();
