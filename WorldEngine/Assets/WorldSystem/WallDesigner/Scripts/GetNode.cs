@@ -2,6 +2,7 @@
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public class GetNode:Node
     {
         public GetNode()

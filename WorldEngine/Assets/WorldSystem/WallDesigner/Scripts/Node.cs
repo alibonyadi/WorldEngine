@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public class Node : INode
     {
         public int id = 0; 

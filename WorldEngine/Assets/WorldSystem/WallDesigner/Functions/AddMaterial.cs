@@ -1,6 +1,7 @@
 using UnityEngine;
 using WallDesigner;
 
+[System.Serializable]
 public class AddMaterial : FunctionItem, IFunctionItem
 {
     private Material _material;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
+[System.Serializable]
 public class AddTexture : FunctionItem, IFunctionItem
 {
     private Texture outputTexture;

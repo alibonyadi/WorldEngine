@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 using WallDesigner;
 
+[System.Serializable]
 public class HorziontallLine : FunctionItem, IFunctionItem
 {
     private WallPartItem UpperPart;

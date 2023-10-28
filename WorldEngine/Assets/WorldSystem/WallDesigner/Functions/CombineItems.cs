@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using WallDesigner;
 
-
+[System.Serializable]
 public class CombineItems : FunctionItem, IFunctionItem
 {
     public CombineItems()

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
+[System.Serializable]
 public class AddColor : FunctionItem, IFunctionItem
 {
     private Color outputColor;

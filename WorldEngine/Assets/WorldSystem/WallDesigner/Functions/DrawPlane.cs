@@ -1,7 +1,7 @@
 using UnityEngine;
 using WallDesigner;
 
-
+[System.Serializable]
 public class DrawPlane : FunctionItem, IFunctionItem
 {
     private WallPartItem output;

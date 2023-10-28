@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
+[System.Serializable]
 public class EndCalculate : FunctionItem, IFunctionItem
 {
     WallPartItem wallItem;

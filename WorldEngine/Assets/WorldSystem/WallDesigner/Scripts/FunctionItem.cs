@@ -7,6 +7,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 namespace WallDesigner
 {
+    [System.Serializable]
     public abstract partial class FunctionItem
     {
         private bool isDragging = false;
