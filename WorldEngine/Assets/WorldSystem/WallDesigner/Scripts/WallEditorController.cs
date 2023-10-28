@@ -103,6 +103,7 @@ namespace WallDesigner
         }
         public List<FunctionItem> GetAllFunctionItems() => allFunctions;
         public List<FunctionItem> GetAllCreatedItems() => allFItems;
+        public void SetAllCreatedItems(List<FunctionItem> newFunctionsItems) => allFItems = newFunctionsItems;
         public Action<object> GetCreateAction()
         {
             Action<object> action = null;
