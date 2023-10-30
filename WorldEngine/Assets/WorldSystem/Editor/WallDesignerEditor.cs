@@ -68,6 +68,12 @@ public class WallDesignedEditor : EditorWindow
                 walleditor.holder.GetComponent<Camera>().SetReplacementShader(Shader.Find("Standard"), ""); 
 
             walleditor.DrawFunctionItemGUI();
+
+            if (walleditor.canRepaint)
+            {
+                walleditor.canRepaint = false;
+                Repaint();
+            }
         }
 
 
@@ -83,7 +89,9 @@ public class WallDesignedEditor : EditorWindow
         {
             ConnectLineController.Instance.CheckWindowsClick();
         }
+
         
-        Repaint();
     }
+
+    
 }

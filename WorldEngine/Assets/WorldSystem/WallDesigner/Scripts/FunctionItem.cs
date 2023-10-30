@@ -62,6 +62,11 @@ namespace WallDesigner
             ClassName = item.ClassName;
         }
 
+        public virtual void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
+        {
+
+        }
+
         public string GetName() => Name;
         //public Action GetAction() => action;
         protected void CalculateRect()
@@ -139,6 +144,7 @@ namespace WallDesigner
                     WEInputManager.Instance.isItemOnDrag = true;
                     position = Event.current.mousePosition - BoardController.Instance.boardPosition;
                     rect = new Rect(Event.current.mousePosition.x - rect.width * 0.5f, Event.current.mousePosition.y - rect.height * 0.5f, rect.width, rect.height);
+                    WallEditorController.Instance.RepaintBoard();
                 }
             }
             else if (isDragging)// && Event.current.type == EventType.MouseUp)

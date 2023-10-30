@@ -46,6 +46,7 @@ public class BoardController
                 item.UpdateBoardPos();
             }
 
+            WallEditorController.Instance.RepaintBoard();
             tempMousePosition = Event.current.mousePosition;
         }
 

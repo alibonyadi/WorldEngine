@@ -10,6 +10,7 @@ namespace WallDesigner
     public class WallEditorController
     {
         Mesh mesh;
+        public bool canRepaint=false;
         private static WallEditorController instance;
         public GameObject holder;//Camera and root for Objects instantiated
         public GameObject inEditeObject;
@@ -117,18 +118,22 @@ namespace WallDesigner
                 Debug.LogWarning("Just One " + allFunctions[(int)index].ClassName + " can exist!!!");
                 return;
             }
-
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
             FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
             item.position = mousePos - BoardController.Instance.boardPosition;
             Vector2 tempposition = item.position + BoardController.Instance.boardPosition;
             item.rect = new Rect(tempposition.x - item.rect.width/2, tempposition.y - item.rect.height / 2, item.rect.width, item.rect.height);
-
             allFItems.Add(item);
             if ((int)index == EndItemIndex)
             {
                 EndItem = item;
             }
         }
+
+        public void RepaintBoard()
+        {
+            canRepaint = true;
+        }
     }
+    
 }
