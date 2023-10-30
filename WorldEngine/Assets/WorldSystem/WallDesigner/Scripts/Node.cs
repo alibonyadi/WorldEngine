@@ -24,6 +24,7 @@ namespace WallDesigner
         public Node()
         {
             IsConnected = false;
+            id = 0;
             color = Color.red;
             AttachedFunctionItem = null;
             ConnectedNode = null;

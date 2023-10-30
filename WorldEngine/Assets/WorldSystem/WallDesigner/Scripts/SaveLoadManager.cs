@@ -38,8 +38,22 @@ public class SaveLoadManager
             {
                 FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type);
                 fitem.LoadSerializedAttributes(item);
+                fitem.position = item.Position;
                 functions.Add(fitem);
             }
+            if (functions[functions.Count - 1].GetType() == typeof(EndCalculate))
+            {
+                WallEditorController.Instance.EndItemIndex = functions.Count - 1;
+                WallEditorController.Instance.EndItem = functions[functions.Count - 1];
+                //CreateAction(EndItemIndex);
+            }
+        }
+
+        WallEditorController.Instance.SetAllCreatedItems(functions);
+
+        for (int i=0;i<functionItems.Count;i++)
+        {
+            functions[i].LoadNodeConnections(functionItems[i], functions);
         }
 
     }

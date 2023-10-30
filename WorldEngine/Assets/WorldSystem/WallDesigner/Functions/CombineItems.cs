@@ -34,6 +34,22 @@ public class CombineItems : FunctionItem, IFunctionItem
         CalculateRect();
         rect = new Rect(position.x, position.y, rect.width, rect.height);
 
+    }
+
+
+    public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
+    {
+        if (item.getnodeConnectedFI.Count > 0)
+            GetNodes[0].ConnectedNode = functionItems[item.getnodeConnectedFI[0]].GiveNodes[item.getnodeItems[0]];
+        if (item.getnodeConnectedFI.Count > 1)
+            GetNodes[1].ConnectedNode = functionItems[item.getnodeConnectedFI[1]].GiveNodes[item.getnodeItems[1]];
+        if (item.givenodeConnectedFI.Count > 0)
+            GiveNodes[0].ConnectedNode = functionItems[item.givenodeConnectedFI[0]].GetNodes[item.givenodeItems[0]];
+    }
+
+
+    public override void LoadSerializedAttributes(SerializedFunctionItem item)
+    {
 
     }
 
@@ -42,24 +58,27 @@ public class CombineItems : FunctionItem, IFunctionItem
         SerializedFunctionItem item = new SerializedFunctionItem();
         item.name = Name;
         item.ClassName = ClassName;
-
+        item.Position = position;
 
         if (GetNodes[0].ConnectedNode != null)
         {
             int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGetNodeNumber);
+            item.getnodeConnectedFI.Add(connectedGetNodeNumber);
+            item.getnodeItems.Add(GetNodes[0].ConnectedNode.id);
         }
 
         if (GetNodes[1].ConnectedNode != null)
         {
             int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[1].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGetNodeNumber);
+            item.getnodeConnectedFI.Add(connectedGetNodeNumber);
+            item.getnodeItems.Add(GetNodes[1].ConnectedNode.id);
         }
 
         if (GiveNodes[0].ConnectedNode != null)
         {
             int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGiveNodeNumber);
+            item.givenodeConnectedFI.Add(connectedGiveNodeNumber);
+            item.givenodeItems.Add(GiveNodes[0].ConnectedNode.id);
         }
 
         return item;
@@ -95,14 +114,11 @@ public class CombineItems : FunctionItem, IFunctionItem
         }
         else if(item2 != null && item != null)
         {
-            Debug.Log(item.material.Count);
-            Debug.Log(item2.material.Count);
-            Debug.Log("2 nodes !!!");
             return CombineTwoItem(item.mesh,item2.mesh,item.material,item2.material);
         }
         else
         {
-            Debug.Log("No Node!!!");
+            Debug.Log("No connected Node!!!");
             return mesh;
         }
     }
@@ -112,8 +128,6 @@ public class CombineItems : FunctionItem, IFunctionItem
        
         int submeshCount1 = mesh1.subMeshCount;
         int submeshCount2 = mesh2.subMeshCount;
-
-        Debug.Log("sub1="+submeshCount1 + "--- sub2=" + submeshCount2);
 
         CombineInstance[] combineInstances1 = new CombineInstance[submeshCount1+ submeshCount2];
         //CombineInstance[] combineInstances2 = new CombineInstance[submeshCount2];

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
@@ -38,33 +39,63 @@ public class DrawPlane : FunctionItem, IFunctionItem
         attrebutes.Add(fl2);
     }
 
+    public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
+    {
+        if (item.getnodeConnectedFI.Count > 0 && item.getnodeConnectedFI[0] != null)
+        {
+            GetNodes[0].ConnectedNode = functionItems[item.getnodeConnectedFI[0]].GiveNodes[item.getnodeItems[0]];
+        }
+
+        if (item.givenodeConnectedFI.Count > 0 && item.givenodeConnectedFI[0] != null)
+        {
+            GiveNodes[0].ConnectedNode = functionItems[item.givenodeConnectedFI[0]].GetNodes[item.givenodeItems[0]];
+        }
+        //GiveNodes[1].ConnectedNode = functionItems[item.givenodeConnectedFI[1]].GiveNodes[item.givenodeItems[1]];
+    }
+
+    public override void LoadSerializedAttributes(SerializedFunctionItem item)
+    {
+        Name = item.name;
+        ClassName = item.ClassName;
+
+        FloatAttrebute att = (FloatAttrebute)attrebutes[0];
+        att.mFloat = float.Parse(item.attributeValue[0]);
+        attrebutes[0] = att;
+
+        FloatAttrebute att2 = (FloatAttrebute)attrebutes[1];
+        att2.mFloat = float.Parse(item.attributeValue[1]);
+        attrebutes[1] = att2;
+    }
 
     public override SerializedFunctionItem SaveSerialize()
     {
         SerializedFunctionItem item = new SerializedFunctionItem();
         item.name = Name;
         item.ClassName = ClassName;
+        item.Position = position;
         item.attributeName.Add("FloatAttrebute");
         item.attributeName.Add("FloatAttrebute");
 
         FloatAttrebute att1 = (FloatAttrebute)attrebutes[0];
-        string stringtexturePath = att1.mFloat.ToString();
-        item.attributeValue.Add(stringtexturePath);
+        string stringfloat1 = att1.mFloat.ToString();
+        item.attributeValue.Add(stringfloat1);
 
         FloatAttrebute att2 = (FloatAttrebute)attrebutes[1];
-        string stringtexturePath2 = att2.mFloat.ToString();
-        item.attributeValue.Add(stringtexturePath2);
+        string stringfloat2 = att2.mFloat.ToString();
+        item.attributeValue.Add(stringfloat2);
 
         if (GetNodes[0].ConnectedNode != null)
         {
             int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGetNodeNumber);
+            item.getnodeConnectedFI.Add(connectedGetNodeNumber);
+            item.getnodeItems.Add(GetNodes[0].ConnectedNode.id);
         }
 
         if (GiveNodes[0].ConnectedNode != null)
         {
             int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGiveNodeNumber);
+            item.givenodeConnectedFI.Add(connectedGiveNodeNumber);
+            item.givenodeItems.Add(GiveNodes[0].ConnectedNode.id);
         }
 
         return item;
@@ -73,7 +104,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh,object id)
     {
-
         if (GetNodes[0].ConnectedNode != null)
             output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
         else

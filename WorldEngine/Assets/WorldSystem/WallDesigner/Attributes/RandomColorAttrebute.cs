@@ -20,6 +20,16 @@ namespace WallDesigner
             rect = r;
         }
 
+        public void SetColor(Color c)
+        {
+            mColor = c;
+            temColor = c;
+            R = c.r;
+            G = c.g;
+            B = c.b;
+            A = c.a;
+        }
+
         public override void Draw(Vector2 position)
         {
             Rect ButtonRect = new Rect(rect.x + position.x - rect.width / 2, rect.y + position.y, rect.width, 20);

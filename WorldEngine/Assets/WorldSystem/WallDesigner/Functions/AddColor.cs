@@ -35,22 +35,31 @@ public class AddColor : FunctionItem, IFunctionItem
         attrebutes.Add(colorAtt1);
     }
 
+    public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
+    {
+        if (item.getnodeConnectedFI.Count > 0)
+        {
+            GetNodes[0].ConnectedNode = functionItems[item.getnodeConnectedFI[0]].GiveNodes[item.getnodeItems[0]];
+        }
+        if (item.givenodeConnectedFI.Count > 0)
+        {
+            GiveNodes[0].ConnectedNode = functionItems[item.givenodeConnectedFI[0]].GetNodes[item.givenodeItems[0]];
+        }
+    }
+
     public override void LoadSerializedAttributes(SerializedFunctionItem item)
     {
         Name = item.name;
         ClassName = item.ClassName;
 
         RandomColorAttrebute att = (RandomColorAttrebute)attrebutes[0];
-        att.mColor = parseColor(item.attributeValue[0]);
+        att.SetColor(att.mColor);
+        //att.
         attrebutes[0] = att;
     }
 
     private Color parseColor(string colorString)
     {
-        Debug.Log(colorString);
-        //Color myColor = Color.white;
-        //string colorString = myColor.ToString(); // this returns "RGBA(1.000, 1.000, 1.000, 1.000)"
-
         string[] colorValues = colorString.Split('(', ',', ')'); // this splits the string into an array containing ["RGBA", "1.000", "1.000", "1.000", "1.000"]
 
         float r = float.Parse(colorValues[1]);
@@ -67,6 +76,7 @@ public class AddColor : FunctionItem, IFunctionItem
         SerializedFunctionItem item = new SerializedFunctionItem();
         item.name = Name;
         item.ClassName = ClassName;
+        item.Position = position;
         item.attributeName.Add("RandomColorAttrebute");
 
         RandomColorAttrebute att1 = (RandomColorAttrebute)attrebutes[0];
@@ -76,13 +86,15 @@ public class AddColor : FunctionItem, IFunctionItem
         if (GetNodes[0].ConnectedNode!=null)
         {
             int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGetNodeNumber);
+            item.getnodeConnectedFI.Add(connectedGetNodeNumber);
+            item.getnodeItems.Add(GetNodes[0].ConnectedNode.id);
         }
 
         if (GiveNodes[0].ConnectedNode != null)
         {
             int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnected.Add(connectedGiveNodeNumber);
+            item.givenodeConnectedFI.Add(connectedGiveNodeNumber);
+            item.givenodeItems.Add(GiveNodes[0].ConnectedNode.id);
         }
         
         return item;
