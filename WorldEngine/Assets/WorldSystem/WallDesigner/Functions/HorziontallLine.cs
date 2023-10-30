@@ -34,7 +34,15 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         CalculateRect();
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
-        FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        
+        ToggleAttribute ta1 = new ToggleAttribute(at1Rect);
+        ta1.mToggle = true;
+        ta1.SetName("fromTop");
+        attrebutes.Add(ta1);
+
+        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y +20, rect.width, rect.height);
+
+        FloatAttrebute fl1 = new FloatAttrebute(at2Rect);
         fl1.mFloat = distance;
         fl1.SetName("Distance");
         attrebutes.Add(fl1);
@@ -59,9 +67,13 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         Name = item.name;
         ClassName = item.ClassName;
 
-        FloatAttrebute att = (FloatAttrebute)attrebutes[0];
-        att.mFloat = float.Parse(item.attributeValue[0]);
-        attrebutes[0] = att;
+        ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
+        ta1.mToggle = item.attributeValue[0]=="True";
+        attrebutes[0] = ta1;
+
+        FloatAttrebute att = (FloatAttrebute)attrebutes[1];
+        att.mFloat = float.Parse(item.attributeValue[1]);
+        attrebutes[1] = att;
     }
 
     public override SerializedFunctionItem SaveSerialize()
@@ -72,7 +84,11 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         item.Position = position;
         item.attributeName.Add("FloatAttrebute");
 
-        FloatAttrebute att1 = (FloatAttrebute)attrebutes[0];
+        ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
+        string stringtoggle = ta1.mToggle.ToString();
+        item.attributeValue.Add(stringtoggle);
+
+        FloatAttrebute att1 = (FloatAttrebute)attrebutes[1];
         string stringtexturePath = att1.mFloat.ToString();
         item.attributeValue.Add(stringtexturePath);
 
@@ -96,14 +112,16 @@ public class HorziontallLine : FunctionItem, IFunctionItem
             item.givenodeConnectedFI.Add(connectedGiveNodeNumber);
             item.givenodeItems.Add(GiveNodes[1].ConnectedNode.id);
         }
-
         return item;
     }
 
     public object Execute(object mMesh,object id)
     {
-        FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
+        FloatAttrebute fa1 = (FloatAttrebute)attrebutes[1];
         distance = fa1.mFloat;
+
+        ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
+        bool fromTop = ta1.mToggle;
 
         //WallPartItem wpi = (WallPartItem)mMesh;
 
@@ -134,15 +152,36 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         List<Vector2> lowerUV = new List<Vector2>();
         List<Vector3> lowerNormals = new List<Vector3>();
 
-        float highestZ = float.MinValue;
-        foreach (Vector3 vertex in vertices)
+        float cutZ = 0;
+
+        if (fromTop)
         {
-            if (vertex.z > highestZ)
+            float highestZ = float.MinValue;
+            foreach (Vector3 vertex in vertices)
             {
-                highestZ = vertex.z;
+                if (vertex.z > highestZ)
+                {
+                    highestZ = vertex.z;
+                }
             }
+
+            cutZ = highestZ - distance;
         }
-        float cutZ = highestZ - distance;
+        else
+        {
+            float minZ = float.MaxValue;
+            foreach (Vector3 vertex in vertices)
+            {
+                if (vertex.z < minZ)
+                {
+                    minZ = vertex.z;
+                }
+            }
+
+            cutZ = minZ + distance;
+        }
+        
+        
 
         for (int i = 0; i < triangles.Length; i += 3)
         {
