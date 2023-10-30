@@ -8,6 +8,8 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using System;
+using UnityEditor;
+
 public class SaveLoadManager
 {
     public static void SaveAllItems()
@@ -17,35 +19,43 @@ public class SaveLoadManager
         {
             functionItems.Add(item.SaveSerialize());
         }
-        string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
-        SaveToXml(path+"/TestSave1.Wall", functionItems);
+        string path = EditorUtility.SaveFilePanel("Save Wall Item", Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions", "Wall", "wall");
+        if (path != "" ) 
+        {
+            SaveToXml(path, functionItems);
+            Debug.Log("Saved!!!");
+        } 
     }
     public static void LoadAllItems()
     {
-        string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
-        List<SerializedFunctionItem> functionItems = LoadSerializedFunctionItemList(path+ "/TestSave1.Wall");
-        List<FunctionItem> functions = new List<FunctionItem>();
-        foreach (SerializedFunctionItem item in functionItems)
+        string path = EditorUtility.OpenFilePanel("Open Wall Item", Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions", "wall");
+        if (path != "")
         {
-            Type type = Type.GetType(item.ClassName);
-            if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
+            //string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
+            List<SerializedFunctionItem> functionItems = LoadSerializedFunctionItemList(path);
+            List<FunctionItem> functions = new List<FunctionItem>();
+            foreach (SerializedFunctionItem item in functionItems)
             {
-                FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type);
-                fitem.LoadSerializedAttributes(item);
-                fitem.position = item.Position;
-                functions.Add(fitem);
+                Type type = Type.GetType(item.ClassName);
+                if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
+                {
+                    FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type);
+                    fitem.LoadSerializedAttributes(item);
+                    fitem.position = item.Position;
+                    functions.Add(fitem);
+                }
+                if (functions[functions.Count - 1].GetType() == typeof(EndCalculate))
+                {
+                    WallEditorController.Instance.EndItemIndex = functions.Count - 1;
+                    WallEditorController.Instance.EndItem = functions[functions.Count - 1];
+                    //CreateAction(EndItemIndex);
+                }
             }
-            if (functions[functions.Count - 1].GetType() == typeof(EndCalculate))
+            WallEditorController.Instance.SetAllCreatedItems(functions);
+            for (int i = 0; i < functionItems.Count; i++)
             {
-                WallEditorController.Instance.EndItemIndex = functions.Count - 1;
-                WallEditorController.Instance.EndItem = functions[functions.Count - 1];
-                //CreateAction(EndItemIndex);
+                functions[i].LoadNodeConnections(functionItems[i], functions);
             }
-        }
-        WallEditorController.Instance.SetAllCreatedItems(functions);
-        for (int i=0;i<functionItems.Count;i++)
-        {
-            functions[i].LoadNodeConnections(functionItems[i], functions);
         }
     }
     public static void SaveToXml(string path, List<SerializedFunctionItem> functionItems)

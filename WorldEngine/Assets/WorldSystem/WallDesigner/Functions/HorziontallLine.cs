@@ -57,7 +57,7 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         if (item.givenodeConnectedFI.Count > 0)
             GiveNodes[0].ConnectedNode = functionItems[item.givenodeConnectedFI[0]].GetNodes[item.givenodeItems[0]];
 
-        if (item.givenodeConnectedFI.Count > 0)
+        if (item.givenodeConnectedFI.Count > 1)
             GiveNodes[1].ConnectedNode = functionItems[item.givenodeConnectedFI[1]].GetNodes[item.givenodeItems[1]];
     }
 
