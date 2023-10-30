@@ -8,14 +8,11 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using System;
-
-
 public class SaveLoadManager
 {
     public static void SaveAllItems()
     {
         List<SerializedFunctionItem> functionItems = new List<SerializedFunctionItem>();
-
         foreach(FunctionItem item in WallEditorController.Instance.GetAllCreatedItems())
         {
             functionItems.Add(item.SaveSerialize());
@@ -23,14 +20,11 @@ public class SaveLoadManager
         string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
         SaveToXml(path+"/TestSave1.Wall", functionItems);
     }
-
     public static void LoadAllItems()
     {
         string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
         List<SerializedFunctionItem> functionItems = LoadSerializedFunctionItemList(path+ "/TestSave1.Wall");
-
         List<FunctionItem> functions = new List<FunctionItem>();
-
         foreach (SerializedFunctionItem item in functionItems)
         {
             Type type = Type.GetType(item.ClassName);
@@ -48,16 +42,12 @@ public class SaveLoadManager
                 //CreateAction(EndItemIndex);
             }
         }
-
         WallEditorController.Instance.SetAllCreatedItems(functions);
-
         for (int i=0;i<functionItems.Count;i++)
         {
             functions[i].LoadNodeConnections(functionItems[i], functions);
         }
-
     }
-
     public static void SaveToXml(string path, List<SerializedFunctionItem> functionItems)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(List<SerializedFunctionItem>));
@@ -66,7 +56,6 @@ public class SaveLoadManager
             serializer.Serialize(writer, functionItems);
         }
     }
-
     public static List<SerializedFunctionItem> LoadSerializedFunctionItemList(string filePath)
     {
         List<SerializedFunctionItem> itemList = new List<SerializedFunctionItem>();
@@ -80,17 +69,11 @@ public class SaveLoadManager
 
         return itemList;
     }
-
-    
-
     public static void SaveFunctionItemList(List<FunctionItem> functionItems)
     {
-        
         foreach(FunctionItem item in functionItems)
         {
 
         }
     }
-
-    
 }

@@ -50,7 +50,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
         {
             GiveNodes[0].ConnectedNode = functionItems[item.givenodeConnectedFI[0]].GetNodes[item.givenodeItems[0]];
         }
-        //GiveNodes[1].ConnectedNode = functionItems[item.givenodeConnectedFI[1]].GiveNodes[item.givenodeItems[1]];
     }
 
     public override void LoadSerializedAttributes(SerializedFunctionItem item)
