@@ -41,12 +41,12 @@ public class DrawPlane : FunctionItem, IFunctionItem
 
     public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
     {
-        if (item.getnodeConnectedFI.Count > 0 && item.getnodeConnectedFI[0] != null)
+        if (item.getnodeConnectedFI.Count > 0)
         {
             GetNodes[0].ConnectedNode = functionItems[item.getnodeConnectedFI[0]].GiveNodes[item.getnodeItems[0]];
         }
 
-        if (item.givenodeConnectedFI.Count > 0 && item.givenodeConnectedFI[0] != null)
+        if (item.givenodeConnectedFI.Count > 0)
         {
             GiveNodes[0].ConnectedNode = functionItems[item.givenodeConnectedFI[0]].GetNodes[item.givenodeItems[0]];
         }
