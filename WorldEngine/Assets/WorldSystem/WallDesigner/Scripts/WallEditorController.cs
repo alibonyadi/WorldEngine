@@ -27,30 +27,47 @@ namespace WallDesigner
         private WallEditorController() 
         {
             //Material material = new Material(Shader.Find("VR/SpatialMapping/Wireframe"));
-            Material material = new Material(Shader.Find("Standard"));
-     
-            holder = new GameObject("Holder");
-            holder.AddComponent<Camera>();
-            holder.GetComponent<Camera>().clearFlags= CameraClearFlags.SolidColor;
-            holder.GetComponent<Camera>().backgroundColor= Color.black;
+            
+            
             allFunctions = new List<FunctionItem>();
             allFItems = new List<FunctionItem>();
-            inEditeObject = new GameObject("InEdit");
-            inEditeObject.AddComponent<MeshFilter>();
-            inEditeObject.AddComponent<MeshRenderer>();
-
-            inEditeObject.transform.parent = holder.transform;
-            inEditeObject.transform.rotation = holder.transform.rotation;
-            inEditeObject.transform.position = holder.transform.position;
-            inEditeObject.transform.Translate(0, 0, 5);
-            inEditeObject.transform.Rotate(270, 0, 0);
-            mesh = new Mesh();
-            inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
-            inEditeObject.GetComponent<MeshRenderer>().material = material;
+            CreateOrGetHolder();
             //IsInitialized = true;
             RefreshClasses();
             //allFItems = 
         }
+
+        public void CreateOrGetHolder()
+        {
+            holder = GameObject.Find("Holder");
+            if (holder == null)
+            {
+                holder = new GameObject("Holder");
+                holder.AddComponent<Camera>();
+                holder.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+                holder.GetComponent<Camera>().backgroundColor = Color.black;
+            }
+
+            inEditeObject = GameObject.Find("InEdit");
+            if (inEditeObject == null)
+            {
+                inEditeObject = new GameObject("InEdit");
+                inEditeObject.AddComponent<MeshFilter>();
+                inEditeObject.AddComponent<MeshRenderer>();
+
+                inEditeObject.transform.parent = holder.transform;
+                inEditeObject.transform.rotation = holder.transform.rotation;
+                inEditeObject.transform.position = holder.transform.position;
+                inEditeObject.transform.Translate(0, 0, 5);
+                inEditeObject.transform.Rotate(270, 0, 0);
+
+                Material material = new Material(Shader.Find("Standard"));
+                mesh = new Mesh();
+                inEditeObject.GetComponent<MeshFilter>().mesh = mesh;
+                inEditeObject.GetComponent<MeshRenderer>().material = material;
+            }
+        }
+
         public void Reset()
         {
             IsInitialized = false;
@@ -58,6 +75,7 @@ namespace WallDesigner
             EndItem = null;
             allFunctions.Clear();
             allFItems.Clear();
+            CreateOrGetHolder();
             RefreshClasses();
         }
         public static WallEditorController Instance
