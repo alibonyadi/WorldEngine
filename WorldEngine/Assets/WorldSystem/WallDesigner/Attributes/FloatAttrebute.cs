@@ -15,6 +15,12 @@ namespace WallDesigner
             rect = r;
         }
 
+        public void SetMinMax(float min,float max)
+        {
+            Min = min;
+            Max = max;
+        }
+
         public override void Draw(Vector2 position)
         {
             Rect boxRect = new Rect(rect.x + position.x - rect.width / 2, rect.y + position.y, rect.width, 20);

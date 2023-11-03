@@ -81,7 +81,6 @@ public class WallDesignedEditor : EditorWindow
             }
         }
 
-
         if (Event.current.type == EventType.ContextClick)
         {
             //GenericMenu menu = new GenericMenu();
@@ -93,10 +92,6 @@ public class WallDesignedEditor : EditorWindow
         if (Event.current.type == EventType.MouseUp)
         {
             ConnectLineController.Instance.CheckWindowsClick();
-        }
-
-        
+        }   
     }
-
-    
 }
