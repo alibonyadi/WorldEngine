@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
 
@@ -33,5 +34,21 @@ public class AddMaterial : FunctionItem, IFunctionItem
     public object Execute(object material, object id)
     {
         return _material;
+    }
+
+    public static List<Material> CopyMaterials(WallPartItem item)
+    {
+        List<Material> materials = new List<Material>();
+
+        for (int i = 0; i < item.material.Count; i++)
+        {
+            Material mat1 = new Material(Shader.Find("Standard"));
+            mat1.color = item.material[i].color;
+            if (item.material[i].mainTexture != null)
+                mat1.mainTexture = item.material[i].mainTexture;
+            materials.Add(mat1);
+        }
+
+        return materials;
     }
 }
