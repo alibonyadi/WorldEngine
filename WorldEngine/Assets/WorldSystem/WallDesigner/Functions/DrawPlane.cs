@@ -119,32 +119,43 @@ public class DrawPlane : FunctionItem, IFunctionItem
         height = fa2.mFloat;
 
         Vector3[] vertices = new Vector3[6];
+        Vector3[] normals = new Vector3[6];
         Vector2[] uv = new Vector2[6];
         int[] triangles = new int[6];
 
         vertices[0] = new Vector3(-width / 2, 0, height / 2);
         vertices[1] = new Vector3(width / 2, 0, height / 2);
-        vertices[2] = new Vector3(width / 2, 0, -height / 2);
-        vertices[3] = new Vector3(-width / 2, 0, -height / 2);
+        vertices[2] = new Vector3(-width / 2, 0, -height / 2);
+        vertices[3] = new Vector3(width / 2, 0, -height / 2);
         vertices[4] = new Vector3(-width / 2, 0, -height / 2);
         vertices[5] = new Vector3(width / 2, 0, height / 2);
 
+        normals[0] = new Vector3(0,1,0);
+        normals[1] = new Vector3(0,1,0);
+        normals[2] = new Vector3(0,1,0);
+        normals[3] = new Vector3(0,1,0);
+        normals[4] = new Vector3(0,1,0);
+        normals[5] = new Vector3(0,1,0);
+
         uv[0] = new Vector2(0, 1);
         uv[1] = new Vector2(1, 1);
-        uv[2] = new Vector2(1, 0);
-        uv[3] = new Vector2(0, 0);
+        uv[2] = new Vector2(0, 0);
+        uv[3] = new Vector2(1, 0);
         uv[4] = new Vector2(0, 0);
         uv[5] = new Vector2(1, 1);
 
         triangles[0] = 0;
         triangles[1] = 1;
-        triangles[2] = 3;
-        triangles[3] = 2;
+        triangles[2] = 2;
+        triangles[3] = 3;
         triangles[4] = 4;
         triangles[5] = 5;
 
+
+
         mesh.vertices = vertices;
         mesh.uv = uv;
+        mesh.normals = normals;
         mesh.triangles = triangles;
 
         output.mesh = mesh;
