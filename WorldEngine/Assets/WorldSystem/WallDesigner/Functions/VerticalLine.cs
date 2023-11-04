@@ -305,6 +305,9 @@ public class VerticalLine : FunctionItem, IFunctionItem
         lowerMesh.RecalculateBounds();
 
         List<Material> mats = new List<Material>();
+
+        //mats = AddMaterial.CopyMaterials(wpi);
+
         if (wpi.material.Count > 0)
         {
             //int count = wallitem.material.Count;

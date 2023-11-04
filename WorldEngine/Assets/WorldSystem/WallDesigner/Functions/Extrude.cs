@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.XR;
 using WallDesigner;
 
 public class Extrude : FunctionItem, IFunctionItem
@@ -245,8 +242,8 @@ public class Extrude : FunctionItem, IFunctionItem
         {
             output.mesh = sideMesh;
         }
-        
-        output.material = item.material;
+
+        output.material = AddMaterial.CopyMaterials(item);
         return output;
     }
 
