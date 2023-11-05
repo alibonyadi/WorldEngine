@@ -101,16 +101,25 @@ public class DrawPlane : FunctionItem, IFunctionItem
     }
 
 
-    public object Execute(object mMesh,object id)
+    public object Execute(object mMesh, object id)
     {
         if (GetNodes[0].ConnectedNode != null)
+        {
             output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
+            Debug.Log(output.mesh.vertexCount);
+            if (output.mesh.vertexCount > 0)
+            {
+                
+                return output;
+            }
+        }
         else
         {
             output.material.Clear();
             Material material = new Material(Shader.Find("Standard"));
             output.material.Add(material);
         }
+
 
         Mesh mesh = new Mesh();
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
@@ -130,12 +139,12 @@ public class DrawPlane : FunctionItem, IFunctionItem
         vertices[4] = new Vector3(-width / 2, 0, -height / 2);
         vertices[5] = new Vector3(width / 2, 0, height / 2);
 
-        normals[0] = new Vector3(0,1,0);
-        normals[1] = new Vector3(0,1,0);
-        normals[2] = new Vector3(0,1,0);
-        normals[3] = new Vector3(0,1,0);
-        normals[4] = new Vector3(0,1,0);
-        normals[5] = new Vector3(0,1,0);
+        normals[0] = new Vector3(0, 1, 0);
+        normals[1] = new Vector3(0, 1, 0);
+        normals[2] = new Vector3(0, 1, 0);
+        normals[3] = new Vector3(0, 1, 0);
+        normals[4] = new Vector3(0, 1, 0);
+        normals[5] = new Vector3(0, 1, 0);
 
         uv[0] = new Vector2(0, 1);
         uv[1] = new Vector2(1, 1);
@@ -159,7 +168,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.triangles = triangles;
 
         output.mesh = mesh;
-
         return output;
     }
 } 

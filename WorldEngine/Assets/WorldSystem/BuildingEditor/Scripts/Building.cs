@@ -65,6 +65,12 @@ public class Building : MonoBehaviour
                     //CreateAction(EndItemIndex);
                     Debug.Log("EndItem founded!! " + endItem.Name);
                 }
+                if (functions[functions.Count - 1].GetType() == typeof(GetInputMesh))
+                {
+                    InputItem = functions[functions.Count - 1];
+                    //CreateAction(EndItemIndex);
+                    Debug.Log("GetInput founded!! " + InputItem.Name);
+                }
             }
             //WallEditorController.Instance.SetAllCreatedItems(functions);
             for (int i = 0; i < functionItems.Count; i++)
