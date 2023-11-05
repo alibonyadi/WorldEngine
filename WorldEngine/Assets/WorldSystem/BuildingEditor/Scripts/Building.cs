@@ -10,10 +10,12 @@ public class Building : MonoBehaviour
 {
     [SerializeField]
     private UnityEngine.Object prucedure;
-    [SerializeField]
+
     List<FunctionItem> functions = new List<FunctionItem>();
     private string path;
+    private Mesh startMeshTemp;
     private Mesh startMeshInput;
+    private bool isBaseMeshLoaded;
     private WallPartItem outputMesh;
     private FunctionItem endItem;
     private FunctionItem InputItem;
@@ -23,7 +25,7 @@ public class Building : MonoBehaviour
 
     Building()
     {
-        
+        //startMeshInput = GetComponent<MeshFilter>().mesh;
     }
 
     private void Awake()
@@ -40,6 +42,16 @@ public class Building : MonoBehaviour
     {
         GetItemPath();
         
+        if(!isBaseMeshLoaded)
+        {
+            isBaseMeshLoaded = true;
+            startMeshInput = startMeshTemp = GetComponent<MeshFilter>().sharedMesh;
+        }
+        else
+        {
+            startMeshInput = startMeshTemp;
+        }
+
         if (path != "")
         {
             Debug.Log("Is Generating Building by " + prucedure.name);
@@ -68,6 +80,9 @@ public class Building : MonoBehaviour
                 if (functions[functions.Count - 1].GetType() == typeof(GetInputMesh))
                 {
                     InputItem = functions[functions.Count - 1];
+                    GetInputMesh gIM = InputItem as GetInputMesh;
+                    gIM.inputMesh.mesh = startMeshInput;
+                    functions[functions.Count - 1] = gIM;
                     //CreateAction(EndItemIndex);
                     Debug.Log("GetInput founded!! " + InputItem.Name);
                 }

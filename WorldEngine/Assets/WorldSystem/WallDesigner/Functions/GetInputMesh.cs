@@ -13,6 +13,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
         Name = "Get Input Mesh";
         ClassName = typeof(GetInputMesh).FullName;
         basecolor = Color.blue;
+        inputMesh = new WallPartItem();
         myFunction = Execute;
 
         GiveNode givenode1 = new GiveNode();
