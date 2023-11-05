@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace WallDesigner
 {
-    [System.Serializable]
     public class WallPartItem
     {
         [NonSerialized]

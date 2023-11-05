@@ -147,7 +147,6 @@ public class LocalMove : FunctionItem, IFunctionItem
             vertices[i] += new Vector3(X,Y,Z);
         }
 
-        
 
         MovedMesh.vertices = vertices;
         MovedMesh.normals = originalMesh.normals;
