@@ -43,6 +43,7 @@ namespace WallDesigner
             if (holder == null)
             {
                 holder = new GameObject("Holder");
+                holder.transform.Rotate(28, 0, 0);
                 holder.AddComponent<Camera>();
                 holder.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
                 holder.GetComponent<Camera>().backgroundColor = Color.black;
@@ -51,15 +52,17 @@ namespace WallDesigner
             inEditeObject = GameObject.Find("InEdit");
             if (inEditeObject == null)
             {
+                //Debug.Log("aaaaaaaa");
                 inEditeObject = new GameObject("InEdit");
                 inEditeObject.AddComponent<MeshFilter>();
                 inEditeObject.AddComponent<MeshRenderer>();
 
-                inEditeObject.transform.parent = holder.transform;
-                inEditeObject.transform.rotation = holder.transform.rotation;
+                
+                //inEditeObject.transform.rotation = holder.transform.rotation;
                 inEditeObject.transform.position = holder.transform.position;
-                inEditeObject.transform.Translate(0, 0, 5);
-                inEditeObject.transform.Rotate(270, 0, 0);
+                inEditeObject.transform.Translate(0, -13, 14.5f);
+                //inEditeObject.transform.Rotate(0, 0, 0);
+                inEditeObject.transform.parent = holder.transform;
 
                 Material material = new Material(Shader.Find("Standard"));
                 mesh = new Mesh();

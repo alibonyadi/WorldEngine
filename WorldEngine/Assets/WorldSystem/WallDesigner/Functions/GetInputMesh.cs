@@ -69,7 +69,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
         else
         {
             Debug.Log("no input!!!");
-            item = (WallPartItem)mMesh;
+            //item = (WallPartItem)mMesh;
         }
         item.material.Clear();
         Material material = new Material(Shader.Find("Standard"));
