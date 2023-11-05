@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using WallDesigner;
 
@@ -161,12 +162,116 @@ public class Extrude : FunctionItem, IFunctionItem
         int OrginaltriangleCount = triangles.Length / 3;
 
 
-        Vector3[] sideVertices = new Vector3[OrginaltriangleCount*12];
-        int[] sideTriangles = new int[OrginaltriangleCount*12];
-        Vector2[] sideUVs = new Vector2[OrginaltriangleCount*12];
+        List<Vector3> sideVertices = new List<Vector3>();
+        List<int> sideTriangles = new List<int>();
+        List<Vector2> sideUVs = new List<Vector2>();
 
         int index = vertices.Length / OrginaltriangleCount;
-        for (int i=0;i< OrginaltriangleCount;i++)
+
+        Debug.Log(OrginaltriangleCount + " <==tri count ---- all vertices ==> " + vertices.Length);
+
+        for(int i=0;i< triangles.Length; i+=3)
+        {
+            if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i+1]], originalMesh))
+            {
+                Debug.Log(i +" is On Border!");
+                Vector3 vertex1 = vertices[triangles[i]];
+                Vector3 vertex2 = vertices[triangles[i+1]];
+                Vector3 exvertex1 = extrudedVertices[triangles[i]];
+                Vector3 exvertex2 = extrudedVertices[triangles[i + 1]];
+
+                sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+
+                int v1 = sideVertices.Count - 4;
+                int v2 = sideVertices.Count - 3;
+                int v3 = sideVertices.Count - 2;
+                int v4 = sideVertices.Count - 1;
+
+                sideUVs.Add(new Vector2(0,0));
+                sideUVs.Add(new Vector2(1,0));
+                sideUVs.Add(new Vector2(0,1));
+                sideUVs.Add(new Vector2(1,1));
+
+                sideTriangles.Add(v2);
+                sideTriangles.Add(v3);
+                sideTriangles.Add(v1);
+
+                sideTriangles.Add(v3);
+                sideTriangles.Add(v2);
+                sideTriangles.Add(v4);
+            }
+
+            if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 2]], originalMesh))
+            {
+                Debug.Log(i+1 + " is On Border!");
+                Vector3 vertex1 = vertices[triangles[i]];
+                Vector3 vertex2 = vertices[triangles[i + 2]];
+                Vector3 exvertex1 = extrudedVertices[triangles[i]];
+                Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
+
+                sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+
+                int v1 = sideVertices.Count - 4;
+                int v2 = sideVertices.Count - 3;
+                int v3 = sideVertices.Count - 2;
+                int v4 = sideVertices.Count - 1;
+
+                sideUVs.Add(new Vector2(0, 0));
+                sideUVs.Add(new Vector2(1, 0));
+                sideUVs.Add(new Vector2(0, 1));
+                sideUVs.Add(new Vector2(1, 1));
+
+                sideTriangles.Add(v1);
+                sideTriangles.Add(v3);
+                sideTriangles.Add(v2);
+
+                sideTriangles.Add(v4);
+                sideTriangles.Add(v2);
+                sideTriangles.Add(v3);
+            }
+
+            if ( IsEdgeOnBorder(vertices[triangles[i+1]], vertices[triangles[i + 2]], originalMesh))
+            {
+                Debug.Log(i+2 + " is On Border!");
+                Vector3 vertex1 = vertices[triangles[i+1]];
+                Vector3 vertex2 = vertices[triangles[i + 2]];
+                Vector3 exvertex1 = extrudedVertices[triangles[i + 1]];
+                Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
+
+                sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+
+                int v1 = sideVertices.Count - 4;
+                int v2 = sideVertices.Count - 3;
+                int v3 = sideVertices.Count - 2;
+                int v4 = sideVertices.Count - 1;
+
+                sideUVs.Add(new Vector2(0, 0));
+                sideUVs.Add(new Vector2(1, 0));
+                sideUVs.Add(new Vector2(0, 1));
+                sideUVs.Add(new Vector2(1, 1));
+
+                sideTriangles.Add(v2);
+                sideTriangles.Add(v3);
+                sideTriangles.Add(v1);
+
+                sideTriangles.Add(v3);
+                sideTriangles.Add(v2);
+                sideTriangles.Add(v4);
+            }
+
+
+        }
+
+        /*for (int i=0;i< OrginaltriangleCount;i++)
         {
             int mul = i*12;
             
@@ -215,12 +320,12 @@ public class Extrude : FunctionItem, IFunctionItem
             sideUVs[mul + 9] = new Vector2(1, 0);
             sideUVs[mul + 10] = new Vector2(0, 0);
             sideUVs[mul + 11] = new Vector2(1, 1);
-        }
+        }*/
 
         Mesh sideMesh = new Mesh();
-        sideMesh.vertices = sideVertices;
-        sideMesh.triangles = sideTriangles;
-        sideMesh.uv = sideUVs;
+        sideMesh.vertices = sideVertices.ToArray();
+        sideMesh.triangles = sideTriangles.ToArray();
+        sideMesh.uv = sideUVs.ToArray();
         sideMesh.RecalculateBounds();
         sideMesh.RecalculateNormals();
 
@@ -247,6 +352,101 @@ public class Extrude : FunctionItem, IFunctionItem
         return output;
     }
 
+
+
+    static bool IsTriangleOnEdgeOfMesh(Mesh mesh, int triangleIndex)
+    {
+        int[] triangles = mesh.triangles;
+        int[] edges = new int[] { triangles[triangleIndex], triangles[triangleIndex + 1], triangles[triangleIndex + 2] };
+
+        for (int i = 0; i < edges.Length; i += 2)
+        {
+            int edge0 = edges[i];
+            int edge1 = edges[i + 1];
+            bool isEdge0OnBoundary = false;
+            bool isEdge1OnBoundary = false;
+
+            for (int j = 0; j < triangles.Length; j += 3)
+            {
+                if (j / 3 != triangleIndex)
+                {
+                    if ((triangles[j] == edge0 && triangles[j + 1] == edge1) ||
+                        (triangles[j] == edge1 && triangles[j + 1] == edge0) ||
+                        (triangles[j + 1] == edge0 && triangles[j + 2] == edge1) ||
+                        (triangles[j + 1] == edge1 && triangles[j + 2] == edge0) ||
+                        (triangles[j + 2] == edge0 && triangles[j] == edge1) ||
+                        (triangles[j + 2] == edge1 && triangles[j] == edge0))
+                    {
+                        isEdge0OnBoundary = true;
+                        break;
+                    }
+                }
+            }
+
+            for (int j = 0; j < triangles.Length; j += 3)
+            {
+                if (j / 3 != triangleIndex)
+                {
+                    if ((triangles[j] == edge0 && triangles[j + 1] == edge1) ||
+                        (triangles[j] == edge1 && triangles[j + 1] == edge0) ||
+                        (triangles[j + 1] == edge0 && triangles[j + 2] == edge1) ||
+                        (triangles[j + 1] == edge1 && triangles[j + 2] == edge0) ||
+                        (triangles[j + 2] == edge0 && triangles[j] == edge1) ||
+                        (triangles[j + 2] == edge1 && triangles[j] == edge0))
+                    {
+                        isEdge1OnBoundary = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isEdge0OnBoundary || !isEdge1OnBoundary)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool IsEdgeOnBorder(Vector3 v1, Vector3 v2, Mesh mesh)
+    {
+        int counter = 0;
+        for (int i = 0; i < mesh.triangles.Length; i += 3)
+        {
+            int triangleIndex1 = mesh.triangles[i];
+            int triangleIndex2 = mesh.triangles[i + 1];
+            int triangleIndex3 = mesh.triangles[i + 2];
+
+            Vector3 vertex1 = mesh.vertices[triangleIndex1];
+            Vector3 vertex2 = mesh.vertices[triangleIndex2];
+            Vector3 vertex3 = mesh.vertices[triangleIndex3];
+
+            if ((vertex1 == v1 && vertex2 == v2) || (vertex1 == v2 && vertex2 == v1))
+            {
+                // Found edge shared by two triangles
+                //return false;
+                counter++;
+            }
+            else if ((vertex2 == v1 && vertex3 == v2) || (vertex2 == v2 && vertex3 == v1))
+            {
+                // Found edge shared by two triangles
+                counter++;
+            }
+            else if ((vertex3 == v1 && vertex1 == v2) || (vertex3 == v2 && vertex1 == v1))
+            {
+                // Found edge shared by two triangles
+                counter++;
+                //return false;
+            }
+
+            if(counter > 1)
+                return false;
+
+        }
+        // Edge not shared by two triangles, is on border
+        return true;
+    }
 
     public static Mesh InsetMesh(Mesh mesh, float insetAmount)
     {
