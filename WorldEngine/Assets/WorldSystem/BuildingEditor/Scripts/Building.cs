@@ -82,6 +82,7 @@ public class Building : MonoBehaviour
                     InputItem = functions[functions.Count - 1];
                     GetInputMesh gIM = InputItem as GetInputMesh;
                     gIM.inputMesh.mesh = startMeshInput;
+                    gIM.havemesh = true;
                     functions[functions.Count - 1] = gIM;
                     //CreateAction(EndItemIndex);
                     Debug.Log("GetInput founded!! " + InputItem.Name);

@@ -6,6 +6,8 @@ using WallDesigner;
 public class GetInputMesh : FunctionItem, IFunctionItem
 {
     public WallPartItem inputMesh;
+    public bool havemesh = false;
+
 
     public GetInputMesh()
     {
@@ -58,7 +60,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
     public object Execute(object mMesh, object id)
     {
         WallPartItem item = new WallPartItem();
-        if (inputMesh != null)
+        if (havemesh)
         {
             Debug.Log("input found!!!");
             item.mesh = inputMesh.mesh;
