@@ -184,8 +184,9 @@ public class VerticalLine : FunctionItem, IFunctionItem
 
         for (int i = 0; i < triangles.Length; i += 3)
         {
-            if (vertices[triangles[i]].x > cutx && vertices[triangles[i] + 1].x > cutx && vertices[triangles[i] + 2].x > cutx && (int)id == 0)
+            if (vertices[triangles[i]].x > cutx && vertices[triangles[i + 1]].x > cutx && vertices[triangles[i + 2]].x > cutx && (int)id == 0)
             {
+                Debug.Log("Upper "+i);
                 upperVertices.Add(vertices[triangles[i]]);
                 upperVertices.Add(vertices[triangles[i + 1]]);
                 upperVertices.Add(vertices[triangles[i + 2]]);
@@ -201,9 +202,10 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 upperTriangles.Add(i);
                 upperTriangles.Add(i + 1);
                 upperTriangles.Add(i + 2);
-            }
-            else if (vertices[triangles[i]].x < cutx && vertices[triangles[i] + 1].x < cutx && vertices[triangles[i] + 2].x < cutx)
+            } 
+            else if (vertices[triangles[i]].x < cutx && vertices[triangles[i + 1]].x < cutx && vertices[triangles[i + 2]].x < cutx)
             {
+                Debug.Log("Lower " + i);
                 lowerVertices.Add(vertices[triangles[i]]);
                 lowerVertices.Add(vertices[triangles[i + 1]]);
                 lowerVertices.Add(vertices[triangles[i + 2]]);
@@ -225,42 +227,54 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 if (vertices[triangles[i]].x < cutx)
                 {
                     lowerVertices.Add(vertices[triangles[i]]);
-                    vertices[triangles[i]].x = cutx;
-                    upperVertices.Add(vertices[triangles[i]]);
+                    //vertices[triangles[i]].x = cutx;
+                    Vector3 v = vertices[triangles[i]];
+                    v.x = cutx;
+                    upperVertices.Add(v);
                 }
                 else
                 {
                     upperVertices.Add(vertices[triangles[i]]);
-                    vertices[triangles[i]].x = cutx;
-                    lowerVertices.Add(vertices[triangles[i]]);
+                    //vertices[triangles[i]].x = cutx;
+                    Vector3 v = vertices[triangles[i]];
+                    v.x = cutx;
+                    lowerVertices.Add(v);
 
                 }
 
                 if (vertices[triangles[i + 1]].x < cutx)
                 {
                     lowerVertices.Add(vertices[triangles[i + 1]]);
-                    vertices[triangles[i + 1]].x = cutx;
-                    upperVertices.Add(vertices[triangles[i + 1]]);
+                    //vertices[triangles[i + 1]].x = cutx;
+                    Vector3 v = vertices[triangles[i+1]];
+                    v.x = cutx;
+                    upperVertices.Add(v);
 
                 }
                 else
                 {
                     upperVertices.Add(vertices[triangles[i + 1]]);
-                    vertices[triangles[i + 1]].x = cutx;
-                    lowerVertices.Add(vertices[triangles[i + 1]]);
+                    //vertices[triangles[i + 1]].x = cutx;
+                    Vector3 v = vertices[triangles[i+1]];
+                    v.x = cutx;
+                    lowerVertices.Add(v);
                 }
 
                 if (vertices[triangles[i + 2]].x < cutx)
                 {
                     lowerVertices.Add(vertices[triangles[i + 2]]);
-                    vertices[triangles[i + 2]].x = cutx;
-                    upperVertices.Add(vertices[triangles[i + 2]]);
+                    //vertices[triangles[i + 2]].x = cutx;
+                    Vector3 v = vertices[triangles[i+2]];
+                    v.x = cutx;
+                    upperVertices.Add(v);
                 }
                 else
                 {
                     upperVertices.Add(vertices[triangles[i + 2]]);
-                    vertices[triangles[i + 2]].x = cutx;
-                    lowerVertices.Add(vertices[triangles[i + 2]]);
+                    //vertices[triangles[i + 2]].x = cutx;
+                    Vector3 v = vertices[triangles[i+2]];
+                    v.x = cutx;
+                    lowerVertices.Add(v);
                 }
 
                 UpperUV.Add(uv[triangles[i]]);
@@ -303,6 +317,8 @@ public class VerticalLine : FunctionItem, IFunctionItem
         lowerMesh.normals = lowerNormals.ToArray();
         lowerMesh.RecalculateNormals();
         lowerMesh.RecalculateBounds();
+
+        Debug.Log("UperCount = " + upperMesh.vertexCount + "LowerCount = " + lowerMesh.vertexCount);
 
         List<Material> mats = new List<Material>();
 
