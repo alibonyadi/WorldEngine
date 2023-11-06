@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using WallDesigner;
 
@@ -35,11 +34,11 @@ public class Extrude : FunctionItem, IFunctionItem
 
         FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
         fl1.mFloat = extrudeDistance;
-        fl1.SetMinMax(-5,10);
+        fl1.SetMinMax(-5, 10);
         fl1.SetName("Extrude");
         attrebutes.Add(fl1);
 
-        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y +15, rect.width, rect.height);
+        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 15, rect.width, rect.height);
 
         FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
         fl2.mFloat = insetDistance;
@@ -144,10 +143,10 @@ public class Extrude : FunctionItem, IFunctionItem
         int[] extrudedTriangles = new int[triangles.Length];
         Vector2[] extrudedUvs = new Vector2[UVs.Length];
 
-        for(int i=0;i<vertices.Length;i++)
+        for (int i = 0; i < vertices.Length; i++)
         {
             extrudedVertices[i] = vertices[i];
-            extrudedVertices[i] += normals[i]*extrudeDistance;
+            extrudedVertices[i] += normals[i] * extrudeDistance;
         }
 
         extrudedMesh.vertices = extrudedVertices;
@@ -155,12 +154,11 @@ public class Extrude : FunctionItem, IFunctionItem
         extrudedMesh.triangles = triangles;
         extrudedMesh.uv = originalMesh.uv;
 
-        extrudedMesh = InsetMesh(extrudedMesh,-insetDistance);
+        extrudedMesh = InsetMesh(extrudedMesh, -insetDistance);
 
         extrudedVertices = extrudedMesh.vertices;
 
         int OrginaltriangleCount = triangles.Length / 3;
-        Debug.Log(OrginaltriangleCount + " <==tri count ---- all vertices ==> " + vertices.Length);
 
 
         List<Vector3> sideVertices = new List<Vector3>();
@@ -169,14 +167,13 @@ public class Extrude : FunctionItem, IFunctionItem
 
         int index = vertices.Length / OrginaltriangleCount;
 
-       
-        for(int i=0;i< triangles.Length; i+=3)
+
+        for (int i = 0; i < triangles.Length; i += 3)
         {
-            if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i+1]], originalMesh))
+            if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 1]], originalMesh))
             {
-                Debug.Log(i +" is On Border!");
                 Vector3 vertex1 = vertices[triangles[i]];
-                Vector3 vertex2 = vertices[triangles[i+1]];
+                Vector3 vertex2 = vertices[triangles[i + 1]];
                 Vector3 exvertex1 = extrudedVertices[triangles[i]];
                 Vector3 exvertex2 = extrudedVertices[triangles[i + 1]];
 
@@ -190,10 +187,10 @@ public class Extrude : FunctionItem, IFunctionItem
                 int v3 = sideVertices.Count - 2;
                 int v4 = sideVertices.Count - 1;
 
-                sideUVs.Add(new Vector2(0,0));
-                sideUVs.Add(new Vector2(1,0));
-                sideUVs.Add(new Vector2(0,1));
-                sideUVs.Add(new Vector2(1,1));
+                sideUVs.Add(new Vector2(0, 0));
+                sideUVs.Add(new Vector2(1, 0));
+                sideUVs.Add(new Vector2(0, 1));
+                sideUVs.Add(new Vector2(1, 1));
 
                 sideTriangles.Add(v2);
                 sideTriangles.Add(v3);
@@ -206,7 +203,6 @@ public class Extrude : FunctionItem, IFunctionItem
 
             if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 2]], originalMesh))
             {
-                Debug.Log(i+1 + " is On Border!");
                 Vector3 vertex1 = vertices[triangles[i]];
                 Vector3 vertex2 = vertices[triangles[i + 2]];
                 Vector3 exvertex1 = extrudedVertices[triangles[i]];
@@ -236,10 +232,9 @@ public class Extrude : FunctionItem, IFunctionItem
                 sideTriangles.Add(v3);
             }
 
-            if ( IsEdgeOnBorder(vertices[triangles[i+1]], vertices[triangles[i + 2]], originalMesh))
+            if (IsEdgeOnBorder(vertices[triangles[i + 1]], vertices[triangles[i + 2]], originalMesh))
             {
-                Debug.Log(i+2 + " is On Border!");
-                Vector3 vertex1 = vertices[triangles[i+1]];
+                Vector3 vertex1 = vertices[triangles[i + 1]];
                 Vector3 vertex2 = vertices[triangles[i + 2]];
                 Vector3 exvertex1 = extrudedVertices[triangles[i + 1]];
                 Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
@@ -339,7 +334,7 @@ public class Extrude : FunctionItem, IFunctionItem
         combinedMesh.CombineMeshes(combineInstances);
         //sideMesh.RecalculateBounds();
         //sideMesh.RecalculateNormals();
-        if((int)id == 0)
+        if ((int)id == 0)
         {
             output.mesh = extrudedMesh;
         }
@@ -440,7 +435,7 @@ public class Extrude : FunctionItem, IFunctionItem
                 //return false;
             }
 
-            if(counter > 1)
+            if (counter > 1)
                 return false;
 
         }

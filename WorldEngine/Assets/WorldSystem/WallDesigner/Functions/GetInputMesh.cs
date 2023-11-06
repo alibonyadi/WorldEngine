@@ -62,15 +62,10 @@ public class GetInputMesh : FunctionItem, IFunctionItem
         WallPartItem item = new WallPartItem();
         if (havemesh)
         {
-            Debug.Log("input found!!!");
             item.mesh = inputMesh.mesh;
             item.material = AddMaterial.CopyMaterials(inputMesh);
         }
-        else
-        {
-            Debug.Log("no input!!!");
-            //item = (WallPartItem)mMesh;
-        }
+
         item.material.Clear();
         Material material = new Material(Shader.Find("Standard"));
         item.material.Add(material);
