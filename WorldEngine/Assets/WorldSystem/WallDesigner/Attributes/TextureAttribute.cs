@@ -46,5 +46,17 @@ namespace WallDesigner
             if (WallEditorController.Instance.autoDraw)
                 FunctionProccesor.Instance.ProcessFunctions();
         }
+
+        public static Texture2D GenerateTextureFromPath(string path)
+        {
+            byte[] imageData = File.ReadAllBytes(path);
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(imageData);
+            return texture;
+        }
+
+
     }
+
+    
 }

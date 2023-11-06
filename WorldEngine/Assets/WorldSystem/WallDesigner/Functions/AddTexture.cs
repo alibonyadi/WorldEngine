@@ -57,16 +57,8 @@ public class AddTexture : FunctionItem, IFunctionItem
 
         TextureAttribute att = (TextureAttribute)attrebutes[0];
         att.adress = item.attributeValue[0];
-        att.texture = GenerateTextureFromPath(att.adress);
+        att.texture = TextureAttribute.GenerateTextureFromPath(att.adress);
         attrebutes[0] = att;
-    }
-
-    public Texture2D GenerateTextureFromPath(string path)
-    {
-        byte[] imageData = File.ReadAllBytes(path);
-        Texture2D texture = new Texture2D(2, 2);
-        texture.LoadImage(imageData);
-        return texture;
     }
 
     public override SerializedFunctionItem SaveSerialize()
