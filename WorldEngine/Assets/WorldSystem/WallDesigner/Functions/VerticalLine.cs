@@ -184,9 +184,8 @@ public class VerticalLine : FunctionItem, IFunctionItem
 
         for (int i = 0; i < triangles.Length; i += 3)
         {
-            if (vertices[triangles[i]].x > cutx && vertices[triangles[i + 1]].x > cutx && vertices[triangles[i + 2]].x > cutx && (int)id == 0)
+            if (vertices[triangles[i]].x > cutx && vertices[triangles[i + 1]].x > cutx && vertices[triangles[i + 2]].x > cutx)
             {
-                Debug.Log("Upper "+i);
                 upperVertices.Add(vertices[triangles[i]]);
                 upperVertices.Add(vertices[triangles[i + 1]]);
                 upperVertices.Add(vertices[triangles[i + 2]]);
@@ -199,13 +198,12 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 UpperNormals.Add(normals[triangles[i + 1]]);
                 UpperNormals.Add(normals[triangles[i + 2]]);
 
-                upperTriangles.Add(i);
-                upperTriangles.Add(i + 1);
-                upperTriangles.Add(i + 2);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
             } 
             else if (vertices[triangles[i]].x < cutx && vertices[triangles[i + 1]].x < cutx && vertices[triangles[i + 2]].x < cutx)
             {
-                Debug.Log("Lower " + i);
                 lowerVertices.Add(vertices[triangles[i]]);
                 lowerVertices.Add(vertices[triangles[i + 1]]);
                 lowerVertices.Add(vertices[triangles[i + 2]]);
@@ -218,9 +216,9 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 lowerNormals.Add(normals[triangles[i + 1]]);
                 lowerNormals.Add(normals[triangles[i + 2]]);
 
-                lowerTriangles.Add(i);
-                lowerTriangles.Add(i + 1);
-                lowerTriangles.Add(i + 2);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
             }
             else
             {
@@ -239,7 +237,6 @@ public class VerticalLine : FunctionItem, IFunctionItem
                     Vector3 v = vertices[triangles[i]];
                     v.x = cutx;
                     lowerVertices.Add(v);
-
                 }
 
                 if (vertices[triangles[i + 1]].x < cutx)
@@ -285,9 +282,9 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 UpperNormals.Add(normals[triangles[i + 1]]);
                 UpperNormals.Add(normals[triangles[i + 2]]);
 
-                upperTriangles.Add(i);
-                upperTriangles.Add(i + 1);
-                upperTriangles.Add(i + 2);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
 
                 lowerUV.Add(uv[triangles[i]]);
                 lowerUV.Add(uv[triangles[i + 1]]);
@@ -297,12 +294,13 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 lowerNormals.Add(normals[triangles[i + 1]]);
                 lowerNormals.Add(normals[triangles[i + 2]]);
 
-                lowerTriangles.Add(i);
-                lowerTriangles.Add(i + 1);
-                lowerTriangles.Add(i + 2);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
 
             }
         }
+
 
         upperMesh.vertices = upperVertices.ToArray();
         upperMesh.triangles = upperTriangles.ToArray();
@@ -311,6 +309,8 @@ public class VerticalLine : FunctionItem, IFunctionItem
         upperMesh.RecalculateNormals();
         upperMesh.RecalculateBounds();
 
+
+
         lowerMesh.vertices = lowerVertices.ToArray();
         lowerMesh.triangles = lowerTriangles.ToArray();
         lowerMesh.uv = lowerUV.ToArray();
@@ -318,7 +318,6 @@ public class VerticalLine : FunctionItem, IFunctionItem
         lowerMesh.RecalculateNormals();
         lowerMesh.RecalculateBounds();
 
-        Debug.Log("UperCount = " + upperMesh.vertexCount + "LowerCount = " + lowerMesh.vertexCount);
 
         List<Material> mats = new List<Material>();
 

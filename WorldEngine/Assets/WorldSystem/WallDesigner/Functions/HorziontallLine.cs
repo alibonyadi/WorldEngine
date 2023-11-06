@@ -185,7 +185,7 @@ public class HorziontallLine : FunctionItem, IFunctionItem
 
         for (int i = 0; i < triangles.Length; i += 3)
         {
-            if (vertices[triangles[i]].z > cutZ && vertices[triangles[i]+1].z > cutZ && vertices[triangles[i]+2].z > cutZ && (int)id==0 )
+            if (vertices[triangles[i]].z > cutZ && vertices[triangles[i+1]].z > cutZ && vertices[triangles[i+2]].z > cutZ )
             {
                 upperVertices.Add(vertices[triangles[i]]);
                 upperVertices.Add(vertices[triangles[i+1]]);
@@ -199,11 +199,12 @@ public class HorziontallLine : FunctionItem, IFunctionItem
                 UpperNormals.Add(normals[triangles[i + 1]]);
                 UpperNormals.Add(normals[triangles[i + 2]]);
 
-                upperTriangles.Add(i);
-                upperTriangles.Add(i+1);
-                upperTriangles.Add(i+2);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
+
             }
-            else if (vertices[triangles[i]].z < cutZ && vertices[triangles[i] + 1].z < cutZ && vertices[triangles[i] + 2].z < cutZ)
+            else if (vertices[triangles[i]].z < cutZ && vertices[triangles[i + 1]].z < cutZ && vertices[triangles[i + 2]].z < cutZ)
             {
                 lowerVertices.Add(vertices[triangles[i]]);
                 lowerVertices.Add(vertices[triangles[i + 1]]);
@@ -217,51 +218,63 @@ public class HorziontallLine : FunctionItem, IFunctionItem
                 lowerNormals.Add(normals[triangles[i + 1]]);
                 lowerNormals.Add(normals[triangles[i + 2]]);
 
-                lowerTriangles.Add(i);
-                lowerTriangles.Add(i +1);
-                lowerTriangles.Add(i +2);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
             }
             else
             {
                 if(vertices[triangles[i]].z < cutZ)
                 {
                     lowerVertices.Add(vertices[triangles[i]]);  
-                    vertices[triangles[i]].z = cutZ;
-                    upperVertices.Add(vertices[triangles[i]]);
+                    //vertices[triangles[i]].z = cutZ;
+                    Vector3 v = vertices[triangles[i]];
+                    v.z = cutZ;
+                    upperVertices.Add(v);
                 }
                 else
                 {
                     upperVertices.Add(vertices[triangles[i]]);
-                    vertices[triangles[i]].z = cutZ;
-                    lowerVertices.Add(vertices[triangles[i]]);
+                    //vertices[triangles[i]].z = cutZ;
+                    Vector3 v = vertices[triangles[i]];
+                    v.z = cutZ;
+                    lowerVertices.Add(v);
 
                 }
 
                 if (vertices[triangles[i+1]].z < cutZ)
                 {
                     lowerVertices.Add(vertices[triangles[i+1]]);
-                    vertices[triangles[i+1]].z = cutZ;
-                    upperVertices.Add(vertices[triangles[i+1]]);
+                    //vertices[triangles[i+1]].z = cutZ;
+                    Vector3 v = vertices[triangles[i+1]];
+                    v.z = cutZ;
+                    upperVertices.Add(v);
 
                 }
                 else
                 {
                     upperVertices.Add(vertices[triangles[i + 1]]);
-                    vertices[triangles[i + 1]].z = cutZ;
-                    lowerVertices.Add(vertices[triangles[i + 1]]);
+                    //vertices[triangles[i + 1]].z = cutZ;
+                    Vector3 v = vertices[triangles[i + 1]];
+                    v.z = cutZ;
+                    lowerVertices.Add(v);
                 }
 
                 if (vertices[triangles[i + 2]].z < cutZ)
                 {
                     lowerVertices.Add(vertices[triangles[i + 2]]);
-                    vertices[triangles[i + 2]].z = cutZ;
-                    upperVertices.Add(vertices[triangles[i + 2]]);
+                    //vertices[triangles[i + 2]].z = cutZ;
+                    Vector3 v = vertices[triangles[i + 2]];
+                    v.z = cutZ;
+                    upperVertices.Add(v);
                 }
                 else
                 {
                     upperVertices.Add(vertices[triangles[i + 2]]);
-                    vertices[triangles[i + 2]].z = cutZ;
-                    lowerVertices.Add(vertices[triangles[i + 2]]);
+                    //vertices[triangles[i + 2]].z = cutZ;
+                    Vector3 v = vertices[triangles[i + 2]];
+                    v.z = cutZ;
+                    lowerVertices.Add(v);
                 }
 
                 UpperUV.Add(uv[triangles[i]]);
@@ -272,9 +285,9 @@ public class HorziontallLine : FunctionItem, IFunctionItem
                 UpperNormals.Add(normals[triangles[i + 1]]);
                 UpperNormals.Add(normals[triangles[i + 2]]);
 
-                upperTriangles.Add(i);
-                upperTriangles.Add(i + 1);
-                upperTriangles.Add(i + 2);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
+                upperTriangles.Add(upperTriangles.Count);
 
                 lowerUV.Add(uv[triangles[i]]);
                 lowerUV.Add(uv[triangles[i + 1]]);
@@ -284,9 +297,10 @@ public class HorziontallLine : FunctionItem, IFunctionItem
                 lowerNormals.Add(normals[triangles[i + 1]]);
                 lowerNormals.Add(normals[triangles[i + 2]]);
 
-                lowerTriangles.Add(i);
-                lowerTriangles.Add(i + 1);
-                lowerTriangles.Add(i + 2);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
+                lowerTriangles.Add(lowerTriangles.Count);
+
 
             }
         }

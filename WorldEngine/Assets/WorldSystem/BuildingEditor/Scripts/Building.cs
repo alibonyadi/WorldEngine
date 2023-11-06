@@ -54,11 +54,11 @@ public class Building : MonoBehaviour
 
         if (path != "")
         {
-            Debug.Log("Is Generating Building by " + prucedure.name);
+            //Debug.Log("Is Generating Building by " + prucedure.name);
             functions.Clear();
             //string path = Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions";
             List<SerializedFunctionItem> functionItems = SaveLoadManager.LoadSerializedFunctionItemList(path);
-            Debug.Log("number of "+functionItems.Count+" function loaded!");
+            //Debug.Log("number of "+functionItems.Count+" function loaded!");
             //List<FunctionItem> functions = new List<FunctionItem>();
             foreach (SerializedFunctionItem item2 in functionItems)
             {
@@ -75,7 +75,7 @@ public class Building : MonoBehaviour
                     //EndItemIndex = functions.Count - 1;
                     endItem = functions[functions.Count - 1];
                     //CreateAction(EndItemIndex);
-                    Debug.Log("EndItem founded!! " + endItem.Name);
+                    //Debug.Log("EndItem founded!! " + endItem.Name);
                 }
                 if (functions[functions.Count - 1].GetType() == typeof(GetInputMesh))
                 {
@@ -85,7 +85,7 @@ public class Building : MonoBehaviour
                     gIM.havemesh = true;
                     functions[functions.Count - 1] = gIM;
                     //CreateAction(EndItemIndex);
-                    Debug.Log("GetInput founded!! " + InputItem.Name);
+                    //Debug.Log("GetInput founded!! " + InputItem.Name);
                 }
             }
             //WallEditorController.Instance.SetAllCreatedItems(functions);
@@ -97,12 +97,12 @@ public class Building : MonoBehaviour
             if (endItem == null)
                 return;
 
-            Debug.Log("There is EndItem!!!");
+            //Debug.Log("There is EndItem!!!");
 
             if (endItem.GetNodes[0].ConnectedNode == null)
                 return;
 
-            Debug.Log("EndItem Connected!!!");
+            //Debug.Log("EndItem Connected!!!");
 
             WallPartItem item = new WallPartItem();
             item = (WallPartItem)endItem.myFunction(item, 0);
