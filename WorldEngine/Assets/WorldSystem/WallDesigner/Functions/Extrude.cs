@@ -160,6 +160,7 @@ public class Extrude : FunctionItem, IFunctionItem
         extrudedVertices = extrudedMesh.vertices;
 
         int OrginaltriangleCount = triangles.Length / 3;
+        Debug.Log(OrginaltriangleCount + " <==tri count ---- all vertices ==> " + vertices.Length);
 
 
         List<Vector3> sideVertices = new List<Vector3>();
@@ -168,8 +169,7 @@ public class Extrude : FunctionItem, IFunctionItem
 
         int index = vertices.Length / OrginaltriangleCount;
 
-        Debug.Log(OrginaltriangleCount + " <==tri count ---- all vertices ==> " + vertices.Length);
-
+       
         for(int i=0;i< triangles.Length; i+=3)
         {
             if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i+1]], originalMesh))
