@@ -29,6 +29,5 @@ namespace WallDesigner
             AttachedFunctionItem = null;
             ConnectedNode = null;
         }
-
     }
 }
