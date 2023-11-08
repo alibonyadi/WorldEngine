@@ -123,9 +123,9 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
         bool fromTop = ta1.mToggle;
 
-        //WallPartItem wpi = (WallPartItem)mMesh;
+        WallPartItem wpi = (WallPartItem)mMesh;
 
-        WallPartItem wpi = new WallPartItem();
+        //WallPartItem wpi = new WallPartItem();
 
         if (GetNodes[0].ConnectedNode != null)
             wpi = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
