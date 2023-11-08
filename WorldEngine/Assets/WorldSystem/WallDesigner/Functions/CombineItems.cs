@@ -123,7 +123,7 @@ public class CombineItems : FunctionItem, IFunctionItem
         }
     }
 
-    public WallPartItem CombineTwoItem(Mesh mesh1, Mesh mesh2, List<Material> materials1, List<Material> materials2)
+    public static WallPartItem CombineTwoItem(Mesh mesh1, Mesh mesh2, List<Material> materials1, List<Material> materials2)
     {
        
         int submeshCount1 = mesh1.subMeshCount;
