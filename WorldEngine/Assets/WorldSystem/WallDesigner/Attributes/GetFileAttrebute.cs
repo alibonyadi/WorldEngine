@@ -36,7 +36,6 @@ namespace WallDesigner
                     byte[] rawData = File.ReadAllBytes(path);
                     //texture.LoadImage(rawData);
                 }
-
             }
 
             if (!string.IsNullOrEmpty(adress))

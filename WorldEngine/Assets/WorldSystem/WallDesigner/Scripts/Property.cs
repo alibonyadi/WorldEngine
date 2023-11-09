@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +43,6 @@ namespace WallDesigner
         {
             GiveNodes[index].position = new Vector3(rect.x + rect.width + 5, rect.y + 5 + (15 * index) + 5, 0);
             DrawNodeLine(GiveNodes[index], false);
-            //Debug.Log("dddddd");
             GUI.color = GiveNodes[index].color;
             if (GUI.Button(new Rect(rect.x + rect.width, rect.y + 5 + (15 * index), 10, 10), ""))
             {
@@ -81,7 +81,14 @@ namespace WallDesigner
             {
                 //Debug.Log(GetNodes[0].ConnectedNode.at)
                 GivePropertyNode givePropertyNode = (GivePropertyNode)GetNodes[0].ConnectedNode;
-                item = (Attrebute)givePropertyNode.AttachedProperty.Execute();
+                try
+                {
+                    item = (Attrebute)givePropertyNode.AttachedProperty.Execute();
+                }
+                catch
+                {
+                    Debug.LogWarning("Attribute Type Missmatch!!!");
+                }
             }
             return item;
         }

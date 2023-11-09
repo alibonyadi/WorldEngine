@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using WallDesigner;
 
@@ -10,6 +11,7 @@ public class Module : FunctionItem, IFunctionItem
     private string path;
     private FunctionItem endItem;
     private FunctionItem InputItem;
+    private int repeatCount=1;
     public Module()
     {
         Init();
@@ -35,6 +37,13 @@ public class Module : FunctionItem, IFunctionItem
         att1.folderlocation = Application.dataPath + "\\WorldSystem\\BuildingEditor\\Modules";
         att1.SetName(Name);
         attrebutes.Add(att1);
+
+        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y+20, rect.width, rect.height);
+        IntAttrebute att2 = new IntAttrebute(at2Rect);
+        att2.mInt = repeatCount;
+        att2.SetMinMax(1, 10);
+        att2.SetName(Name);
+        attrebutes.Add(att2);
     }
 
     public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
@@ -59,6 +68,11 @@ public class Module : FunctionItem, IFunctionItem
         att.adress = item.attributeValue[0];
         //att.texture = GenerateTextureFromPath(att.adress);
         attrebutes[0] = att;
+
+        IntAttrebute att2 = (IntAttrebute)attrebutes[1];
+        att2.mInt =  int.Parse(item.attributeValue[1]);
+        att2.SetMinMax(1,10);
+        attrebutes[1] = att2;
     }
 
     public override SerializedFunctionItem SaveSerialize()
@@ -75,6 +89,11 @@ public class Module : FunctionItem, IFunctionItem
             string stringFilePath = att1.adress;
             item.attributeValue.Add(stringFilePath);
         }
+
+        IntAttrebute att2 = (IntAttrebute)attrebutes[1];
+        string stringIntAtt = att2.mInt.ToString();
+        item.attributeValue.Add(stringIntAtt);
+
 
         if (GetNodes[0].ConnectedNode != null)
         {
@@ -107,6 +126,11 @@ public class Module : FunctionItem, IFunctionItem
             return wpi;
         }
 
+        IntAttrebute att2 = attrebutes[1] as IntAttrebute;
+        repeatCount = (int)att2.mInt;
+
+        Name = Path.GetFileNameWithoutExtension(path);
+        Debug.Log(Name);
         functions.Clear();
 
         List<SerializedFunctionItem> functionItems = SaveLoadManager.LoadSerializedFunctionItemList(path);

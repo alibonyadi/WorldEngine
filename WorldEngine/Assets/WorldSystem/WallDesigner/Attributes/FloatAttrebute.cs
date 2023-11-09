@@ -37,7 +37,7 @@ namespace WallDesigner
 
         public override void Draw(Vector2 position)
         { 
-            base.Draw(position); 
+            base.Draw(position);
             Rect boxRect = new Rect(rect.x + position.x - rect.width / 2, rect.y + position.y, rect.width, 20);
             GUI.color = Color.cyan;
             Rect GetPos = new Rect(boxRect.x + boxRect.width, boxRect.y + 5, 10, 10);
