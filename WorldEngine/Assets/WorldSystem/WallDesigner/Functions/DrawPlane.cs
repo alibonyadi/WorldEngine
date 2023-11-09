@@ -76,11 +76,11 @@ public class DrawPlane : FunctionItem, IFunctionItem
         item.attributeName.Add("FloatAttrebute");
 
         FloatAttrebute att1 = (FloatAttrebute)attrebutes[0];
-        string stringfloat1 = att1.mFloat.ToString();
+        string stringfloat1 = att1.GetValue().ToString();
         item.attributeValue.Add(stringfloat1);
 
         FloatAttrebute att2 = (FloatAttrebute)attrebutes[1];
-        string stringfloat2 = att2.mFloat.ToString();
+        string stringfloat2 = att2.GetValue().ToString();
         item.attributeValue.Add(stringfloat2);
 
         if (GetNodes[0].ConnectedNode != null)
@@ -123,8 +123,8 @@ public class DrawPlane : FunctionItem, IFunctionItem
         Mesh mesh = new Mesh();
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
         FloatAttrebute fa2 = (FloatAttrebute)attrebutes[1];
-        width = fa1.mFloat;
-        height = fa2.mFloat;
+        width = (float)fa1.GetValue();
+        height = (float)fa2.GetValue();
 
         Vector3[] vertices = new Vector3[4];
         Vector3[] normals = new Vector3[4];
