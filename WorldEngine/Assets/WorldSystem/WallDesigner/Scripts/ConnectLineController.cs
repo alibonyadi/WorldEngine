@@ -7,6 +7,8 @@ namespace WallDesigner
     public class ConnectLineController
     {
         Node inDragNode;
+        Node inDragPropertyNode;
+        public bool isNodeProperty;
         public bool isLineInDraw;
         private static ConnectLineController instance;
         private ConnectLineController()
@@ -101,7 +103,19 @@ namespace WallDesigner
         }
         private static void ConnectTwoNode(Node node)
         {
-            if(isGetNode(node) && node.ConnectedNode != null )
+            if (isGetNode(node) && node.ConnectedNode != null)
+            {
+                return;
+            }
+
+            Type n1Type = node.GetType();
+            Type n2Type = ConnectLineController.Instance.GetInDragNode().GetType();
+
+            if ((n1Type == typeof(GetPropertyNode) && n2Type == typeof(GivePropertyNode)) || (n1Type == typeof(GivePropertyNode) && n2Type == typeof(GetPropertyNode)) || (n1Type == typeof(GetNode) && n2Type == typeof(GiveNode)) || (n1Type == typeof(GiveNode) && n2Type == typeof(GetNode)))
+            {
+                
+            }
+            else
             {
                 return;
             }
