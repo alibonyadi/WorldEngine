@@ -118,7 +118,7 @@ public class HorziontallLine : FunctionItem, IFunctionItem
     public object Execute(object mMesh,object id)
     {
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[1];
-        distance = fa1.mFloat;
+        distance = (float)fa1.GetValue();
 
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
         bool fromTop = ta1.mToggle;

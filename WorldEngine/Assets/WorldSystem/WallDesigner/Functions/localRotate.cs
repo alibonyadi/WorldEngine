@@ -124,13 +124,13 @@ public class localRotate : FunctionItem, IFunctionItem
             item = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
-        X = fl1.mFloat;
+        X = (float)fl1.GetValue();
 
         FloatAttrebute fl2 = (FloatAttrebute)attrebutes[1];
-        Y = fl2.mFloat;
+        Y = (float)fl2.GetValue();
 
         FloatAttrebute fl3 = (FloatAttrebute)attrebutes[2];
-        Z = fl3.mFloat;
+        Z = (float)fl3.GetValue();
 
         Mesh originalMesh = item.mesh;
         Mesh RoatatedMesh = new Mesh();

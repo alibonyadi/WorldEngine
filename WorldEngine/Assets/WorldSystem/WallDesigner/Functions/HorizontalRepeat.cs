@@ -142,13 +142,13 @@ public class HorizontalRepeat : FunctionItem, IFunctionItem
     public object Execute(object mMesh,object id)
     {
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
-        inBetween = fa1.mFloat;
+        inBetween = (float)fa1.GetValue();
 
         FloatAttrebute fa2 = (FloatAttrebute)attrebutes[1];
-        fromLeft = fa2.mFloat;
+        fromLeft = (float)fa2.GetValue();
 
         FloatAttrebute fa3 = (FloatAttrebute)attrebutes[2];
-        fromRight = fa3.mFloat;
+        fromRight = (float)fa3.GetValue();
 
         List<Material> baseMaterials = new List<Material>();
 

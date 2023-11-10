@@ -117,10 +117,10 @@ public class VerticalLine : FunctionItem, IFunctionItem
     public object Execute(object mMesh, object id)
     {
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[1];
-        distance = fa1.mFloat;
+        distance = (float)fa1.GetValue();
 
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
-        bool fromLeft = ta1.mToggle;
+        bool fromLeft = (bool)ta1.GetValue();
 
         WallPartItem wpi = (WallPartItem)mMesh;
 

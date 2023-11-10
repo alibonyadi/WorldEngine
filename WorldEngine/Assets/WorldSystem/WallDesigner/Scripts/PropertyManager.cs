@@ -7,6 +7,7 @@ public class PropertyManager
 {
     private List<Property> properties;
     private static PropertyManager instance;
+
     private PropertyManager() 
     {
         properties = new List<Property>();

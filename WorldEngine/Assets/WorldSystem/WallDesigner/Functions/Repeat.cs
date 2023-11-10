@@ -106,7 +106,7 @@ public class Repeat : FunctionItem, IFunctionItem
         WallPartItem Item2 = new WallPartItem();
         WallPartItem Temp = new WallPartItem();
         IntAttrebute att1 = attrebutes[0] as IntAttrebute;
-
+        count = (int)att1.GetValue();
         if (GetNodes[1].ConnectedNode == null)
             return mMesh;
 
@@ -115,7 +115,7 @@ public class Repeat : FunctionItem, IFunctionItem
 
         if (GetNodes[0].ConnectedNode != null)
         {
-            for(int i = 0;i< att1.mInt;i++)
+            for(int i = 0;i< (int)att1.GetValue();i++)
             {
                 Temp = new WallPartItem();
                 //Debug.Log(i);

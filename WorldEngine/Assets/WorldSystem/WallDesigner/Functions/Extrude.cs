@@ -121,10 +121,10 @@ public class Extrude : FunctionItem, IFunctionItem
 
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
-        extrudeDistance = fl1.mFloat;
+        extrudeDistance = (float)fl1.GetValue();
 
         FloatAttrebute fl2 = (FloatAttrebute)attrebutes[1];
-        insetDistance = fl2.mFloat;
+        insetDistance = (float)fl2.GetValue();
 
         WallPartItem output = new WallPartItem();
         Mesh originalMesh = item.mesh;
