@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,16 +6,16 @@ using WallDesigner;
 
 public class VerticalLine : FunctionItem, IFunctionItem
 {
-    private WallPartItem LeftPart;
-    private WallPartItem RightPart;
+    private List<WallPartItem> LeftPart;
+    private List<WallPartItem> RightPart;
     private float distance = 1;
 
     public VerticalLine()
     {
         Init();
         Name = "Vertical Slicer";
-        LeftPart = new WallPartItem();
-        RightPart = new WallPartItem();
+        LeftPart = new List<WallPartItem>();
+        RightPart = new List<WallPartItem>();
         ClassName = typeof(VerticalLine).FullName;
         basecolor = Color.white;
         myFunction = Execute;
@@ -122,235 +123,257 @@ public class VerticalLine : FunctionItem, IFunctionItem
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
         bool fromLeft = (bool)ta1.GetValue();
 
-        WallPartItem wpi = (WallPartItem)mMesh;
+
+
+        List<WallPartItem> wpi = (List<WallPartItem>)mMesh;
 
         //WallPartItem wpi = new WallPartItem();
 
         if (GetNodes[0].ConnectedNode != null)
-            wpi = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+            wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
+        LeftPart = new List<WallPartItem>();
+        RightPart =new List<WallPartItem>();
 
-        Mesh mesh = wpi.mesh;
-        //List<Material material = wpi.material;
-        mesh.RecalculateNormals();
-        Mesh upperMesh = new Mesh();
-        Mesh lowerMesh = new Mesh();
-
-        Vector3[] vertices = mesh.vertices;
-        int[] triangles = mesh.triangles;
-        Vector2[] uv = mesh.uv;
-        Vector3[] normals = mesh.normals;
-
-        List<int> upperTriangles = new List<int>();
-        List<Vector3> upperVertices = new List<Vector3>();
-        List<Vector2> UpperUV = new List<Vector2>();
-        List<Vector3> UpperNormals = new List<Vector3>();
-
-        List<int> lowerTriangles = new List<int>();
-        List<Vector3> lowerVertices = new List<Vector3>();
-        List<Vector2> lowerUV = new List<Vector2>();
-        List<Vector3> lowerNormals = new List<Vector3>();
-
-        float cutx = 0;
-
-        if (fromLeft)
+        for (int l = 0; l < wpi.Count; l++)
         {
-            float highestx = float.MinValue;
-            foreach (Vector3 vertex in vertices)
+            Mesh mesh = wpi[l].mesh;
+            //List<Material material = wpi.material;
+            mesh.RecalculateNormals();
+            Mesh upperMesh = new Mesh();
+            Mesh lowerMesh = new Mesh();
+
+            Vector3[] vertices = mesh.vertices;
+            int[] triangles = mesh.triangles;
+            Vector2[] uv = mesh.uv;
+            Vector3[] normals = mesh.normals;
+
+            List<int> upperTriangles = new List<int>();
+            List<Vector3> upperVertices = new List<Vector3>();
+            List<Vector2> UpperUV = new List<Vector2>();
+            List<Vector3> UpperNormals = new List<Vector3>();
+
+            List<int> lowerTriangles = new List<int>();
+            List<Vector3> lowerVertices = new List<Vector3>();
+            List<Vector2> lowerUV = new List<Vector2>();
+            List<Vector3> lowerNormals = new List<Vector3>();
+
+            float cutx = 0;
+
+            if (fromLeft)
             {
-                if (vertex.x > highestx)
+                float highestx = float.MinValue;
+                foreach (Vector3 vertex in vertices)
                 {
-                    highestx = vertex.x;
+                    if (vertex.x > highestx)
+                    {
+                        highestx = vertex.x;
+                    }
                 }
-            }
 
-            cutx = highestx - distance;
-        }
-        else
-        {
-            float minx = float.MaxValue;
-            foreach (Vector3 vertex in vertices)
-            {
-                if (vertex.x < minx)
-                {
-                    minx = vertex.x;
-                }
-            }
-
-            cutx = minx + distance;
-        }
-
-
-
-        for (int i = 0; i < triangles.Length; i += 3)
-        {
-            if (vertices[triangles[i]].x > cutx && vertices[triangles[i + 1]].x > cutx && vertices[triangles[i + 2]].x > cutx)
-            {
-                upperVertices.Add(vertices[triangles[i]]);
-                upperVertices.Add(vertices[triangles[i + 1]]);
-                upperVertices.Add(vertices[triangles[i + 2]]);
-
-                UpperUV.Add(uv[triangles[i]]);
-                UpperUV.Add(uv[triangles[i + 1]]);
-                UpperUV.Add(uv[triangles[i + 2]]);
-
-                UpperNormals.Add(normals[triangles[i]]);
-                UpperNormals.Add(normals[triangles[i + 1]]);
-                UpperNormals.Add(normals[triangles[i + 2]]);
-
-                upperTriangles.Add(upperTriangles.Count);
-                upperTriangles.Add(upperTriangles.Count);
-                upperTriangles.Add(upperTriangles.Count);
-            } 
-            else if (vertices[triangles[i]].x < cutx && vertices[triangles[i + 1]].x < cutx && vertices[triangles[i + 2]].x < cutx)
-            {
-                lowerVertices.Add(vertices[triangles[i]]);
-                lowerVertices.Add(vertices[triangles[i + 1]]);
-                lowerVertices.Add(vertices[triangles[i + 2]]);
-
-                lowerUV.Add(uv[triangles[i]]);
-                lowerUV.Add(uv[triangles[i + 1]]);
-                lowerUV.Add(uv[triangles[i + 2]]);
-
-                lowerNormals.Add(normals[triangles[i]]);
-                lowerNormals.Add(normals[triangles[i + 1]]);
-                lowerNormals.Add(normals[triangles[i + 2]]);
-
-                lowerTriangles.Add(lowerTriangles.Count);
-                lowerTriangles.Add(lowerTriangles.Count);
-                lowerTriangles.Add(lowerTriangles.Count);
+                cutx = highestx - distance;
             }
             else
             {
-                if (vertices[triangles[i]].x < cutx)
+                float minx = float.MaxValue;
+                foreach (Vector3 vertex in vertices)
                 {
-                    lowerVertices.Add(vertices[triangles[i]]);
-                    //vertices[triangles[i]].x = cutx;
-                    Vector3 v = vertices[triangles[i]];
-                    v.x = cutx;
-                    upperVertices.Add(v);
+                    if (vertex.x < minx)
+                    {
+                        minx = vertex.x;
+                    }
                 }
-                else
+
+                cutx = minx + distance;
+            }
+
+
+
+            for (int i = 0; i < triangles.Length; i += 3)
+            {
+                if (vertices[triangles[i]].x > cutx && vertices[triangles[i + 1]].x > cutx && vertices[triangles[i + 2]].x > cutx)
                 {
                     upperVertices.Add(vertices[triangles[i]]);
-                    //vertices[triangles[i]].x = cutx;
-                    Vector3 v = vertices[triangles[i]];
-                    v.x = cutx;
-                    lowerVertices.Add(v);
-                }
-
-                if (vertices[triangles[i + 1]].x < cutx)
-                {
-                    lowerVertices.Add(vertices[triangles[i + 1]]);
-                    //vertices[triangles[i + 1]].x = cutx;
-                    Vector3 v = vertices[triangles[i+1]];
-                    v.x = cutx;
-                    upperVertices.Add(v);
-
-                }
-                else
-                {
                     upperVertices.Add(vertices[triangles[i + 1]]);
-                    //vertices[triangles[i + 1]].x = cutx;
-                    Vector3 v = vertices[triangles[i+1]];
-                    v.x = cutx;
-                    lowerVertices.Add(v);
-                }
+                    upperVertices.Add(vertices[triangles[i + 2]]);
 
-                if (vertices[triangles[i + 2]].x < cutx)
+                    UpperUV.Add(uv[triangles[i]]);
+                    UpperUV.Add(uv[triangles[i + 1]]);
+                    UpperUV.Add(uv[triangles[i + 2]]);
+
+                    UpperNormals.Add(normals[triangles[i]]);
+                    UpperNormals.Add(normals[triangles[i + 1]]);
+                    UpperNormals.Add(normals[triangles[i + 2]]);
+
+                    upperTriangles.Add(upperTriangles.Count);
+                    upperTriangles.Add(upperTriangles.Count);
+                    upperTriangles.Add(upperTriangles.Count);
+                }
+                else if (vertices[triangles[i]].x < cutx && vertices[triangles[i + 1]].x < cutx && vertices[triangles[i + 2]].x < cutx)
                 {
+                    lowerVertices.Add(vertices[triangles[i]]);
+                    lowerVertices.Add(vertices[triangles[i + 1]]);
                     lowerVertices.Add(vertices[triangles[i + 2]]);
-                    //vertices[triangles[i + 2]].x = cutx;
-                    Vector3 v = vertices[triangles[i+2]];
-                    v.x = cutx;
-                    upperVertices.Add(v);
+
+                    lowerUV.Add(uv[triangles[i]]);
+                    lowerUV.Add(uv[triangles[i + 1]]);
+                    lowerUV.Add(uv[triangles[i + 2]]);
+
+                    lowerNormals.Add(normals[triangles[i]]);
+                    lowerNormals.Add(normals[triangles[i + 1]]);
+                    lowerNormals.Add(normals[triangles[i + 2]]);
+
+                    lowerTriangles.Add(lowerTriangles.Count);
+                    lowerTriangles.Add(lowerTriangles.Count);
+                    lowerTriangles.Add(lowerTriangles.Count);
                 }
                 else
                 {
-                    upperVertices.Add(vertices[triangles[i + 2]]);
-                    //vertices[triangles[i + 2]].x = cutx;
-                    Vector3 v = vertices[triangles[i+2]];
-                    v.x = cutx;
-                    lowerVertices.Add(v);
+                    if (vertices[triangles[i]].x < cutx)
+                    {
+                        lowerVertices.Add(vertices[triangles[i]]);
+                        //vertices[triangles[i]].x = cutx;
+                        Vector3 v = vertices[triangles[i]];
+                        v.x = cutx;
+                        upperVertices.Add(v);
+                    }
+                    else
+                    {
+                        upperVertices.Add(vertices[triangles[i]]);
+                        //vertices[triangles[i]].x = cutx;
+                        Vector3 v = vertices[triangles[i]];
+                        v.x = cutx;
+                        lowerVertices.Add(v);
+                    }
+
+                    if (vertices[triangles[i + 1]].x < cutx)
+                    {
+                        lowerVertices.Add(vertices[triangles[i + 1]]);
+                        //vertices[triangles[i + 1]].x = cutx;
+                        Vector3 v = vertices[triangles[i + 1]];
+                        v.x = cutx;
+                        upperVertices.Add(v);
+
+                    }
+                    else
+                    {
+                        upperVertices.Add(vertices[triangles[i + 1]]);
+                        //vertices[triangles[i + 1]].x = cutx;
+                        Vector3 v = vertices[triangles[i + 1]];
+                        v.x = cutx;
+                        lowerVertices.Add(v);
+                    }
+
+                    if (vertices[triangles[i + 2]].x < cutx)
+                    {
+                        lowerVertices.Add(vertices[triangles[i + 2]]);
+                        //vertices[triangles[i + 2]].x = cutx;
+                        Vector3 v = vertices[triangles[i + 2]];
+                        v.x = cutx;
+                        upperVertices.Add(v);
+                    }
+                    else
+                    {
+                        upperVertices.Add(vertices[triangles[i + 2]]);
+                        //vertices[triangles[i + 2]].x = cutx;
+                        Vector3 v = vertices[triangles[i + 2]];
+                        v.x = cutx;
+                        lowerVertices.Add(v);
+                    }
+
+                    UpperUV.Add(uv[triangles[i]]);
+                    UpperUV.Add(uv[triangles[i + 1]]);
+                    UpperUV.Add(uv[triangles[i + 2]]);
+
+                    UpperNormals.Add(normals[triangles[i]]);
+                    UpperNormals.Add(normals[triangles[i + 1]]);
+                    UpperNormals.Add(normals[triangles[i + 2]]);
+
+                    upperTriangles.Add(upperTriangles.Count);
+                    upperTriangles.Add(upperTriangles.Count);
+                    upperTriangles.Add(upperTriangles.Count);
+
+                    lowerUV.Add(uv[triangles[i]]);
+                    lowerUV.Add(uv[triangles[i + 1]]);
+                    lowerUV.Add(uv[triangles[i + 2]]);
+
+                    lowerNormals.Add(normals[triangles[i]]);
+                    lowerNormals.Add(normals[triangles[i + 1]]);
+                    lowerNormals.Add(normals[triangles[i + 2]]);
+
+                    lowerTriangles.Add(lowerTriangles.Count);
+                    lowerTriangles.Add(lowerTriangles.Count);
+                    lowerTriangles.Add(lowerTriangles.Count);
+
                 }
-
-                UpperUV.Add(uv[triangles[i]]);
-                UpperUV.Add(uv[triangles[i + 1]]);
-                UpperUV.Add(uv[triangles[i + 2]]);
-
-                UpperNormals.Add(normals[triangles[i]]);
-                UpperNormals.Add(normals[triangles[i + 1]]);
-                UpperNormals.Add(normals[triangles[i + 2]]);
-
-                upperTriangles.Add(upperTriangles.Count);
-                upperTriangles.Add(upperTriangles.Count);
-                upperTriangles.Add(upperTriangles.Count);
-
-                lowerUV.Add(uv[triangles[i]]);
-                lowerUV.Add(uv[triangles[i + 1]]);
-                lowerUV.Add(uv[triangles[i + 2]]);
-
-                lowerNormals.Add(normals[triangles[i]]);
-                lowerNormals.Add(normals[triangles[i + 1]]);
-                lowerNormals.Add(normals[triangles[i + 2]]);
-
-                lowerTriangles.Add(lowerTriangles.Count);
-                lowerTriangles.Add(lowerTriangles.Count);
-                lowerTriangles.Add(lowerTriangles.Count);
-
             }
-        }
 
 
-        upperMesh.vertices = upperVertices.ToArray();
-        upperMesh.triangles = upperTriangles.ToArray();
-        upperMesh.uv = UpperUV.ToArray();
-        upperMesh.normals = UpperNormals.ToArray();
-        upperMesh.RecalculateNormals();
-        upperMesh.RecalculateBounds();
+            upperMesh.vertices = upperVertices.ToArray();
+            upperMesh.triangles = upperTriangles.ToArray();
+            upperMesh.uv = UpperUV.ToArray();
+            upperMesh.normals = UpperNormals.ToArray();
+            upperMesh.RecalculateNormals();
+            upperMesh.RecalculateBounds();
 
 
 
-        lowerMesh.vertices = lowerVertices.ToArray();
-        lowerMesh.triangles = lowerTriangles.ToArray();
-        lowerMesh.uv = lowerUV.ToArray();
-        lowerMesh.normals = lowerNormals.ToArray();
-        lowerMesh.RecalculateNormals();
-        lowerMesh.RecalculateBounds();
+            lowerMesh.vertices = lowerVertices.ToArray();
+            lowerMesh.triangles = lowerTriangles.ToArray();
+            lowerMesh.uv = lowerUV.ToArray();
+            lowerMesh.normals = lowerNormals.ToArray();
+            lowerMesh.RecalculateNormals();
+            lowerMesh.RecalculateBounds();
 
 
-        List<Material> mats = new List<Material>();
+            List<Material> mats = new List<Material>();
 
-        //mats = AddMaterial.CopyMaterials(wpi);
+            //mats = AddMaterial.CopyMaterials(wpi);
 
-        if (wpi.material.Count > 0)
-        {
-            //int count = wallitem.material.Count;
-            //wallitem.material.Clear();
-
-            for (int i = 0; i < wpi.material.Count; i++)
+            if (wpi[l].material.Count > 0)
             {
-                Material mat1 = new Material(Shader.Find("Standard"));
-                mat1.color = wpi.material[i].color;
-                if (wpi.material[i].mainTexture != null)
-                    mat1.mainTexture = wpi.material[i].mainTexture;
-                mats.Add(mat1);
-            }
-            //wpi.material.Clear();
-            //wpi.material = mats;
-        }
+                //int count = wallitem.material.Count;
+                //wallitem.material.Clear();
 
+                for (int i = 0; i < wpi[l].material.Count; i++)
+                {
+                    Material mat1 = new Material(Shader.Find("Standard"));
+                    mat1.color = wpi[l].material[i].color;
+                    if (wpi[l].material[i].mainTexture != null)
+                        mat1.mainTexture = wpi[l].material[i].mainTexture;
+                    mats.Add(mat1);
+                }
+                //wpi.material.Clear();
+                //wpi.material = mats;
+            }
+
+            WallPartItem wallPartItem = new WallPartItem();
+
+            if ((int)id == 0)
+            {
+                wallPartItem.mesh = upperMesh;
+                wallPartItem.material = mats;
+                LeftPart.Add(wallPartItem);
+            }
+            else
+            {
+                wallPartItem.mesh = lowerMesh;
+                wallPartItem.material = mats;
+                RightPart.Add(wallPartItem);
+                //return RightPart;
+            }
+        }
 
         if ((int)id == 0)
         {
-            LeftPart.mesh = upperMesh;
-            LeftPart.material = mats;
+            //LeftPart[l].mesh = upperMesh;
+            //LeftPart[l].material = mats;
             return LeftPart;
         }
         else
         {
-            RightPart.mesh = lowerMesh;
-            RightPart.material = mats;
+            //RightPart[l].mesh = lowerMesh;
+            //RightPart[l].material = mats;
             return RightPart;
         }
     }

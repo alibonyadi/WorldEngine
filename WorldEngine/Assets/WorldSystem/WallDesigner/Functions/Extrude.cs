@@ -114,10 +114,10 @@ public class Extrude : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        WallPartItem item = mMesh as WallPartItem;
+        List<WallPartItem> item = mMesh as List<WallPartItem>;
 
         if (GetNodes[0].ConnectedNode != null)
-            item = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
+            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
@@ -126,224 +126,235 @@ public class Extrude : FunctionItem, IFunctionItem
         FloatAttrebute fl2 = (FloatAttrebute)attrebutes[1];
         insetDistance = (float)fl2.GetValue();
 
-        WallPartItem output = new WallPartItem();
-        Mesh originalMesh = item.mesh;
-        Mesh extrudedMesh = new Mesh();
+        List<WallPartItem> output = new List<WallPartItem>();
 
-
-        // Get the normals and vertices of the original mesh
-        Vector3[] vertices = originalMesh.vertices;
-        Vector3[] normals = originalMesh.normals;
-        int[] triangles = originalMesh.triangles;
-        Vector2[] UVs = originalMesh.uv;
-
-        // Create new arrays to hold the extruded vertices and triangles
-        Vector3[] extrudedVertices = new Vector3[vertices.Length];
-        Vector3[] extrudedNormals = new Vector3[normals.Length];
-        int[] extrudedTriangles = new int[triangles.Length];
-        Vector2[] extrudedUvs = new Vector2[UVs.Length];
-
-        for (int i = 0; i < vertices.Length; i++)
+        for (int j = 0; j < item.Count; j++)
         {
-            extrudedVertices[i] = vertices[i];
-            extrudedVertices[i] += normals[i] * extrudeDistance;
-        }
 
-        extrudedMesh.vertices = extrudedVertices;
-        extrudedMesh.normals = normals;
-        extrudedMesh.triangles = triangles;
-        extrudedMesh.uv = originalMesh.uv;
+            if (item[j] == null)
+                continue;
 
-        extrudedMesh = InsetMesh(extrudedMesh, -insetDistance);
-
-        extrudedVertices = extrudedMesh.vertices;
-
-        int OrginaltriangleCount = triangles.Length / 3;
+            Mesh originalMesh = item[j].mesh;
+            Mesh extrudedMesh = new Mesh();
 
 
-        List<Vector3> sideVertices = new List<Vector3>();
-        List<int> sideTriangles = new List<int>();
-        List<Vector2> sideUVs = new List<Vector2>();
+            // Get the normals and vertices of the original mesh
+            Vector3[] vertices = originalMesh.vertices;
+            Vector3[] normals = originalMesh.normals;
+            int[] triangles = originalMesh.triangles;
+            Vector2[] UVs = originalMesh.uv;
 
-        int index = vertices.Length / OrginaltriangleCount;
+            // Create new arrays to hold the extruded vertices and triangles
+            Vector3[] extrudedVertices = new Vector3[vertices.Length];
+            Vector3[] extrudedNormals = new Vector3[normals.Length];
+            int[] extrudedTriangles = new int[triangles.Length];
+            Vector2[] extrudedUvs = new Vector2[UVs.Length];
 
-
-        for (int i = 0; i < triangles.Length; i += 3)
-        {
-            if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 1]], originalMesh))
+            for (int i = 0; i < vertices.Length; i++)
             {
-                Vector3 vertex1 = vertices[triangles[i]];
-                Vector3 vertex2 = vertices[triangles[i + 1]];
-                Vector3 exvertex1 = extrudedVertices[triangles[i]];
-                Vector3 exvertex2 = extrudedVertices[triangles[i + 1]];
-
-                sideVertices.Add(vertex1);//0 w = 0 -- h = 0
-                sideVertices.Add(vertex2);//1 w = 1 -- h = 0
-                sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
-                sideVertices.Add(exvertex2);//3 w = 1 -- h =1
-
-                int v1 = sideVertices.Count - 4;
-                int v2 = sideVertices.Count - 3;
-                int v3 = sideVertices.Count - 2;
-                int v4 = sideVertices.Count - 1;
-
-                sideUVs.Add(new Vector2(0, 0));
-                sideUVs.Add(new Vector2(1, 0));
-                sideUVs.Add(new Vector2(0, 1));
-                sideUVs.Add(new Vector2(1, 1));
-
-                sideTriangles.Add(v2);
-                sideTriangles.Add(v3);
-                sideTriangles.Add(v1);
-
-                sideTriangles.Add(v3);
-                sideTriangles.Add(v2);
-                sideTriangles.Add(v4);
+                extrudedVertices[i] = vertices[i];
+                extrudedVertices[i] += normals[i] * extrudeDistance;
             }
 
-            if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 2]], originalMesh))
+            extrudedMesh.vertices = extrudedVertices;
+            extrudedMesh.normals = normals;
+            extrudedMesh.triangles = triangles;
+            extrudedMesh.uv = originalMesh.uv;
+
+            extrudedMesh = InsetMesh(extrudedMesh, -insetDistance);
+
+            extrudedVertices = extrudedMesh.vertices;
+
+            int OrginaltriangleCount = triangles.Length / 3;
+
+
+            List<Vector3> sideVertices = new List<Vector3>();
+            List<int> sideTriangles = new List<int>();
+            List<Vector2> sideUVs = new List<Vector2>();
+
+            int index = vertices.Length / OrginaltriangleCount;
+
+
+            for (int i = 0; i < triangles.Length; i += 3)
             {
-                Vector3 vertex1 = vertices[triangles[i]];
-                Vector3 vertex2 = vertices[triangles[i + 2]];
-                Vector3 exvertex1 = extrudedVertices[triangles[i]];
-                Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
+                if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 1]], originalMesh))
+                {
+                    Vector3 vertex1 = vertices[triangles[i]];
+                    Vector3 vertex2 = vertices[triangles[i + 1]];
+                    Vector3 exvertex1 = extrudedVertices[triangles[i]];
+                    Vector3 exvertex2 = extrudedVertices[triangles[i + 1]];
 
-                sideVertices.Add(vertex1);//0 w = 0 -- h = 0
-                sideVertices.Add(vertex2);//1 w = 1 -- h = 0
-                sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
-                sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+                    sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                    sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                    sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                    sideVertices.Add(exvertex2);//3 w = 1 -- h =1
 
-                int v1 = sideVertices.Count - 4;
-                int v2 = sideVertices.Count - 3;
-                int v3 = sideVertices.Count - 2;
-                int v4 = sideVertices.Count - 1;
+                    int v1 = sideVertices.Count - 4;
+                    int v2 = sideVertices.Count - 3;
+                    int v3 = sideVertices.Count - 2;
+                    int v4 = sideVertices.Count - 1;
 
-                sideUVs.Add(new Vector2(0, 0));
-                sideUVs.Add(new Vector2(1, 0));
-                sideUVs.Add(new Vector2(0, 1));
-                sideUVs.Add(new Vector2(1, 1));
+                    sideUVs.Add(new Vector2(0, 0));
+                    sideUVs.Add(new Vector2(1, 0));
+                    sideUVs.Add(new Vector2(0, 1));
+                    sideUVs.Add(new Vector2(1, 1));
 
-                sideTriangles.Add(v1);
-                sideTriangles.Add(v3);
-                sideTriangles.Add(v2);
+                    sideTriangles.Add(v2);
+                    sideTriangles.Add(v3);
+                    sideTriangles.Add(v1);
 
-                sideTriangles.Add(v4);
-                sideTriangles.Add(v2);
-                sideTriangles.Add(v3);
+                    sideTriangles.Add(v3);
+                    sideTriangles.Add(v2);
+                    sideTriangles.Add(v4);
+                }
+
+                if (IsEdgeOnBorder(vertices[triangles[i]], vertices[triangles[i + 2]], originalMesh))
+                {
+                    Vector3 vertex1 = vertices[triangles[i]];
+                    Vector3 vertex2 = vertices[triangles[i + 2]];
+                    Vector3 exvertex1 = extrudedVertices[triangles[i]];
+                    Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
+
+                    sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                    sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                    sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                    sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+
+                    int v1 = sideVertices.Count - 4;
+                    int v2 = sideVertices.Count - 3;
+                    int v3 = sideVertices.Count - 2;
+                    int v4 = sideVertices.Count - 1;
+
+                    sideUVs.Add(new Vector2(0, 0));
+                    sideUVs.Add(new Vector2(1, 0));
+                    sideUVs.Add(new Vector2(0, 1));
+                    sideUVs.Add(new Vector2(1, 1));
+
+                    sideTriangles.Add(v1);
+                    sideTriangles.Add(v3);
+                    sideTriangles.Add(v2);
+
+                    sideTriangles.Add(v4);
+                    sideTriangles.Add(v2);
+                    sideTriangles.Add(v3);
+                }
+
+                if (IsEdgeOnBorder(vertices[triangles[i + 1]], vertices[triangles[i + 2]], originalMesh))
+                {
+                    Vector3 vertex1 = vertices[triangles[i + 1]];
+                    Vector3 vertex2 = vertices[triangles[i + 2]];
+                    Vector3 exvertex1 = extrudedVertices[triangles[i + 1]];
+                    Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
+
+                    sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                    sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                    sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                    sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+
+                    int v1 = sideVertices.Count - 4;
+                    int v2 = sideVertices.Count - 3;
+                    int v3 = sideVertices.Count - 2;
+                    int v4 = sideVertices.Count - 1;
+
+                    sideUVs.Add(new Vector2(0, 0));
+                    sideUVs.Add(new Vector2(1, 0));
+                    sideUVs.Add(new Vector2(0, 1));
+                    sideUVs.Add(new Vector2(1, 1));
+
+                    sideTriangles.Add(v2);
+                    sideTriangles.Add(v3);
+                    sideTriangles.Add(v1);
+
+                    sideTriangles.Add(v3);
+                    sideTriangles.Add(v2);
+                    sideTriangles.Add(v4);
+                }
             }
 
-            if (IsEdgeOnBorder(vertices[triangles[i + 1]], vertices[triangles[i + 2]], originalMesh))
+            /*for (int i=0;i< OrginaltriangleCount;i++)
             {
-                Vector3 vertex1 = vertices[triangles[i + 1]];
-                Vector3 vertex2 = vertices[triangles[i + 2]];
-                Vector3 exvertex1 = extrudedVertices[triangles[i + 1]];
-                Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
+                int mul = i*12;
 
-                sideVertices.Add(vertex1);//0 w = 0 -- h = 0
-                sideVertices.Add(vertex2);//1 w = 1 -- h = 0
-                sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
-                sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+                sideVertices[mul+2] = vertices[ index * i + 0];
+                sideVertices[mul + 1] = extrudedVertices[index * i + 0];
+                sideVertices[mul] = vertices[index * i + 1];
 
-                int v1 = sideVertices.Count - 4;
-                int v2 = sideVertices.Count - 3;
-                int v3 = sideVertices.Count - 2;
-                int v4 = sideVertices.Count - 1;
+                sideVertices[mul +5] = extrudedVertices[index * i + 1];
+                sideVertices[mul +4] = vertices[index * i + 1];
+                sideVertices[mul +3] = extrudedVertices[index * i + 0];
 
-                sideUVs.Add(new Vector2(0, 0));
-                sideUVs.Add(new Vector2(1, 0));
-                sideUVs.Add(new Vector2(0, 1));
-                sideUVs.Add(new Vector2(1, 1));
 
-                sideTriangles.Add(v2);
-                sideTriangles.Add(v3);
-                sideTriangles.Add(v1);
+                sideVertices[mul + 6] = vertices[index * i + 0];
+                sideVertices[mul + 7] = extrudedVertices[index * i + 0];
+                sideVertices[mul + 8] = vertices[index * i + 2];
 
-                sideTriangles.Add(v3);
-                sideTriangles.Add(v2);
-                sideTriangles.Add(v4);
+                sideVertices[mul + 9] = extrudedVertices[index * i + 2];
+                sideVertices[mul + 10] = vertices[index * i + 2];
+                sideVertices[mul + 11] = extrudedVertices[index * i + 0];
+
+                sideTriangles[mul] = mul;
+                sideTriangles[mul+1] = mul+1;
+                sideTriangles[mul+2] = mul + 2;
+                sideTriangles[mul+3] = mul + 3;
+                sideTriangles[mul+4] = mul + 4;
+                sideTriangles[mul+5] = mul + 5;
+                sideTriangles[mul+6] = mul + 6;
+                sideTriangles[mul+7] = mul + 7;
+                sideTriangles[mul+8] = mul + 8;
+                sideTriangles[mul+9] = mul + 9;
+                sideTriangles[mul+10] = mul + 10;
+                sideTriangles[mul+11] = mul + 11;
+
+                sideUVs[mul+2] = new Vector2(0, 1);
+                sideUVs[mul+1] = new Vector2(1, 1);
+                sideUVs[mul ] = new Vector2(0, 0);
+
+                sideUVs[mul + 5] = new Vector2(1, 0);
+                sideUVs[mul + 4] = new Vector2(0, 0);
+                sideUVs[mul + 3] = new Vector2(1, 1);
+
+                sideUVs[mul + 6] = new Vector2(0, 1);
+                sideUVs[mul + 7] = new Vector2(1, 1);
+                sideUVs[mul + 8] = new Vector2(0, 0);
+
+                sideUVs[mul + 9] = new Vector2(1, 0);
+                sideUVs[mul + 10] = new Vector2(0, 0);
+                sideUVs[mul + 11] = new Vector2(1, 1);
+            }*/
+
+            Mesh sideMesh = new Mesh();
+            sideMesh.vertices = sideVertices.ToArray();
+            sideMesh.triangles = sideTriangles.ToArray();
+            sideMesh.uv = sideUVs.ToArray();
+            sideMesh.RecalculateBounds();
+            sideMesh.RecalculateNormals();
+
+            Mesh combinedMesh = new Mesh();
+
+            CombineInstance[] combineInstances = new CombineInstance[2];
+            combineInstances[0].mesh = extrudedMesh;
+            combineInstances[0].transform = Matrix4x4.identity;
+            combineInstances[1].mesh = sideMesh;
+            combineInstances[1].transform = Matrix4x4.identity;
+            combinedMesh.CombineMeshes(combineInstances);
+            //sideMesh.RecalculateBounds();
+            //sideMesh.RecalculateNormals();
+
+
+            WallPartItem itemTemp = new WallPartItem();
+            if ((int)id == 0)
+            {
+                itemTemp.mesh = extrudedMesh;
+            }
+            else
+            {
+                itemTemp.mesh = sideMesh;
             }
 
-
+            itemTemp.material = AddMaterial.CopyMaterials(item[j]);
+            output.Add(itemTemp);
         }
-
-        /*for (int i=0;i< OrginaltriangleCount;i++)
-        {
-            int mul = i*12;
-            
-            sideVertices[mul+2] = vertices[ index * i + 0];
-            sideVertices[mul + 1] = extrudedVertices[index * i + 0];
-            sideVertices[mul] = vertices[index * i + 1];
-
-            sideVertices[mul +5] = extrudedVertices[index * i + 1];
-            sideVertices[mul +4] = vertices[index * i + 1];
-            sideVertices[mul +3] = extrudedVertices[index * i + 0];
-
-
-            sideVertices[mul + 6] = vertices[index * i + 0];
-            sideVertices[mul + 7] = extrudedVertices[index * i + 0];
-            sideVertices[mul + 8] = vertices[index * i + 2];
-
-            sideVertices[mul + 9] = extrudedVertices[index * i + 2];
-            sideVertices[mul + 10] = vertices[index * i + 2];
-            sideVertices[mul + 11] = extrudedVertices[index * i + 0];
-
-            sideTriangles[mul] = mul;
-            sideTriangles[mul+1] = mul+1;
-            sideTriangles[mul+2] = mul + 2;
-            sideTriangles[mul+3] = mul + 3;
-            sideTriangles[mul+4] = mul + 4;
-            sideTriangles[mul+5] = mul + 5;
-            sideTriangles[mul+6] = mul + 6;
-            sideTriangles[mul+7] = mul + 7;
-            sideTriangles[mul+8] = mul + 8;
-            sideTriangles[mul+9] = mul + 9;
-            sideTriangles[mul+10] = mul + 10;
-            sideTriangles[mul+11] = mul + 11;
-
-            sideUVs[mul+2] = new Vector2(0, 1);
-            sideUVs[mul+1] = new Vector2(1, 1);
-            sideUVs[mul ] = new Vector2(0, 0);
-
-            sideUVs[mul + 5] = new Vector2(1, 0);
-            sideUVs[mul + 4] = new Vector2(0, 0);
-            sideUVs[mul + 3] = new Vector2(1, 1);
-
-            sideUVs[mul + 6] = new Vector2(0, 1);
-            sideUVs[mul + 7] = new Vector2(1, 1);
-            sideUVs[mul + 8] = new Vector2(0, 0);
-
-            sideUVs[mul + 9] = new Vector2(1, 0);
-            sideUVs[mul + 10] = new Vector2(0, 0);
-            sideUVs[mul + 11] = new Vector2(1, 1);
-        }*/
-
-        Mesh sideMesh = new Mesh();
-        sideMesh.vertices = sideVertices.ToArray();
-        sideMesh.triangles = sideTriangles.ToArray();
-        sideMesh.uv = sideUVs.ToArray();
-        sideMesh.RecalculateBounds();
-        sideMesh.RecalculateNormals();
-
-        Mesh combinedMesh = new Mesh();
-
-        CombineInstance[] combineInstances = new CombineInstance[2];
-        combineInstances[0].mesh = extrudedMesh;
-        combineInstances[0].transform = Matrix4x4.identity;
-        combineInstances[1].mesh = sideMesh;
-        combineInstances[1].transform = Matrix4x4.identity;
-        combinedMesh.CombineMeshes(combineInstances);
-        //sideMesh.RecalculateBounds();
-        //sideMesh.RecalculateNormals();
-        if ((int)id == 0)
-        {
-            output.mesh = extrudedMesh;
-        }
-        else
-        {
-            output.mesh = sideMesh;
-        }
-
-        output.material = AddMaterial.CopyMaterials(item);
+        
         return output;
     }
 

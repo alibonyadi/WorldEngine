@@ -5,7 +5,7 @@ using WallDesigner;
 
 public class GetInputMesh : FunctionItem, IFunctionItem
 {
-    public WallPartItem inputMesh;
+    public List<WallPartItem> inputMesh;
     public bool havemesh = false;
 
 
@@ -15,7 +15,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
         Name = "Get Input Mesh";
         ClassName = typeof(GetInputMesh).FullName;
         basecolor = Color.blue;
-        inputMesh = new WallPartItem();
+        inputMesh = new List<WallPartItem>();
         myFunction = Execute;
 
         GiveNode givenode1 = new GiveNode();
@@ -59,16 +59,26 @@ public class GetInputMesh : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        WallPartItem item = new WallPartItem();
+        List<WallPartItem> item = new List<WallPartItem>();
         if (havemesh)
         {
-            item.mesh = inputMesh.mesh;
-            item.material = AddMaterial.CopyMaterials(inputMesh);
+            for(int i=0;i< inputMesh.Count;i++)
+            {
+                WallPartItem item1 = new WallPartItem();
+                item1.mesh = inputMesh[i].mesh;
+                item1.material = AddMaterial.CopyMaterials(inputMesh[i]);
+                item.Add(item1);
+            }
+        }
+        else
+        {
+            WallPartItem item1 = new WallPartItem();
+            item1.material.Clear();
+            Material material = new Material(Shader.Find("Standard"));
+            item1.material.Add(material);
+            item.Add(item1);
         }
 
-        item.material.Clear();
-        Material material = new Material(Shader.Find("Standard"));
-        item.material.Add(material);
         return item;
     }
 }

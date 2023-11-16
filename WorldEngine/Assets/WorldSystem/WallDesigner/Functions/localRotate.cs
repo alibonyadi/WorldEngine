@@ -118,10 +118,10 @@ public class localRotate : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        WallPartItem item = mMesh as WallPartItem;
+        List<WallPartItem> item = mMesh as List<WallPartItem>;
 
         if (GetNodes[0].ConnectedNode != null)
-            item = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
+            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
         X = (float)fl1.GetValue();
@@ -132,40 +132,48 @@ public class localRotate : FunctionItem, IFunctionItem
         FloatAttrebute fl3 = (FloatAttrebute)attrebutes[2];
         Z = (float)fl3.GetValue();
 
-        Mesh originalMesh = item.mesh;
-        Mesh RoatatedMesh = new Mesh();
 
-        Vector3[] vertices = originalMesh.vertices;
+        List<WallPartItem> outitem = new List<WallPartItem>();
 
-        int numSubMeshes = originalMesh.subMeshCount;
-
-
-        Vector3 rotationVector = new Vector3(X, Y, Z);
-
-        Matrix4x4 rotationMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(rotationVector), Vector3.one);
-
-        for (int i = 0; i < vertices.Length; i++)
+        for (int i = 0; i < item.Count; i++)
         {
-            vertices[i] = rotationMatrix.MultiplyPoint(vertices[i]);
+            Mesh originalMesh = item[i].mesh;
+            Mesh RoatatedMesh = new Mesh();
+
+            Vector3[] vertices = originalMesh.vertices;
+
+            int numSubMeshes = originalMesh.subMeshCount;
+
+
+            Vector3 rotationVector = new Vector3(X, Y, Z);
+
+            Matrix4x4 rotationMatrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(rotationVector), Vector3.one);
+
+            for (int j = 0; j < vertices.Length; j++)
+            {
+                vertices[j] = rotationMatrix.MultiplyPoint(vertices[j]);
+            }
+
+
+
+            RoatatedMesh.vertices = vertices;
+            RoatatedMesh.normals = originalMesh.normals;
+            RoatatedMesh.uv = originalMesh.uv;
+            //MovedMesh.triangles = originalMesh.triangles;
+            RoatatedMesh.subMeshCount = numSubMeshes;
+            for (int j = 0; j < numSubMeshes; j++)
+            {
+                int[] originalTriangles = originalMesh.GetTriangles(j);
+                RoatatedMesh.SetTriangles(originalTriangles, j);
+            }
+
+            WallPartItem output = new WallPartItem();
+            output.mesh = RoatatedMesh;
+            output.material = AddMaterial.CopyMaterials(item[i]);
+            outitem.Add(output);
         }
-
-
-
-        RoatatedMesh.vertices = vertices;
-        RoatatedMesh.normals = originalMesh.normals;
-        RoatatedMesh.uv = originalMesh.uv;
-        //MovedMesh.triangles = originalMesh.triangles;
-        RoatatedMesh.subMeshCount = numSubMeshes;
-        for (int i = 0; i < numSubMeshes; i++)
-        {
-            int[] originalTriangles = originalMesh.GetTriangles(i);
-            RoatatedMesh.SetTriangles(originalTriangles, i);
-        }
-
-        WallPartItem output = new WallPartItem();
-        output.mesh = RoatatedMesh;
-        output.material = AddMaterial.CopyMaterials(item);
-        return output;
+        
+        return outitem;
     }
 
 }

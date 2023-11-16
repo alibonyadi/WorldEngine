@@ -113,10 +113,10 @@ public class Module : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        WallPartItem wpi = new WallPartItem();
+        List<WallPartItem> wpi = new List<WallPartItem>();
 
         if (GetNodes[0].ConnectedNode != null)
-            wpi = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+            wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
         GetFileAttrebute att1 = attrebutes[0] as GetFileAttrebute;
         path = att1.adress;
@@ -130,7 +130,7 @@ public class Module : FunctionItem, IFunctionItem
         repeatCount = (int)att2.mInt;
 
         Name = Path.GetFileNameWithoutExtension(path);
-        Debug.Log(Name);
+        //Debug.Log(Name);
         functions.Clear();
 
         List<SerializedFunctionItem> functionItems = SaveLoadManager.LoadSerializedFunctionItemList(path);
@@ -176,7 +176,8 @@ public class Module : FunctionItem, IFunctionItem
 
         WallPartItem item = new WallPartItem();
         item = (WallPartItem)endItem.myFunction(mMesh, 0);
-
-        return item;
+        List<WallPartItem> output = new List<WallPartItem>();
+        output.Add(item);
+        return output;
     }
 }

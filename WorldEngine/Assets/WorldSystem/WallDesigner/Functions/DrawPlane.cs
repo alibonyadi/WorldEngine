@@ -5,7 +5,7 @@ using WallDesigner;
 [System.Serializable]
 public class DrawPlane : FunctionItem, IFunctionItem
 {
-    private WallPartItem output;
+    private List<WallPartItem> output;
     private float width = 1;
     private float height = 1;
 
@@ -13,7 +13,7 @@ public class DrawPlane : FunctionItem, IFunctionItem
     {
         Init();
         Name = "Draw Plane";
-        output = new WallPartItem();
+        output = new List<WallPartItem>();
         ClassName = typeof(DrawPlane).FullName;
         basecolor = Color.white;
         myFunction = Execute;
@@ -105,20 +105,24 @@ public class DrawPlane : FunctionItem, IFunctionItem
     {
         if (GetNodes[0].ConnectedNode != null)
         {
-            output = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
+            output = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
             //Debug.Log(output.mesh.vertexCount);
-            if (output.mesh.vertexCount > 0)
+            for (int i = 0; i < output.Count; i++)
             {
-                return output;
+                if (output[i].mesh.vertexCount > 0)
+                {
+                    return output;
+                }
             }
         }
-        else
-        {
-            output.material.Clear();
-            Material material = new Material(Shader.Find("Standard"));
-            output.material.Add(material);
-        }
 
+        output.Clear();
+
+        WallPartItem wallPartItem = new WallPartItem();
+        Material material = new Material(Shader.Find("Standard"));
+        wallPartItem.material.Clear();
+        wallPartItem.material.Add(material);
+        output.Add(wallPartItem);
 
         Mesh mesh = new Mesh();
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
@@ -163,7 +167,7 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.normals = normals;
         mesh.triangles = triangles;
 
-        output.mesh = mesh;
+        output[0].mesh = mesh;
         return output;
     }
 } 

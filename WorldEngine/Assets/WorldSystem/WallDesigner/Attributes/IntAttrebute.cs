@@ -39,6 +39,9 @@ namespace WallDesigner
         {
             base.Draw(position);
             Rect boxRect = new Rect(rect.x + position.x - rect.width / 2, rect.y + position.y, rect.width, 20);
+            GUI.color = Color.cyan;
+            Rect GetPos = new Rect(boxRect.x + boxRect.width, boxRect.y + 5, 10, 10);
+            property.rect = boxRect;
             Rect r = new Rect(rect.x + 15 + position.x - rect.width / 2, rect.y + position.y, rect.width - 30, 20);
             GUI.color = Color.gray;
             GUI.Box(boxRect, "");
@@ -61,7 +64,7 @@ namespace WallDesigner
         {
             IntAttrebute att1 = (IntAttrebute)property.Execute();
             mInt = att1.mInt;
-            return mInt;
+            return (int)mInt;
         }
     }
 }

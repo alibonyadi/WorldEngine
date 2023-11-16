@@ -81,7 +81,9 @@ public class Building : MonoBehaviour
                 {
                     InputItem = functions[functions.Count - 1];
                     GetInputMesh gIM = InputItem as GetInputMesh;
-                    gIM.inputMesh.mesh = startMeshInput;
+                    WallPartItem wallPartItem = new WallPartItem();
+                    wallPartItem.mesh = startMeshInput;
+                    gIM.inputMesh.Add(wallPartItem);
                     gIM.havemesh = true;
                     functions[functions.Count - 1] = gIM;
                     //CreateAction(EndItemIndex);

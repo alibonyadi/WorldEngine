@@ -119,10 +119,10 @@ public class LocalMove : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        WallPartItem item = mMesh as WallPartItem;
+        List<WallPartItem> item = mMesh as List<WallPartItem>;
 
         if (GetNodes[0].ConnectedNode != null)
-            item = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
+            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
         X = (float)fl1.GetValue();
@@ -133,36 +133,43 @@ public class LocalMove : FunctionItem, IFunctionItem
         FloatAttrebute fl3 = (FloatAttrebute)attrebutes[2];
         Z = (float)fl3.GetValue();
 
-        Mesh originalMesh = item.mesh;
-        Mesh MovedMesh = new Mesh();
+        List<WallPartItem> outitem = new List<WallPartItem>();
 
-        Vector3[] vertices = originalMesh.vertices;
-
-        int numSubMeshes = originalMesh.subMeshCount;
-
-
-
-        for (int i = 0;i<vertices.Length;i++)
+        for (int j = 0; j < item.Count; j++)
         {
-            vertices[i] += new Vector3(X,Y,Z);
+            Mesh originalMesh = item[j].mesh;
+            Mesh MovedMesh = new Mesh();
+
+            Vector3[] vertices = originalMesh.vertices;
+
+            int numSubMeshes = originalMesh.subMeshCount;
+
+
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] += new Vector3(X, Y, Z);
+            }
+
+
+            MovedMesh.vertices = vertices;
+            MovedMesh.normals = originalMesh.normals;
+            MovedMesh.uv = originalMesh.uv;
+            //MovedMesh.triangles = originalMesh.triangles;
+            MovedMesh.subMeshCount = numSubMeshes;
+            for (int i = 0; i < numSubMeshes; i++)
+            {
+                int[] originalTriangles = originalMesh.GetTriangles(i);
+                MovedMesh.SetTriangles(originalTriangles, i);
+            }
+
+            WallPartItem output = new WallPartItem();
+            output.mesh = MovedMesh;
+            output.material = AddMaterial.CopyMaterials(item[j]);
+            outitem.Add(output);
+
         }
-
-
-        MovedMesh.vertices = vertices;
-        MovedMesh.normals = originalMesh.normals;
-        MovedMesh.uv = originalMesh.uv;
-        //MovedMesh.triangles = originalMesh.triangles;
-        MovedMesh.subMeshCount = numSubMeshes;
-        for (int i = 0; i < numSubMeshes; i++)
-        {
-            int[] originalTriangles = originalMesh.GetTriangles(i);
-            MovedMesh.SetTriangles(originalTriangles, i);
-        }
-
-        WallPartItem output = new WallPartItem();
-        output.mesh = MovedMesh;
-        output.material = AddMaterial.CopyMaterials(item);
-        return output;
+        return outitem;
     }
 
 }

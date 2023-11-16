@@ -102,8 +102,9 @@ public class Repeat : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        WallPartItem wpi = new WallPartItem();
-        WallPartItem Item2 = new WallPartItem();
+        List<WallPartItem> wpi = new List<WallPartItem>();
+        List < WallPartItem> Item2 = new List<WallPartItem>();
+        List < WallPartItem> item = new List<WallPartItem>();
         WallPartItem Temp = new WallPartItem();
         IntAttrebute att1 = attrebutes[0] as IntAttrebute;
         count = (int)att1.GetValue();
@@ -111,32 +112,38 @@ public class Repeat : FunctionItem, IFunctionItem
             return mMesh;
 
 
-        wpi = (WallPartItem)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[1].ConnectedNode.id);
+        wpi = (List<WallPartItem>)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[1].ConnectedNode.id);
 
         if (GetNodes[0].ConnectedNode != null)
         {
-            for(int i = 0;i< (int)att1.GetValue();i++)
+            for (int j = 0; j < wpi.Count; j++)
             {
-                Temp = new WallPartItem();
-                //Debug.Log(i);
-                
-                if (i > 0)
+                for (int i = 0; i < (int)att1.GetValue(); i++)
                 {
-                    Temp = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(Item2, GetNodes[0].ConnectedNode.id);
-                    Item2 = CombineItems.CombineTwoItem(Item2.mesh,Temp.mesh,Item2.material,Temp.material);
+                    Temp = new WallPartItem();
+                    //Debug.Log(i);
+
+                    if (i > 0)
+                    {
+                        Temp = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(Item2, GetNodes[0].ConnectedNode.id);
+                        Item2[j] = CombineItems.CombineTwoItem(Item2[j].mesh, Temp.mesh, Item2[j].material, Temp.material);
+                    }
+                    else
+                    {
+                        //Temp = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+                        Item2 = wpi;
+                    }
                 }
-                else
-                {
-                    //Temp = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
-                    Item2 = wpi;
-                }
+
+                item[j].material.Clear();
+                item[j].mesh = Item2[j].mesh;
+                item[j].material = AddMaterial.CopyMaterials(Item2[j]);
             }
         }
-        WallPartItem item = new WallPartItem();
-        item.material.Clear();
-        item.mesh = Item2.mesh;
-        Debug.Log(Item2.mesh.vertexCount);
-        item.material = AddMaterial.CopyMaterials(Item2);
+        else
+        {
+            item = wpi;
+        }
 
         return item;
     }
