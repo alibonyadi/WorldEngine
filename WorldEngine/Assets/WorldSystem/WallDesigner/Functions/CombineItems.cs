@@ -86,17 +86,17 @@ public class CombineItems : FunctionItem, IFunctionItem
 
     public object Execute(object mesh, object id)
     {
-        WallPartItem item = new WallPartItem();
+        List<WallPartItem> item = new List<WallPartItem>();
         if (GetNodes[0].ConnectedNode != null)
-            item = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[0].ConnectedNode.id);
+            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[0].ConnectedNode.id);
         else
             item = null;
 
         //Debug.Log("first Call material count:"+item.material.Count);
 
-        WallPartItem item2 = new WallPartItem();
+        List<WallPartItem> item2 = new List<WallPartItem>();
         if (GetNodes[1].ConnectedNode != null)
-            item2 = (WallPartItem)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[1].ConnectedNode.id);
+            item2 = (List<WallPartItem>)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[1].ConnectedNode.id);
         else
             item2 = null;
 
@@ -104,21 +104,20 @@ public class CombineItems : FunctionItem, IFunctionItem
 
         if (item == null && item2 != null)
         {
-            Debug.Log("Just Node 2 !!!");
             return item2;
         }
         else if(item2 == null && item != null)
         {
-            Debug.Log("Just Node 1 !!!");
             return item;
         }
         else if(item2 != null && item != null)
         {
-            return CombineTwoItem(item.mesh,item2.mesh,item.material,item2.material);
+            //return CombineTwoItem(item.mesh,item2.mesh,item.material,item2.material);
+            item.AddRange(item2);
+            return item;
         }
         else
         {
-            Debug.Log("No connected Node!!!");
             return mesh;
         }
     }
