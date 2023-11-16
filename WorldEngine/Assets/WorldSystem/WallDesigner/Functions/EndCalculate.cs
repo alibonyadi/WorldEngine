@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WallDesigner;
+using static UnityEditor.Progress;
 
 [System.Serializable]
 public class EndCalculate : FunctionItem, IFunctionItem
 {
-    WallPartItem wallItem;
+    List<WallPartItem> wallItem;
 
     public EndCalculate()
     {
@@ -15,7 +16,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
         ClassName = typeof(EndCalculate).FullName;
         basecolor = Color.red;
         myFunction = Execute;
-        wallItem = new WallPartItem();
+        wallItem = new List<WallPartItem>();
         GiveNodes = new List<Node>();
         GetNodes = new List<Node>();
         GetNode node = new GetNode();
@@ -66,10 +67,21 @@ public class EndCalculate : FunctionItem, IFunctionItem
         if (GetNodes[0].ConnectedNode == null)
             return wallItem;
 
+        //wallItem.material.Clear();
 
-        wallItem.material.Clear();
+        wallItem = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem, GetNodes[0].ConnectedNode.id);
+        for (int i = 0; i < wallItem.Count; i++)
+        {
+            if (i > 0)
+            {
+                wallItem[i] = CombineItems.CombineTwoItem(wallItem[i - 1].mesh, wallItem[i].mesh, wallItem[i - 1].material, wallItem[i].material);
+            }
+        }
 
-        wallItem = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem, GetNodes[0].ConnectedNode.id);
-        return wallItem;
+        WallPartItem EndItem = wallItem[wallItem.Count - 1];
+        //wallItem.Clear();
+        //wallItem.Add(EndItem);
+        //return wallItem;
+        return EndItem;
     }
 }
