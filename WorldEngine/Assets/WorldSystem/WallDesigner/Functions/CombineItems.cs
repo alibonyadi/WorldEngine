@@ -36,7 +36,6 @@ public class CombineItems : FunctionItem, IFunctionItem
 
     }
 
-
     public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
     {
         if (item.getnodeConnectedFI.Count > 0)
