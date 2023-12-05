@@ -13,7 +13,7 @@ public class DrawPlane : FunctionItem, IFunctionItem
     {
         Init();
         Name = "Draw Plane";
-        output = new List<WallPartItem>();
+        output = new WallItem();
         ClassName = typeof(DrawPlane).FullName;
         basecolor = Color.white;
         myFunction = Execute;
