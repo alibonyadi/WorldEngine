@@ -103,13 +103,13 @@ public class RandomGets : FunctionItem, IFunctionItem
      
     public object Execute(object mMesh, object id)
     {
-        List<WallPartItem> output = new List<WallPartItem>();
-        List<List<WallPartItem>> tempList = new List<List<WallPartItem>>();
+        WallItem output = new WallItem();
+        List<WallItem> tempList = new List<WallItem>();
         for(int i = 0; i < GetNodes.Count;i++)
         {
             if (GetNodes[i].ConnectedNode != null)
             {
-                List<WallPartItem> item = (List<WallPartItem>)GetNodes[i].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[i].ConnectedNode.id);
+                WallItem item = (WallItem)GetNodes[i].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[i].ConnectedNode.id);
                 tempList.Add(item);
             }
         }
@@ -117,10 +117,11 @@ public class RandomGets : FunctionItem, IFunctionItem
         if (tempList.Count <= 0)
             return output;
 
-        int rand = (int)(Mathf.Round(Random.value * (GetNodes.Count-2)));
+        int rand = (int)(Mathf.Round(Random.value * (tempList.Count-1)));
         if (GetNodes[rand].ConnectedNode != null)
         {
-            output = (List<WallPartItem>)GetNodes[rand].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[rand].ConnectedNode.id);
+            //output = (WallItem)GetNodes[rand].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[rand].ConnectedNode.id);
+            output = tempList[rand];
         }
 
         return output;
