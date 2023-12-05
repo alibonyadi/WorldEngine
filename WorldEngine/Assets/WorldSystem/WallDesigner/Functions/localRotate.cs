@@ -7,7 +7,7 @@ public class localRotate : FunctionItem, IFunctionItem
 {
     float X, Y, Z;
 
-    public localRotate()
+    public localRotate(int gets, int gives)
     {
         Init();
         Name = "Local Roatet";

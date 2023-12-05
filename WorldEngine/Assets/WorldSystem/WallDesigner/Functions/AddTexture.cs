@@ -11,7 +11,7 @@ public class AddTexture : FunctionItem, IFunctionItem
     private Texture outputTexture;
 
      
-    public AddTexture()
+    public AddTexture(int gets, int gives)
     {
         Init();
         Name = "Texture";

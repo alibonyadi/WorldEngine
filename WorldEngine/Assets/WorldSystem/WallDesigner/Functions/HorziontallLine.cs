@@ -9,7 +9,7 @@ public class HorziontallLine : FunctionItem, IFunctionItem
     private WallItem UpperPart;
     private WallItem LowerPart;
     private float distance = 1;
-    public HorziontallLine()
+    public HorziontallLine(int gets, int gives)
     {
         Init();
         Name = "Horrizontal Slicer";

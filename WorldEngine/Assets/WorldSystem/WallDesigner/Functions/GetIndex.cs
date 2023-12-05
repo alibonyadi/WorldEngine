@@ -7,7 +7,7 @@ public class GetIndex : FunctionItem, IFunctionItem
 {
     private int Index = 0;
 
-    public GetIndex()
+    public GetIndex(int gets, int gives)
     {
         Init();
         Name = "Get Index";

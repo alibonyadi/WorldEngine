@@ -9,7 +9,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
     public bool havemesh = false;
 
 
-    public GetInputMesh()
+    public GetInputMesh(int gets, int gives)
     {
         Init();
         Name = "Get Input Mesh";

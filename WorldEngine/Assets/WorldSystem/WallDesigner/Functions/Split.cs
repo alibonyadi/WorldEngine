@@ -8,7 +8,7 @@ public class Split : FunctionItem, IFunctionItem
 {
     private float distance = 0f;
     private bool autoAdjust=false;
-    public Split() 
+    public Split(int gets, int gives) 
     {
         Init();
         Name = "Split";

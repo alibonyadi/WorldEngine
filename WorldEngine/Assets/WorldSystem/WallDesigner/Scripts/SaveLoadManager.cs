@@ -39,7 +39,7 @@ public class SaveLoadManager
                 Type type = Type.GetType(item.ClassName);
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
-                    FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type);
+                    FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type, item.getnodeItems.Count,item.givenodeItems.Count);
                     fitem.LoadSerializedAttributes(item);
                     fitem.position = item.Position;
                     functions.Add(fitem);

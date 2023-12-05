@@ -10,7 +10,7 @@ public class VerticalLine : FunctionItem, IFunctionItem
     private WallItem RightPart;
     private float distance = 1;
 
-    public VerticalLine()
+    public VerticalLine(int gets, int gives)
     {
         Init();
         Name = "Vertical Slicer";

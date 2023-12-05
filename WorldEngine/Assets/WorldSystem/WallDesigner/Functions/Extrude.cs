@@ -7,7 +7,7 @@ public class Extrude : FunctionItem, IFunctionItem
     float extrudeDistance = 1.0f;
     float insetDistance = 0.0f;
 
-    public Extrude()
+    public Extrude(int gets, int gives)
     {
         Init();
         Name = "Extrude";

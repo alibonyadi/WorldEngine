@@ -9,7 +9,7 @@ public class AddColor : FunctionItem, IFunctionItem
     [NonSerialized]
     private Color outputColor;
 
-    public AddColor()
+    public AddColor(int gets,int gives)
     {
         Init();
         Name = "Color";

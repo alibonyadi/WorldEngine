@@ -9,7 +9,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
 {
     WallItem wallItem;
 
-    public EndCalculate()
+    public EndCalculate(int gets, int gives)
     {
         Name = "End Calculate";
         //WallEditorController.Instance.EndItem = this;

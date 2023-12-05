@@ -8,7 +8,7 @@ public class LocalMove : FunctionItem, IFunctionItem
 {
     float X, Y, Z;
 
-    public LocalMove()
+    public LocalMove(int gets, int gives)
     {
         Init();
         Name = "Local Move";

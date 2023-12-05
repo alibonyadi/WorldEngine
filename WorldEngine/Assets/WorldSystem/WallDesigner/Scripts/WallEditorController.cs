@@ -113,7 +113,7 @@ namespace WallDesigner
                 Type type = Type.GetType(className);
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
-                    FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
+                    FunctionItem item = (FunctionItem)Activator.CreateInstance( type,1,1);
                     allFunctions.Add(item);
                 }
                 if (allFunctions[allFunctions.Count - 1].GetType() == typeof(EndCalculate))
@@ -140,7 +140,7 @@ namespace WallDesigner
                 return;
             }
             Type type = Type.GetType(allFunctions[(int)index].ClassName);
-            FunctionItem item = (FunctionItem)Activator.CreateInstance(type);
+            FunctionItem item = (FunctionItem)Activator.CreateInstance(type,1,1);
             item.position = mousePos - BoardController.Instance.boardPosition;
             Vector2 tempposition = item.position + BoardController.Instance.boardPosition;
             item.rect = new Rect(tempposition.x - item.rect.width/2, tempposition.y - item.rect.height / 2, item.rect.width, item.rect.height);

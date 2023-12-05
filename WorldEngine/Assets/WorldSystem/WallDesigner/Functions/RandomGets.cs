@@ -5,7 +5,7 @@ using WallDesigner;
 
 public class RandomGets : FunctionItem, IFunctionItem
 {
-    public RandomGets()
+    public RandomGets(int getnodes, int givenodes)
     {
         Init();
         Name = "Random Get";
@@ -13,9 +13,13 @@ public class RandomGets : FunctionItem, IFunctionItem
         basecolor = Color.white;
         myFunction = Execute;
 
-        GetNode gnode = new GetNode();
-        gnode.AttachedFunctionItem = this;
-        GetNodes.Add(gnode);
+        for (int i = 0; i < getnodes; i++)
+        {
+            GetNode gnode = new GetNode();
+            gnode.AttachedFunctionItem = this;
+            gnode.id = i;
+            GetNodes.Add(gnode);
+        }
 
         GiveNode givenode1 = new GiveNode();
         givenode1.AttachedFunctionItem = this;
@@ -28,9 +32,12 @@ public class RandomGets : FunctionItem, IFunctionItem
 
     public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
     {
-        if (item.getnodeConnectedFI.Count > 0)
+        for (int i = 0; i < GetNodes.Count; i++)
         {
-            GetNodes[0].ConnectedNode = functionItems[item.getnodeConnectedFI[0]].GiveNodes[item.getnodeItems[0]];
+            if (item.getnodeConnectedFI.Count > 0)
+            {
+                GetNodes[i].ConnectedNode = functionItems[item.getnodeConnectedFI[i]].GiveNodes[item.getnodeItems[i]];
+            }
         }
 
         if (item.givenodeConnectedFI.Count > 0)
@@ -55,12 +62,14 @@ public class RandomGets : FunctionItem, IFunctionItem
         FloatAttrebute att2 = (FloatAttrebute)attrebutes[1];
         string stringfloat2 = att2.GetValue().ToString();
         item.attributeValue.Add(stringfloat2);*/
-
-        if (GetNodes[0].ConnectedNode != null)
+        for (int i = 0; i < GetNodes.Count; i++)
         {
-            int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[0].ConnectedNode.AttachedFunctionItem);
-            item.getnodeConnectedFI.Add(connectedGetNodeNumber);
-            item.getnodeItems.Add(GetNodes[0].ConnectedNode.id);
+            if (GetNodes[i].ConnectedNode != null)
+            {
+                int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GetNodes[i].ConnectedNode.AttachedFunctionItem);
+                item.getnodeConnectedFI.Add(connectedGetNodeNumber);
+                item.getnodeItems.Add(GetNodes[i].ConnectedNode.id);
+            }
         }
 
         if (GiveNodes[0].ConnectedNode != null)
@@ -105,25 +114,44 @@ public class RandomGets : FunctionItem, IFunctionItem
     {
         WallItem output = new WallItem();
         List<WallItem> tempList = new List<WallItem>();
+        int counter = 0;
+        int lastfoundIndex = 0;
         for(int i = 0; i < GetNodes.Count;i++)
         {
             if (GetNodes[i].ConnectedNode != null)
             {
-                WallItem item = (WallItem)GetNodes[i].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[i].ConnectedNode.id);
-                tempList.Add(item);
+                counter++;
+                lastfoundIndex = i;
+                //WallItem item = new WallItem();
+                //item = (WallItem)GetNodes[i].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[i].ConnectedNode.id);
+                //tempList.Add(item);
             }
         }
 
-        if (tempList.Count <= 0)
+        if (counter <= 0)
             return output;
 
-        int rand = (int)(Mathf.Round(Random.value * (tempList.Count-1)));
-        if (GetNodes[rand].ConnectedNode != null)
+        
+        int rand = (int)(Mathf.Round(Random.value * (GetNodes.Count-2)));
+        counter = 0;
+        bool founded = false;
+        while (counter < 20)
         {
-            //output = (WallItem)GetNodes[rand].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[rand].ConnectedNode.id);
-            output = tempList[rand];
+            counter++;
+            if (GetNodes[rand].ConnectedNode != null)
+            {
+                output = (WallItem)GetNodes[rand].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[rand].ConnectedNode.id);
+                //output = tempList[rand];
+                founded = true;
+                break;
+            }
         }
 
+        if (!founded)
+        {
+            //Debug.Log("Not Found!!!");
+            output = (WallItem)GetNodes[lastfoundIndex].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[lastfoundIndex].ConnectedNode.id);
+        }
         return output;
     }
 }

@@ -7,7 +7,7 @@ using WallDesigner;
 [System.Serializable]
 public class CombineItems : FunctionItem, IFunctionItem
 {
-    public CombineItems()
+    public CombineItems(int gets, int gives)
     {
         Init();
         Name = "Combine Meshes";

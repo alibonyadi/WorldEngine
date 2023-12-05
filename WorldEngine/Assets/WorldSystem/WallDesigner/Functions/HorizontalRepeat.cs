@@ -15,7 +15,7 @@ public class HorizontalRepeat : FunctionItem, IFunctionItem
     private float fromLeft = 1;
     private float fromRight = 1;
 
-    public HorizontalRepeat()
+    public HorizontalRepeat(int gets, int gives)
     {
         Init();
         Name = "Horrizontal Repeat";

@@ -10,7 +10,7 @@ public class Repeat : FunctionItem, IFunctionItem
 {
     int count = 1;
 
-    public Repeat()
+    public Repeat(int gets, int gives)
     {
         Init();
         Name = "Repeat";

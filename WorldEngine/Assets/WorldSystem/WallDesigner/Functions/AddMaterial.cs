@@ -9,7 +9,7 @@ public class AddMaterial : FunctionItem, IFunctionItem
     [NonSerialized]
     private Material _material;
     
-    public AddMaterial()
+    public AddMaterial(int gets,int gives)
     {
         Init();
         Name = "Material";

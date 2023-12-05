@@ -9,7 +9,7 @@ public class DrawPlane : FunctionItem, IFunctionItem
     private float width = 1;
     private float height = 1;
 
-    public DrawPlane()
+    public DrawPlane(int gets, int gives)
     {
         Init();
         Name = "Draw Plane";

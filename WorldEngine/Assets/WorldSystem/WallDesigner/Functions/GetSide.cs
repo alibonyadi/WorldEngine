@@ -7,7 +7,7 @@ using WallDesigner;
 
 public class GetSide : FunctionItem, IFunctionItem
 {
-    public GetSide()
+    public GetSide(int gets, int gives)
     {
         Init();
         Name = "Get Mesh Sides";
