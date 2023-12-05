@@ -6,16 +6,16 @@ using WallDesigner;
 
 public class VerticalLine : FunctionItem, IFunctionItem
 {
-    private List<WallPartItem> LeftPart;
-    private List<WallPartItem> RightPart;
+    private WallItem LeftPart;
+    private WallItem RightPart;
     private float distance = 1;
 
     public VerticalLine()
     {
         Init();
         Name = "Vertical Slicer";
-        LeftPart = new List<WallPartItem>();
-        RightPart = new List<WallPartItem>();
+        LeftPart = new WallItem();
+        RightPart = new WallItem();
         ClassName = typeof(VerticalLine).FullName;
         basecolor = Color.white;
         myFunction = Execute;
@@ -125,19 +125,19 @@ public class VerticalLine : FunctionItem, IFunctionItem
 
 
 
-        List<WallPartItem> wpi = (List<WallPartItem>)mMesh;
+        WallItem wpi = (WallItem)mMesh;
 
         //WallPartItem wpi = new WallPartItem();
 
         if (GetNodes[0].ConnectedNode != null)
-            wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+            wpi = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
-        LeftPart = new List<WallPartItem>();
-        RightPart =new List<WallPartItem>();
+        LeftPart = new WallItem();
+        RightPart =new WallItem();
 
-        for (int l = 0; l < wpi.Count; l++)
+        for (int l = 0; l < wpi.wallPartItems.Count; l++)
         {
-            Mesh mesh = wpi[l].mesh;
+            Mesh mesh = wpi.wallPartItems[l].mesh;
             //List<Material material = wpi.material;
             mesh.RecalculateNormals();
             Mesh upperMesh = new Mesh();
@@ -330,17 +330,17 @@ public class VerticalLine : FunctionItem, IFunctionItem
 
             //mats = AddMaterial.CopyMaterials(wpi);
 
-            if (wpi[l].material.Count > 0)
+            if (wpi.wallPartItems[l].material.Count > 0)
             {
                 //int count = wallitem.material.Count;
                 //wallitem.material.Clear();
 
-                for (int i = 0; i < wpi[l].material.Count; i++)
+                for (int i = 0; i < wpi.wallPartItems[l].material.Count; i++)
                 {
                     Material mat1 = new Material(Shader.Find("Standard"));
-                    mat1.color = wpi[l].material[i].color;
-                    if (wpi[l].material[i].mainTexture != null)
-                        mat1.mainTexture = wpi[l].material[i].mainTexture;
+                    mat1.color = wpi.wallPartItems[l].material[i].color;
+                    if (wpi.wallPartItems[l].material[i].mainTexture != null)
+                        mat1.mainTexture = wpi.wallPartItems[l].material[i].mainTexture;
                     mats.Add(mat1);
                 }
                 //wpi.material.Clear();
@@ -353,22 +353,24 @@ public class VerticalLine : FunctionItem, IFunctionItem
             {
                 wallPartItem.mesh = upperMesh;
                 wallPartItem.material = mats;
-                LeftPart.Add(wallPartItem);
+                LeftPart.wallPartItems.Add(wallPartItem);
             }
             else
             {
                 wallPartItem.mesh = lowerMesh;
                 wallPartItem.material = mats;
-                RightPart.Add(wallPartItem);
+                RightPart.wallPartItems.Add(wallPartItem);
                 //return RightPart;
             }
         }
+
+
 
         if ((int)id == 0)
         {
             //LeftPart[l].mesh = upperMesh;
             //LeftPart[l].material = mats;
-            return LeftPart;
+            return  LeftPart;
         }
         else
         {

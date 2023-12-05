@@ -107,20 +107,20 @@ public class Split : FunctionItem, IFunctionItem
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
         autoAdjust = (bool)ta1.GetValue();
 
-        List<WallPartItem> wpi = (List<WallPartItem>)mMesh;
+        WallItem wpi = (WallItem)mMesh;
 
         if (GetNodes[0].ConnectedNode != null)
-            wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+            wpi = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
-        for (int i = 0; i < wpi.Count; i++)
+        for (int i = 0; i < wpi.wallPartItems.Count; i++)
         {
             if (i > 0)
             {
-                wpi[i] = CombineItems.CombineTwoItem(wpi[i - 1].mesh, wpi[i].mesh, wpi[i - 1].material, wpi[i].material);
+                wpi.wallPartItems[i] = CombineItems.CombineTwoItem(wpi.wallPartItems[i - 1].mesh, wpi.wallPartItems[i].mesh, wpi.wallPartItems[i - 1].material, wpi.wallPartItems[i].material);
             }
         }
 
-        WallPartItem wallPartItem = wpi[wpi.Count - 1];
+        WallPartItem wallPartItem = wpi.wallPartItems[wpi.wallPartItems.Count - 1];
 
         List<WallPartItem> SlicedItems = new List<WallPartItem>();
 
@@ -335,7 +335,9 @@ public class Split : FunctionItem, IFunctionItem
         Material mat2 = new Material(Shader.Find("Standard"));
         titem.material.Add(mat2);
         SlicedItems.Add(titem);
-
-        return SlicedItems;
+        WallItem output = new WallItem();
+        output.wallPartItems = SlicedItems;
+        output.buildingDirection =wpi.buildingDirection;
+        return output;
     }
 }

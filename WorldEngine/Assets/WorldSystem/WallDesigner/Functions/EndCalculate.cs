@@ -7,7 +7,7 @@ using static UnityEditor.Progress;
 [System.Serializable]
 public class EndCalculate : FunctionItem, IFunctionItem
 {
-    List<WallPartItem> wallItem;
+    WallItem wallItem;
 
     public EndCalculate()
     {
@@ -16,7 +16,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
         ClassName = typeof(EndCalculate).FullName;
         basecolor = Color.red;
         myFunction = Execute;
-        wallItem = new List<WallPartItem>();
+        wallItem = new WallItem();
         GiveNodes = new List<Node>();
         GetNodes = new List<Node>();
         GetNode node = new GetNode();
@@ -63,25 +63,26 @@ public class EndCalculate : FunctionItem, IFunctionItem
 
     public object Execute(object mesh,object id)
     {
-       
         if (GetNodes[0].ConnectedNode == null)
             return wallItem;
 
         //wallItem.material.Clear();
 
-        wallItem = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem, GetNodes[0].ConnectedNode.id);
-        for (int i = 0; i < wallItem.Count; i++)
+        wallItem = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wallItem, GetNodes[0].ConnectedNode.id);
+        for (int i = 0; i < wallItem.wallPartItems.Count; i++)
         {
             if (i > 0)
             {
-                wallItem[i] = CombineItems.CombineTwoItem(wallItem[i - 1].mesh, wallItem[i].mesh, wallItem[i - 1].material, wallItem[i].material);
+                wallItem.wallPartItems[i] = CombineItems.CombineTwoItem(wallItem.wallPartItems[i - 1].mesh, wallItem.wallPartItems[i].mesh, wallItem.wallPartItems[i - 1].material, wallItem.wallPartItems[i].material);
             }
         }
 
-        WallPartItem EndItem = wallItem[wallItem.Count - 1];
+        WallPartItem EndItem = wallItem.wallPartItems[wallItem.wallPartItems.Count - 1];
+        WallItem output = new WallItem();
         //wallItem.Clear();
-        //wallItem.Add(EndItem);
+        output.wallPartItems.Add(EndItem);
+        output.buildingDirection = wallItem.buildingDirection;
         //return wallItem;
-        return EndItem;
+        return output;
     }
 }

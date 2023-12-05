@@ -119,10 +119,10 @@ public class LocalMove : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        List<WallPartItem> item = mMesh as List<WallPartItem>;
+        WallItem item = mMesh as WallItem;
 
         if (GetNodes[0].ConnectedNode != null)
-            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
+            item = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
         X = (float)fl1.GetValue();
@@ -135,9 +135,9 @@ public class LocalMove : FunctionItem, IFunctionItem
 
         List<WallPartItem> outitem = new List<WallPartItem>();
 
-        for (int j = 0; j < item.Count; j++)
+        for (int j = 0; j < item.wallPartItems.Count; j++)
         {
-            Mesh originalMesh = item[j].mesh;
+            Mesh originalMesh = item.wallPartItems[j].mesh;
             Mesh MovedMesh = new Mesh();
 
             Vector3[] vertices = originalMesh.vertices;
@@ -165,7 +165,7 @@ public class LocalMove : FunctionItem, IFunctionItem
 
             WallPartItem output = new WallPartItem();
             output.mesh = MovedMesh;
-            output.material = AddMaterial.CopyMaterials(item[j]);
+            output.material = AddMaterial.CopyMaterials(item.wallPartItems[j]);
             outitem.Add(output);
 
         }

@@ -95,57 +95,57 @@ public class AddTexture : FunctionItem, IFunctionItem
 
     public object Execute(object item, object id)
     {
-        List<WallPartItem> mitem = new List<WallPartItem>();
+        WallItem mitem = new WallItem();
         TextureAttribute att1 = (TextureAttribute)attrebutes[0];
         Material mat = new Material(Shader.Find("Standard"));
         mat.mainTexture = att1.texture;
         if (GetNodes[0].ConnectedNode != null)
         {
-            mitem = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mitem, GetNodes[0].ConnectedNode.id);
-            for (int j = 0; j < mitem.Count; j++)
+            mitem = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mitem, GetNodes[0].ConnectedNode.id);
+            for (int j = 0; j < mitem.wallPartItems.Count; j++)
             {
-                if (mitem[j] == null)
+                if (mitem.wallPartItems[j] == null)
                     continue;
 
-                if (mitem[j].material.Count > 0)
+                if (mitem.wallPartItems[j].material.Count > 0)
                 {
-                    for (int i = 0; i < mitem[j].material.Count; i++)
+                    for (int i = 0; i < mitem.wallPartItems[j].material.Count; i++)
                     {
-                        mitem[j].material[i].mainTexture = att1.texture;
+                        mitem.wallPartItems[j].material[i].mainTexture = att1.texture;
                     }
                 }
                 else
                 {
-                    mitem[j].material.Add(mat);
+                    mitem.wallPartItems[j].material.Add(mat);
                 }
             }
             return mitem;
         }
         else
         {
-            List<WallPartItem> wallitem = (List<WallPartItem>)item;
-            for (int j = 0; j < wallitem.Count; j++)
+            WallItem wallitem = (WallItem)item;
+            for (int j = 0; j < wallitem.wallPartItems.Count; j++)
             {
-                if (wallitem[j] == null)
+                if (wallitem.wallPartItems[j] == null)
                     continue;
-                if (wallitem[j].material.Count > 0)
+                if (wallitem.wallPartItems[j].material.Count > 0)
                 {
                     //int count = wallitem.material.Count;
                     //wallitem.material.Clear();
                     List<Material> mats = new List<Material>();
-                    for (int i = 0; i < wallitem[j].material.Count; i++)
+                    for (int i = 0; i < wallitem.wallPartItems[j].material.Count; i++)
                     {
                         Material mat1 = new Material(Shader.Find("Standard"));
-                        mat1.color = wallitem[j].material[i].color;
+                        mat1.color = wallitem.wallPartItems[j].material[i].color;
                         mat1.mainTexture = att1.texture;
                         mats.Add(mat1);
                     }
-                    wallitem[j].material.Clear();
-                    wallitem[j].material = mats;
+                    wallitem.wallPartItems[j].material.Clear();
+                    wallitem.wallPartItems[j].material = mats;
                 }
                 else
                 {
-                    wallitem[j].material.Add(mat);
+                    wallitem.wallPartItems[j].material.Add(mat);
                 }
             }
             return wallitem;

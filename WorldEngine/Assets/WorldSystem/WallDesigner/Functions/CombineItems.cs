@@ -85,17 +85,17 @@ public class CombineItems : FunctionItem, IFunctionItem
 
     public object Execute(object mesh, object id)
     {
-        List<WallPartItem> item = new List<WallPartItem>();
+        WallItem item = new WallItem();
         if (GetNodes[0].ConnectedNode != null)
-            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[0].ConnectedNode.id);
+            item = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[0].ConnectedNode.id);
         else
             item = null;
 
         //Debug.Log("first Call material count:"+item.material.Count);
 
-        List<WallPartItem> item2 = new List<WallPartItem>();
+        WallItem item2 = new WallItem();
         if (GetNodes[1].ConnectedNode != null)
-            item2 = (List<WallPartItem>)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[1].ConnectedNode.id);
+            item2 = (WallItem)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(mesh, GetNodes[1].ConnectedNode.id);
         else
             item2 = null;
 
@@ -112,7 +112,7 @@ public class CombineItems : FunctionItem, IFunctionItem
         else if(item2 != null && item != null)
         {
             //return CombineTwoItem(item.mesh,item2.mesh,item.material,item2.material);
-            item.AddRange(item2);
+            item.wallPartItems.AddRange(item2.wallPartItems);
             return item;
         }
         else

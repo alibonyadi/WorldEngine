@@ -106,11 +106,11 @@ public class Building : MonoBehaviour
 
             //Debug.Log("EndItem Connected!!!");
 
-            WallPartItem item = new WallPartItem();
-            item = (WallPartItem)endItem.myFunction(item, 0);
+            WallItem item = new WallItem();
+            item = (WallItem)endItem.myFunction(item, 0);
 
-            GetComponent<MeshFilter>().mesh = item.mesh;
-            GetComponent<MeshRenderer>().materials = item.material.ToArray();
+            GetComponent<MeshFilter>().mesh = item.wallPartItems[0].mesh;
+            GetComponent<MeshRenderer>().materials = item.wallPartItems[0].material.ToArray();
             Debug.Log("Generate Complete!!!");
         }
     }

@@ -114,10 +114,10 @@ public class Extrude : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        List<WallPartItem> item = mMesh as List<WallPartItem>;
+        WallItem item = mMesh as WallItem;
 
         if (GetNodes[0].ConnectedNode != null)
-            item = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
+            item = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
 
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
@@ -128,13 +128,13 @@ public class Extrude : FunctionItem, IFunctionItem
 
         List<WallPartItem> output = new List<WallPartItem>();
 
-        for (int j = 0; j < item.Count; j++)
+        for (int j = 0; j < item.wallPartItems.Count; j++)
         {
 
-            if (item[j] == null)
+            if (item.wallPartItems[j] == null)
                 continue;
 
-            Mesh originalMesh = item[j].mesh;
+            Mesh originalMesh = item.wallPartItems[j].mesh;
             Mesh extrudedMesh = new Mesh();
 
 
@@ -351,7 +351,7 @@ public class Extrude : FunctionItem, IFunctionItem
                 itemTemp.mesh = sideMesh;
             }
 
-            itemTemp.material = AddMaterial.CopyMaterials(item[j]);
+            itemTemp.material = AddMaterial.CopyMaterials(item.wallPartItems[j]);
             output.Add(itemTemp);
         }
         

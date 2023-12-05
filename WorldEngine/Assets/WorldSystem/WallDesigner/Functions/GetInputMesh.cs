@@ -59,7 +59,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        List<WallPartItem> item = new List<WallPartItem>();
+        WallItem item = new WallItem();
         if (havemesh)
         {
             for(int i=0;i< inputMesh.Count;i++)
@@ -67,7 +67,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
                 WallPartItem item1 = new WallPartItem();
                 item1.mesh = inputMesh[i].mesh;
                 item1.material = AddMaterial.CopyMaterials(inputMesh[i]);
-                item.Add(item1);
+                item.wallPartItems.Add(item1);
             }
         }
         else
@@ -76,7 +76,7 @@ public class GetInputMesh : FunctionItem, IFunctionItem
             item1.material.Clear();
             Material material = new Material(Shader.Find("Standard"));
             item1.material.Add(material);
-            item.Add(item1);
+            item.wallPartItems.Add(item1);
         }
 
         return item;

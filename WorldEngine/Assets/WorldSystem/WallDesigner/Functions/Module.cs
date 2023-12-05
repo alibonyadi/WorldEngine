@@ -113,10 +113,10 @@ public class Module : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        List<WallPartItem> wpi = new List<WallPartItem>();
+        WallItem wpi = new WallItem();
 
         if (GetNodes[0].ConnectedNode != null)
-            wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+            wpi = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
         GetFileAttrebute att1 = attrebutes[0] as GetFileAttrebute;
         path = att1.adress;
@@ -155,7 +155,7 @@ public class Module : FunctionItem, IFunctionItem
             {
                 InputItem = functions[functions.Count - 1];
                 GetInputMesh gIM = InputItem as GetInputMesh;
-                gIM.inputMesh = wpi;
+                gIM.inputMesh = wpi.wallPartItems;
                 gIM.havemesh = true;
                 functions[functions.Count - 1] = gIM;
                 //CreateAction(EndItemIndex);
@@ -174,10 +174,10 @@ public class Module : FunctionItem, IFunctionItem
         if (endItem.GetNodes[0].ConnectedNode == null)
             return wpi;
 
-        WallPartItem item = new WallPartItem();
-        item = (WallPartItem)endItem.myFunction(mMesh, 0);
-        List<WallPartItem> output = new List<WallPartItem>();
-        output.Add(item);
-        return output;
+        WallItem item = new WallItem();
+        item = (WallItem)endItem.myFunction(mMesh, 0);
+        //WallItem output = new WallItem();
+        //output.Add(item);
+        return item;
     }
 }

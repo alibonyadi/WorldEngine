@@ -41,10 +41,10 @@ namespace WallDesigner
             if (endItem.GetNodes[0].ConnectedNode == null)
                 return;
 
-            WallPartItem item = new WallPartItem();
-            item = (WallPartItem)endItem.myFunction(item,0);
-            DrawEndMesh(item.mesh);
-            SetEndMaterials(item.material);
+            WallItem item = new WallItem();
+            item = (WallItem)endItem.myFunction(item,0);
+            DrawEndMesh(item.wallPartItems[0].mesh);
+            SetEndMaterials(item.wallPartItems[0].material);
         }
 
         private void SetEndMaterials(List<Material> material)

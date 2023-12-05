@@ -102,9 +102,9 @@ public class Repeat : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        List<WallPartItem> wpi = new List<WallPartItem>();
-        List < WallPartItem> Item2 = new List<WallPartItem>();
-        List < WallPartItem> item = new List<WallPartItem>();
+        WallItem wpi = new WallItem();
+        WallItem Item2 = new WallItem();
+        WallItem item = new WallItem();
         WallPartItem Temp = new WallPartItem();
         IntAttrebute att1 = attrebutes[0] as IntAttrebute;
         count = (int)att1.GetValue();
@@ -112,11 +112,11 @@ public class Repeat : FunctionItem, IFunctionItem
             return mMesh;
 
 
-        wpi = (List<WallPartItem>)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[1].ConnectedNode.id);
+        wpi = (WallItem)GetNodes[1].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[1].ConnectedNode.id);
 
         if (GetNodes[0].ConnectedNode != null)
         {
-            for (int j = 0; j < wpi.Count; j++)
+            for (int j = 0; j < wpi.wallPartItems.Count; j++)
             {
                 for (int i = 0; i < (int)att1.GetValue(); i++)
                 {
@@ -126,7 +126,7 @@ public class Repeat : FunctionItem, IFunctionItem
                     if (i > 0)
                     {
                         Temp = (WallPartItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(Item2, GetNodes[0].ConnectedNode.id);
-                        Item2[j] = CombineItems.CombineTwoItem(Item2[j].mesh, Temp.mesh, Item2[j].material, Temp.material);
+                        Item2.wallPartItems[j] = CombineItems.CombineTwoItem(Item2.wallPartItems[j].mesh, Temp.mesh, Item2.wallPartItems[j].material, Temp.material);
                     }
                     else
                     {
@@ -135,9 +135,9 @@ public class Repeat : FunctionItem, IFunctionItem
                     }
                 }
 
-                item[j].material.Clear();
-                item[j].mesh = Item2[j].mesh;
-                item[j].material = AddMaterial.CopyMaterials(Item2[j]);
+                item.wallPartItems[j].material.Clear();
+                item.wallPartItems[j].mesh = Item2.wallPartItems[j].mesh;
+                item.wallPartItems[j].material = AddMaterial.CopyMaterials(Item2.wallPartItems[j]);
             }
         }
         else

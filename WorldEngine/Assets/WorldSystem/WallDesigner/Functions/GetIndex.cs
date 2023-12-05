@@ -119,25 +119,25 @@ public class GetIndex : FunctionItem, IFunctionItem
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
         bool fromTop = ta1.mToggle;
 
-        List<WallPartItem> wpi = (List<WallPartItem>)mMesh;
+        WallItem wpi = (WallItem)mMesh;
 
         if (GetNodes[0].ConnectedNode != null)
-            wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
+            wpi = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
         List<WallPartItem> OtherIndexes = new List<WallPartItem>();
         List<WallPartItem> thisIndex = new List<WallPartItem>();
-        int tempIndex = fromTop? wpi.Count-Index-1:Index;
+        int tempIndex = fromTop? wpi.wallPartItems.Count-Index-1:Index;
         if (GetNodes[0].ConnectedNode != null)
         {
-            for(int i=0;i<wpi.Count;i++)
+            for(int i=0;i<wpi.wallPartItems.Count;i++)
             {
                 if(i == tempIndex)
                 {
-                    thisIndex.Add(wpi[i]);
+                    thisIndex.Add(wpi.wallPartItems[i]);
                 }
                 else
                 {
-                    OtherIndexes.Add(wpi[i]);
+                    OtherIndexes.Add(wpi.wallPartItems[i]);
                 }
             }
 

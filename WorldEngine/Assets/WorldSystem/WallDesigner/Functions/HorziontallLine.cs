@@ -6,15 +6,15 @@ using WallDesigner;
 [System.Serializable]
 public class HorziontallLine : FunctionItem, IFunctionItem
 {
-    private List<WallPartItem> UpperPart;
-    private List<WallPartItem> LowerPart;
+    private WallItem UpperPart;
+    private WallItem LowerPart;
     private float distance = 1;
     public HorziontallLine()
     {
         Init();
         Name = "Horrizontal Slicer";
-        UpperPart = new List<WallPartItem>();
-        LowerPart = new List<WallPartItem>();
+        UpperPart = new WallItem();
+        LowerPart = new WallItem();
         ClassName = typeof(HorziontallLine).FullName;
         basecolor = Color.white;
         myFunction = Execute;
@@ -131,8 +131,8 @@ public class HorziontallLine : FunctionItem, IFunctionItem
         if (GetNodes[0].ConnectedNode != null)
             wpi = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(wpi, GetNodes[0].ConnectedNode.id);
 
-        UpperPart = new List<WallPartItem>();
-        LowerPart = new List<WallPartItem>();
+        UpperPart = new WallItem();
+        LowerPart = new WallItem();
 
         for (int j = 0; j < wpi.Count; j++)
         {
@@ -347,12 +347,12 @@ public class HorziontallLine : FunctionItem, IFunctionItem
             if ((int)id == 0)
             {
                 item.mesh = upperMesh;
-                UpperPart.Add(item);
+                UpperPart.wallPartItems.Add(item);
             }
             else
             {
                 item.mesh = lowerMesh;
-                LowerPart.Add(item);
+                LowerPart.wallPartItems.Add(item);
                 //return LowerPart;
             }
         }

@@ -5,7 +5,7 @@ using WallDesigner;
 [System.Serializable]
 public class DrawPlane : FunctionItem, IFunctionItem
 {
-    private List<WallPartItem> output;
+    private WallItem output;
     private float width = 1;
     private float height = 1;
 
@@ -105,24 +105,24 @@ public class DrawPlane : FunctionItem, IFunctionItem
     {
         if (GetNodes[0].ConnectedNode != null)
         {
-            output = (List<WallPartItem>)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
+            output = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(output, GetNodes[0].ConnectedNode.id);
             //Debug.Log(output.mesh.vertexCount);
-            for (int i = 0; i < output.Count; i++)
+            for (int i = 0; i < output.wallPartItems.Count; i++)
             {
-                if (output[i].mesh.vertexCount > 0)
+                if (output.wallPartItems[i].mesh.vertexCount > 0)
                 {
                     return output;
                 }
             }
         }
 
-        output.Clear();
+        output.wallPartItems.Clear();
 
         WallPartItem wallPartItem = new WallPartItem();
         Material material = new Material(Shader.Find("Standard"));
         wallPartItem.material.Clear();
         wallPartItem.material.Add(material);
-        output.Add(wallPartItem);
+        output.wallPartItems.Add(wallPartItem);
 
         Mesh mesh = new Mesh();
         FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
@@ -167,7 +167,7 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.normals = normals;
         mesh.triangles = triangles;
 
-        output[0].mesh = mesh;
+        output.wallPartItems[0].mesh = mesh;
         return output;
     }
 } 
