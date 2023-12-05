@@ -29,8 +29,14 @@ public class Split : FunctionItem, IFunctionItem
         myFunction = Execute;
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
+        ToggleAttribute ta1 = new ToggleAttribute(at1Rect);
+        ta1.mToggle = autoAdjust;
+        ta1.SetName("Auto adjust");
+        attrebutes.Add(ta1);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+
+        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 20, rect.width, rect.height);
+        FloatAttrebute fl1 = new FloatAttrebute(at2Rect);
         fl1.mFloat = distance;
         fl1.SetName("Distance");
         attrebutes.Add(fl1);
@@ -51,13 +57,13 @@ public class Split : FunctionItem, IFunctionItem
         Name = item.name;
         ClassName = item.ClassName;
 
-        //ToggleAttribute ta1 = (ToggleAttribute)attrebutes[1];
-        //ta1.mToggle = item.attributeValue[1] == "True";
-        //attrebutes[1] = ta1;
+        ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
+        ta1.mToggle = item.attributeValue[0] == "True";
+        attrebutes[0] = ta1;
 
-        FloatAttrebute att = (FloatAttrebute)attrebutes[0];
-        att.mFloat = float.Parse(item.attributeValue[0]);
-        attrebutes[0] = att;
+        FloatAttrebute att = (FloatAttrebute)attrebutes[1];
+        att.mFloat = float.Parse(item.attributeValue[1]);
+        attrebutes[1] = att;
     }
 
     public override SerializedFunctionItem SaveSerialize()
@@ -68,11 +74,11 @@ public class Split : FunctionItem, IFunctionItem
         item.Position = position;
         item.attributeName.Add("FloatAttrebute");
 
-        //ToggleAttribute ta1 = (ToggleAttribute)attrebutes[1];
-        //string stringtoggle = ta1.mToggle.ToString();
-        //item.attributeValue.Add(stringtoggle);
+        ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
+        string stringtoggle = ta1.mToggle.ToString();
+        item.attributeValue.Add(stringtoggle);
 
-        FloatAttrebute att1 = (FloatAttrebute)attrebutes[0];
+        FloatAttrebute att1 = (FloatAttrebute)attrebutes[1];
         string stringtexturePath = att1.mFloat.ToString();
         item.attributeValue.Add(stringtexturePath);
 
@@ -95,8 +101,11 @@ public class Split : FunctionItem, IFunctionItem
 
     public object Execute(object mMesh, object id)
     {
-        FloatAttrebute fa1 = (FloatAttrebute)attrebutes[0];
+        FloatAttrebute fa1 = (FloatAttrebute)attrebutes[1];
         distance = (float)fa1.GetValue();
+
+        ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
+        autoAdjust = (bool)ta1.GetValue();
 
         List<WallPartItem> wpi = (List<WallPartItem>)mMesh;
 
@@ -117,8 +126,30 @@ public class Split : FunctionItem, IFunctionItem
 
         Mesh mesh = wallPartItem.mesh;
         mesh.RecalculateNormals();
-        int numberOfSlices = (int)(mesh.bounds.size.y / distance);
-        Debug.Log(numberOfSlices);
+        int numberOfSlices=0;
+        float newDistance = 0;
+        if (autoAdjust)
+        {
+            numberOfSlices = (int)(mesh.bounds.size.y / distance);
+            float remain = mesh.bounds.size.y % distance;
+            if(remain <= distance/2)
+            {
+                newDistance = distance + (remain/numberOfSlices);
+            }
+            else
+            {
+                float menus = (distance - remain) / (numberOfSlices + 1);
+                newDistance = distance - menus;
+                numberOfSlices++;
+            }
+        }
+        else
+        {
+            numberOfSlices = (int)(mesh.bounds.size.y / distance);
+            newDistance = distance;
+        }
+
+        //Debug.Log(distance+" <=Dist -- N=> "+numberOfSlices);
         Mesh upperMesh = new Mesh();
         Mesh lowerMesh = new Mesh();
 
@@ -154,7 +185,7 @@ public class Split : FunctionItem, IFunctionItem
                 }
             }
 
-            cutY = minY + distance;
+            cutY = minY + newDistance;
 
             for (int i = 0; i < triangles.Length; i += 3)
             {
