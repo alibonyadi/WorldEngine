@@ -85,6 +85,12 @@ namespace WallDesigner
             DrawAndDrag();
             DrawNodes();
             DrawAttrebutes();
+            FIUpdate();
+        }
+
+        protected virtual void FIUpdate()
+        {
+            //use this as Update methode
         }
 
         public void Remove()
