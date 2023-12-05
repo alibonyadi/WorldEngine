@@ -126,7 +126,7 @@ public class Extrude : FunctionItem, IFunctionItem
         FloatAttrebute fl2 = (FloatAttrebute)attrebutes[1];
         insetDistance = (float)fl2.GetValue();
 
-        List<WallPartItem> output = new List<WallPartItem>();
+        WallItem output = new WallItem();
 
         for (int j = 0; j < item.wallPartItems.Count; j++)
         {
@@ -352,7 +352,7 @@ public class Extrude : FunctionItem, IFunctionItem
             }
 
             itemTemp.material = AddMaterial.CopyMaterials(item.wallPartItems[j]);
-            output.Add(itemTemp);
+            output.wallPartItems.Add(itemTemp);
         }
         
         return output;

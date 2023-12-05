@@ -141,8 +141,11 @@ public class GetIndex : FunctionItem, IFunctionItem
                 }
             }
 
-            return (int)id==0 ? thisIndex : OtherIndexes;
+            WallItem output = new WallItem();
 
+            output.wallPartItems = (int)id==0 ? thisIndex : OtherIndexes;
+            output.buildingDirection =wpi.buildingDirection;
+            return output;
             /*if ((int)id == 0)
             {
                 return thisIndex;

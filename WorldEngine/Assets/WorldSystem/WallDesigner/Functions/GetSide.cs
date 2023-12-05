@@ -213,30 +213,24 @@ public class GetSide : FunctionItem, IFunctionItem
                 if (isAlley)
                     continue;
 
-                for (int k = 0; k < alleyDirection.Count; k++)
-                {
-                    float angle = Vector3.Angle(normal, alleyDirection[k]);
-                    if (angle < angleTreshold)
-                    {
-                        isAlley = true;
+                    
 
-                        sideVertices.Add(vertices[tri[i]]);
-                        sideVertices.Add(vertices[tri[i + 1]]);
-                        sideVertices.Add(vertices[tri[i + 2]]);
+                sideVertices.Add(vertices[tri[i]]);
+                sideVertices.Add(vertices[tri[i + 1]]);
+                sideVertices.Add(vertices[tri[i + 2]]);
 
-                        sideTriangles.Add(sideTriangles.Count);
-                        sideTriangles.Add(sideTriangles.Count);
-                        sideTriangles.Add(sideTriangles.Count);
+                sideTriangles.Add(sideTriangles.Count);
+                sideTriangles.Add(sideTriangles.Count);
+                sideTriangles.Add(sideTriangles.Count);
 
-                        sideNormals.Add(normals[tri[i]]);
-                        sideNormals.Add(normals[tri[i + 1]]);
-                        sideNormals.Add(normals[tri[i + 2]]);
+                sideNormals.Add(normals[tri[i]]);
+                sideNormals.Add(normals[tri[i + 1]]);
+                sideNormals.Add(normals[tri[i + 2]]);
 
-                        sideUVs.Add(uvs[tri[i]]);
-                        sideUVs.Add(uvs[tri[i + 1]]);
-                        sideUVs.Add(uvs[tri[i + 2]]);
-                    }
-                }
+                sideUVs.Add(uvs[tri[i]]);
+                sideUVs.Add(uvs[tri[i + 1]]);
+                sideUVs.Add(uvs[tri[i + 2]]);
+                    
             }
             
             if((int)id==0)
