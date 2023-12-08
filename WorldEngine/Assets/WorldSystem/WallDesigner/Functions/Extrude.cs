@@ -34,7 +34,7 @@ public class Extrude : FunctionItem, IFunctionItem
 
         FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
         fl1.mFloat = extrudeDistance;
-        fl1.SetMinMax(-5, 10);
+        fl1.SetMinMax(-5, 40);
         fl1.SetName("Extrude");
         attrebutes.Add(fl1);
 

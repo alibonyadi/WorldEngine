@@ -133,7 +133,7 @@ public class localRotate : FunctionItem, IFunctionItem
         Z = (float)fl3.GetValue();
 
 
-        List<WallPartItem> outitem = new List<WallPartItem>();
+        WallItem outitem = new WallItem();
 
         for (int i = 0; i < item.wallPartItems.Count; i++)
         {
@@ -170,7 +170,7 @@ public class localRotate : FunctionItem, IFunctionItem
             WallPartItem output = new WallPartItem();
             output.mesh = RoatatedMesh;
             output.material = AddMaterial.CopyMaterials(item.wallPartItems[i]);
-            outitem.Add(output);
+            outitem.wallPartItems.Add(output);
         }
         
         return outitem;

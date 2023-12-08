@@ -65,7 +65,7 @@ public class Building : MonoBehaviour
                 Type type = Type.GetType(item2.ClassName);
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
-                    FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type);
+                    FunctionItem fitem = (FunctionItem)Activator.CreateInstance(type,item2.getnodeItems.Count,item2.getnodeItems.Count);
                     fitem.LoadSerializedAttributes(item2);
                     fitem.position = item2.Position;
                     functions.Add(fitem);

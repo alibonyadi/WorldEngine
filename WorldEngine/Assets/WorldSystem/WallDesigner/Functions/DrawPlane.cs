@@ -30,11 +30,13 @@ public class DrawPlane : FunctionItem, IFunctionItem
         Rect at1Rect = new Rect(position.x, rect.height/2+position.y,rect.width,rect.height);
         FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
         fl1.mFloat = width;
+        fl1.SetMinMax(0, 40);
         fl1.SetName("width");
         attrebutes.Add(fl1);
         Rect at2Rect = new Rect(position.x, rect.height/2+position.y + 15, rect.width, rect.height);
         FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
         fl2.mFloat = height;
+        fl2.SetMinMax(0, 40);
         fl2.SetName("heigh");
         attrebutes.Add(fl2);
     }
@@ -130,6 +132,16 @@ public class DrawPlane : FunctionItem, IFunctionItem
         width = (float)fa1.GetValue();
         height = (float)fa2.GetValue();
 
+        mesh = CreatePlane(width, height);
+
+        output.wallPartItems[0].mesh = mesh;
+        return output;
+    }
+
+    public static Mesh CreatePlane(float width,float height)
+    {
+        Mesh mesh = new Mesh();
+
         Vector3[] vertices = new Vector3[4];
         Vector3[] normals = new Vector3[4];
         Vector2[] uv = new Vector2[4];
@@ -167,7 +179,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
         mesh.normals = normals;
         mesh.triangles = triangles;
 
-        output.wallPartItems[0].mesh = mesh;
-        return output;
+        return mesh;
     }
 } 

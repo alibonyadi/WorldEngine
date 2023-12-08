@@ -36,6 +36,7 @@ public class Module : FunctionItem, IFunctionItem
         GetFileAttrebute att1 = new GetFileAttrebute(at1Rect);
         att1.folderlocation = Application.dataPath + "\\WorldSystem\\BuildingEditor\\Modules";
         att1.SetName(Name);
+        att1.extension = "wall,Building,mudule";
         attrebutes.Add(att1);
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y+20, rect.width, rect.height);

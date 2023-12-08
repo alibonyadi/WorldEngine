@@ -13,6 +13,7 @@ namespace WallDesigner
         public string adress;
         string tempAdress;
         public string folderlocation;
+        public string extension;
         public byte[] rawData;
         public GetFileAttrebute(Rect r) : base(r)
         {
@@ -28,7 +29,7 @@ namespace WallDesigner
             Rect ButtonRect = new Rect(rect.x + position.x - rect.width / 2, rect.y + position.y, rect.width, 20);
             if (GUI.Button(ButtonRect, "Select File"))
             {
-                string path = EditorUtility.OpenFilePanel("Select Item", folderlocation, "wall,Building,mudule");
+                string path = EditorUtility.OpenFilePanel("Select Item", folderlocation, extension/*"wall,Building,mudule"*/);
                 adress = path;
                 // Load the texture from the file path
                 if (!string.IsNullOrEmpty(path))

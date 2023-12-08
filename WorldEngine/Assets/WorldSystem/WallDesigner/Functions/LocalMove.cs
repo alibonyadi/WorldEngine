@@ -133,7 +133,7 @@ public class LocalMove : FunctionItem, IFunctionItem
         FloatAttrebute fl3 = (FloatAttrebute)attrebutes[2];
         Z = (float)fl3.GetValue();
 
-        List<WallPartItem> outitem = new List<WallPartItem>();
+        WallItem outitem = new WallItem();
 
         for (int j = 0; j < item.wallPartItems.Count; j++)
         {
@@ -166,7 +166,7 @@ public class LocalMove : FunctionItem, IFunctionItem
             WallPartItem output = new WallPartItem();
             output.mesh = MovedMesh;
             output.material = AddMaterial.CopyMaterials(item.wallPartItems[j]);
-            outitem.Add(output);
+            outitem.wallPartItems.Add(output);
 
         }
         return outitem;

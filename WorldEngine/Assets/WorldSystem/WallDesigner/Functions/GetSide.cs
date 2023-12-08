@@ -47,7 +47,7 @@ public class GetSide : FunctionItem, IFunctionItem
         if (item.givenodeConnectedFI.Count > 1)
             GiveNodes[1].ConnectedNode = functionItems[item.givenodeConnectedFI[1]].GetNodes[item.givenodeItems[1]];
 
-        if (item.givenodeConnectedFI.Count > 1)
+        if (item.givenodeConnectedFI.Count > 2)
             GiveNodes[2].ConnectedNode = functionItems[item.givenodeConnectedFI[2]].GetNodes[item.givenodeItems[2]];
 
     }
