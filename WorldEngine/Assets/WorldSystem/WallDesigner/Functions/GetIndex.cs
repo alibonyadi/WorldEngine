@@ -126,25 +126,34 @@ public class GetIndex : FunctionItem, IFunctionItem
 
         List<WallPartItem> OtherIndexes = new List<WallPartItem>();
         List<WallPartItem> thisIndex = new List<WallPartItem>();
+        OtherIndexes.Clear();
+        thisIndex.Clear();
         int tempIndex = fromTop? wpi.wallPartItems.Count-Index-1:Index;
         if (GetNodes[0].ConnectedNode != null)
         {
             for(int i=0;i<wpi.wallPartItems.Count;i++)
             {
+                //Debug.Log(i+" <= I --- tempIndex=> "+tempIndex);
                 if(i == tempIndex)
                 {
+                    //Debug.Log("On Index!!!");
                     thisIndex.Add(wpi.wallPartItems[i]);
                 }
                 else
                 {
+                    //Debug.Log("Out Of Index!!!");
                     OtherIndexes.Add(wpi.wallPartItems[i]);
                 }
             }
 
+            /*Debug.Log("All Index Count = " + wpi.wallPartItems.Count);
+            Debug.Log("Index Count = " + thisIndex.Count);
+            Debug.Log("Out Count = " + OtherIndexes.Count);*/
+
             WallItem output = new WallItem();
 
             output.wallPartItems = (int)id==0 ? thisIndex : OtherIndexes;
-            output.buildingDirection =wpi.buildingDirection;
+            output.buildingDirection = wpi.buildingDirection;
             return output;
             /*if ((int)id == 0)
             {
