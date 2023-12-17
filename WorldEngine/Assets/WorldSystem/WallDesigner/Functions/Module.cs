@@ -156,8 +156,10 @@ public class Module : FunctionItem, IFunctionItem
             {
                 InputItem = functions[functions.Count - 1];
                 GetInputMesh gIM = InputItem as GetInputMesh;
-                gIM.inputMesh = wpi.wallPartItems;
+                gIM.inputMesh.wallPartItems = wpi.wallPartItems;
                 gIM.havemesh = true;
+                gIM.inputMesh.Caller = wpi.Caller;
+                gIM.inputMesh.isInEditMode = wpi.isInEditMode;
                 functions[functions.Count - 1] = gIM;
                 //CreateAction(EndItemIndex);
                 //Debug.Log("GetInput founded!! " + InputItem.Name);

@@ -82,6 +82,7 @@ public class EndCalculate : FunctionItem, IFunctionItem
         //wallItem.Clear();
         output.wallPartItems.Add(EndItem);
         output.buildingDirection = wallItem.buildingDirection;
+        output.Caller = wallItem.Caller;
         //return wallItem;
         return output;
     }

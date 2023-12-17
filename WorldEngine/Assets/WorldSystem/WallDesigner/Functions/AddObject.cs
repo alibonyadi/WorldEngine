@@ -137,7 +137,15 @@ public class AddObject : FunctionItem, IFunctionItem
             GameObject Prefab = Resources.Load(path) as GameObject;
             myObject = GameObject.Instantiate(Prefab, inEdit.transform.position, Quaternion.identity);
         }
-        myObject.transform.parent = inEdit.transform;
+
+        if (wpi.isInEditMode)
+            myObject.transform.parent = inEdit.transform;
+        else
+        {
+            myObject.transform.parent = wpi.Caller.transform;
+            myObject.transform.position = wpi.Caller.transform.position;
+        }
+        
         myObject.transform.localPosition = localposition;
         myObject.transform.localRotation = Quaternion.Euler(localrotation);
 

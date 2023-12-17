@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace WallDesigner
 {
@@ -6,5 +7,7 @@ namespace WallDesigner
     {
         public List<WallPartItem> wallPartItems = new List<WallPartItem>();
         public BuildingDirection buildingDirection = new BuildingDirection();
+        public GameObject Caller;// = new GameObject();
+        public bool isInEditMode = true;
     }
 }

@@ -210,7 +210,7 @@ public class VerticalLine : FunctionItem, IFunctionItem
                     upperTriangles.Add(upperTriangles.Count);
                 }
                 else if (vertices[triangles[i]].x < cutx && vertices[triangles[i + 1]].x < cutx && vertices[triangles[i + 2]].x < cutx)
-                {
+                { 
                     lowerVertices.Add(vertices[triangles[i]]);
                     lowerVertices.Add(vertices[triangles[i + 1]]);
                     lowerVertices.Add(vertices[triangles[i + 2]]);
@@ -229,12 +229,43 @@ public class VerticalLine : FunctionItem, IFunctionItem
                 }
                 else
                 {
-                    if (vertices[triangles[i]].x < cutx)
+                    float tempXpos = getCutXPos(vertices[triangles[i]], vertices[triangles[i + 1]],fromLeft);
+                    
+                    float distZ = vertices[triangles[i]].z - vertices[triangles[i+1]].z;
+                    //Debug.Log("Dist Z = "+distZ+" -- i = "+i+ "-- vertices[i]= " + vertices[triangles[i]] + " -- vertices[i+1]= " + vertices[triangles[i+1]] + " -- vertices[i+2]= " + vertices[triangles[i + 2]]);
+                    //Debug.Log("cutX = "+cutx+"-- tempcutX= "+ tempXpos);
+                    float distX = Mathf.Abs(vertices[triangles[i]].x-vertices[triangles[i+1]].x);
+                    float xdistI = Mathf.Abs(vertices[triangles[i]].x - (tempXpos));// + MathF.Abs(cutx - tempXpos)));
+                    float xdistII = Mathf.Abs(vertices[triangles[i+1]].x - cutx);
+                    float xdistIII=0;// = Mathf.Abs(vertices[triangles[i+2]].x - cutx);
+                    float Zpos = vertices[triangles[i]].z - (distZ * Mathf.Abs(xdistI / distX));
+                    float Zpos2 = 0;
+                    float distX2 = 0;
+                    float tempXpos2 = 0;
+                    if (i % 6 > 0)//Second triangle of polygon
+                    {
+                        tempXpos2 = getCutXPos(vertices[triangles[i + 2]], vertices[triangles[i - 3]], fromLeft);
+                        xdistIII = Mathf.Abs(vertices[triangles[i + 2]].x - tempXpos2);
+                        float distZ2 = vertices[triangles[i + 2]].z - vertices[triangles[i - 3]].z;
+                        distX2 = Mathf.Abs(vertices[triangles[i+2]].x - vertices[triangles[i -3]].x);
+                        Zpos2 = vertices[triangles[i + 2]].z - (distZ2 * Mathf.Abs(xdistIII / distX2));
+                    }
+                    else//First triangle of polygon
+                    {
+                        tempXpos2 = getCutXPos(vertices[triangles[i + 2]], vertices[triangles[i + 3]], fromLeft);
+                        xdistIII = Mathf.Abs(vertices[triangles[i + 2]].x - tempXpos2);
+                        float distZ2 = vertices[triangles[i + 2]].z - vertices[triangles[i + 3]].z ;
+                        distX2 = Mathf.Abs(vertices[triangles[i + 2]].x - vertices[triangles[i + 3]].x);
+                        Zpos2 = vertices[triangles[i+2]].z - (distZ2 * Mathf.Abs(xdistIII/distX2));
+                    }
+                    
+                    if (vertices[triangles[i]].x < tempXpos)
                     {
                         lowerVertices.Add(vertices[triangles[i]]);
                         //vertices[triangles[i]].x = cutx;
                         Vector3 v = vertices[triangles[i]];
-                        v.x = cutx;
+                        v.x = tempXpos;
+                        v.z = Zpos;
                         upperVertices.Add(v);
                     }
                     else
@@ -242,16 +273,18 @@ public class VerticalLine : FunctionItem, IFunctionItem
                         upperVertices.Add(vertices[triangles[i]]);
                         //vertices[triangles[i]].x = cutx;
                         Vector3 v = vertices[triangles[i]];
-                        v.x = cutx;
+                        v.x = tempXpos;
+                        v.z = Zpos;
                         lowerVertices.Add(v);
                     }
 
-                    if (vertices[triangles[i + 1]].x < cutx)
+                    if (vertices[triangles[i + 1]].x < tempXpos)
                     {
                         lowerVertices.Add(vertices[triangles[i + 1]]);
                         //vertices[triangles[i + 1]].x = cutx;
                         Vector3 v = vertices[triangles[i + 1]];
-                        v.x = cutx;
+                        v.x = tempXpos;
+                        v.z = Zpos;
                         upperVertices.Add(v);
 
                     }
@@ -260,7 +293,8 @@ public class VerticalLine : FunctionItem, IFunctionItem
                         upperVertices.Add(vertices[triangles[i + 1]]);
                         //vertices[triangles[i + 1]].x = cutx;
                         Vector3 v = vertices[triangles[i + 1]];
-                        v.x = cutx;
+                        v.x = tempXpos;
+                        v.z = Zpos;
                         lowerVertices.Add(v);
                     }
 
@@ -269,7 +303,8 @@ public class VerticalLine : FunctionItem, IFunctionItem
                         lowerVertices.Add(vertices[triangles[i + 2]]);
                         //vertices[triangles[i + 2]].x = cutx;
                         Vector3 v = vertices[triangles[i + 2]];
-                        v.x = cutx;
+                        v.x = tempXpos2;
+                        v.z = Zpos2;
                         upperVertices.Add(v);
                     }
                     else
@@ -277,7 +312,8 @@ public class VerticalLine : FunctionItem, IFunctionItem
                         upperVertices.Add(vertices[triangles[i + 2]]);
                         //vertices[triangles[i + 2]].x = cutx;
                         Vector3 v = vertices[triangles[i + 2]];
-                        v.x = cutx;
+                        v.x = tempXpos2;
+                        v.z = Zpos2;
                         lowerVertices.Add(v);
                     }
 
@@ -378,5 +414,41 @@ public class VerticalLine : FunctionItem, IFunctionItem
             //RightPart[l].material = mats;
             return RightPart;
         }
+    }
+
+    private float getCutXPos(Vector3 v1,Vector3 v2,bool fromLeft)
+    {
+        List<Vector3> vertices = new List<Vector3>();
+        vertices.Add(v1);
+        vertices.Add(v2);
+        float cutx = 0;
+        if (fromLeft)
+        {
+            float highestx = float.MinValue;
+            foreach (Vector3 vertex in vertices)
+            {
+                if (vertex.x > highestx)
+                {
+                    highestx = vertex.x;
+                }
+            }
+
+            cutx = highestx - distance;
+        }
+        else
+        {
+            float minx = float.MaxValue;
+            foreach (Vector3 vertex in vertices)
+            {
+                if (vertex.x < minx)
+                {
+                    minx = vertex.x;
+                }
+            }
+
+            cutx = minx + distance;
+        }
+
+        return cutx;
     }
 }
