@@ -53,7 +53,7 @@ public class AddColor : FunctionItem, IFunctionItem
         ClassName = item.ClassName;
 
         RandomColorAttrebute att = (RandomColorAttrebute)attrebutes[0];
-        att.SetColor(att.mColor);
+        att.SetColor(parseColor(item.attributeValue[0]));
         //att.
         attrebutes[0] = att;
     }

@@ -26,6 +26,11 @@ namespace WallDesigner
             PropertyManager.Instance.AddProperty(property);
         }
 
+        private void SetValue()
+        {
+
+        }
+
         public override void Draw(Vector2 position)
         {
             base.Draw(position);
