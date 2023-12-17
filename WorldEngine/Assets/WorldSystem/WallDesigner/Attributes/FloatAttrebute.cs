@@ -36,10 +36,11 @@ namespace WallDesigner
         }
 
         public override void Draw(Vector2 position)
-        { 
+        {
             base.Draw(position);
             Rect boxRect = new Rect(rect.x + position.x - rect.width / 2, rect.y + position.y, rect.width, 20);
             GUI.color = Color.cyan;
+            GUI.contentColor = Color.black;
             Rect GetPos = new Rect(boxRect.x + boxRect.width, boxRect.y + 5, 10, 10);
             property.rect = boxRect;
             //GUI.Button(new Rect(boxRect.x - 10, boxRect.y + 5,10, 10), "Give");
@@ -47,8 +48,11 @@ namespace WallDesigner
             GUI.color = Color.gray;
             GUI.Box(boxRect, "");
             GUI.Label(boxRect, name+":"+ ((int)mFloat));
-            mFloat = GUI.HorizontalSlider(new Rect(r.x + 40f,r.y,r.width-30,r.height), mFloat, Min, Max);
-
+            
+            mFloat = GUI.HorizontalSlider(new Rect(r.x + 40f,r.y,r.width-60,r.height), mFloat, Min, Max);
+            GUI.contentColor = Color.white;
+            mFloat = float.Parse(GUI.TextField(new Rect(r.x + 45 + r.width - 60,r.y,25,r.height), mFloat.ToString()));
+            
             if (mFloat == temfloat )
             {
                 return;

@@ -46,7 +46,10 @@ namespace WallDesigner
             GUI.color = Color.gray;
             GUI.Box(boxRect, "");
             GUI.Label(boxRect, name + ":" + ((int)mInt));
-            mInt = GUI.HorizontalSlider(new Rect(r.x + 40f, r.y, r.width - 30, r.height), mInt, Min, Max);
+            mInt = Mathf.Round(GUI.HorizontalSlider(new Rect(r.x + 40f, r.y, r.width - 60, r.height), mInt, Min, Max));
+            GUI.contentColor = Color.white;
+            mInt = int.Parse(GUI.TextField(new Rect(r.x + 45 + r.width - 60, r.y, 25, r.height), mInt.ToString()));
+
 
             property.rect = boxRect;
 
