@@ -83,8 +83,10 @@ public class Building : MonoBehaviour
                     GetInputMesh gIM = InputItem as GetInputMesh;
                     WallPartItem wallPartItem = new WallPartItem();
                     wallPartItem.mesh = startMeshInput;
-                    gIM.inputMesh.Add(wallPartItem);
+                    gIM.inputMesh.wallPartItems.Add(wallPartItem);
                     gIM.havemesh = true;
+                    gIM.inputMesh.Caller = gameObject;
+                    gIM.inputMesh.isInEditMode = false;
                     functions[functions.Count - 1] = gIM;
                     //CreateAction(EndItemIndex);
                     //Debug.Log("GetInput founded!! " + InputItem.Name);
