@@ -28,26 +28,33 @@ public class UVSet : FunctionItem, IFunctionItem
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
 
-        ToggleAttribute ta1 = new ToggleAttribute(at1Rect);
+        ToggleAttribute ta1 = new ToggleAttribute(at1Rect, this);
         ta1.mToggle = world;
         ta1.SetName("World Scale");
         attrebutes.Add(ta1);
 
-        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 20, rect.width, rect.height);
+        Rect at3Rect = new Rect(position.x, rect.height / 2 + position.y + 40, rect.width, rect.height);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at3Rect,this);
         fl1.mFloat = UVX;
         fl1.SetMinMax(0.01f, 5);
         fl1.SetName("UVX");
         attrebutes.Add(fl1);
 
-        Rect at3Rect = new Rect(position.x, rect.height / 2 + position.y + 40, rect.width, rect.height);
+        Rect at4Rect = new Rect(position.x, rect.height / 2 + position.y + 60, rect.width, rect.height);
 
-        FloatAttrebute fl2 = new FloatAttrebute(at3Rect);
+        FloatAttrebute fl2 = new FloatAttrebute(at4Rect,this);
         fl2.mFloat = UVY;
         fl2.SetMinMax(0.01f, 5);
         fl2.SetName("UVY");
         attrebutes.Add(fl2);
+
+        Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 20, rect.width, rect.height);
+
+        ToggleAttribute ta2 = new ToggleAttribute(at2Rect,this);
+        ta2.mToggle = Square;
+        ta2.SetName("Square");
+        attrebutes.Add(ta2);
     }
 
     public override void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
@@ -78,6 +85,13 @@ public class UVSet : FunctionItem, IFunctionItem
         FloatAttrebute att2 = (FloatAttrebute)attrebutes[2];
         att2.mFloat = float.Parse(item.attributeValue[2]);
         attrebutes[2] = att2;
+
+        ToggleAttribute ta2 = (ToggleAttribute)attrebutes[3];
+        if(item.attributeValue.Count>3)
+            ta2.mToggle = item.attributeValue[3] == "True";
+        else 
+            ta2.mToggle = false;
+        attrebutes[3] = ta2;
     }
 
     public override SerializedFunctionItem SaveSerialize()
@@ -99,6 +113,10 @@ public class UVSet : FunctionItem, IFunctionItem
         FloatAttrebute att2 = (FloatAttrebute)attrebutes[2];
         string stringFloat2 = att2.mFloat.ToString();
         item.attributeValue.Add(stringFloat2);
+
+        ToggleAttribute ta2 = (ToggleAttribute)attrebutes[3];
+        string stringtoggle2 = ta2.mToggle.ToString();
+        item.attributeValue.Add(stringtoggle2);
 
         if (GetNodes[0].ConnectedNode != null)
         {
@@ -126,6 +144,9 @@ public class UVSet : FunctionItem, IFunctionItem
         ToggleAttribute ta1 = (ToggleAttribute)attrebutes[0];
         world = (bool)ta1.GetValue();
 
+        ToggleAttribute ta2 = (ToggleAttribute)attrebutes[3];
+        Square = (bool)ta2.GetValue();
+
         FloatAttrebute fl1 = (FloatAttrebute)attrebutes[1];
         UVX = (float)fl1.GetValue();
 
@@ -143,10 +164,118 @@ public class UVSet : FunctionItem, IFunctionItem
             int[] triangles = originalMesh.triangles;
             Vector2[] UVs = originalMesh.uv;
 
-            for (int i = 0; i < triangles.Length; i += 3)
+            float maxX = vertices[0].x;
+            float maxY = vertices[0].y;
+            float minX = vertices[0].x;
+            float minY = vertices[0].y;
+            float minZ = vertices[0].z;
+            float maxZ = vertices[0].z;
+            if (Square)
             {
-                //Debug.Log(i);
-                if (world)
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    if (vertices[i].x > maxX)
+                    {
+                        maxX = vertices[i].x;
+                    }
+
+                    if (vertices[i].y > maxY)
+                    {
+                        maxY = vertices[i].y;
+                    }
+
+                    if (vertices[i].x < minX)
+                        minX = vertices[i].x;
+
+                    if (vertices[i].y < minY)
+                        minY = vertices[i].y;
+
+                    if (vertices[i].z < minZ)
+                        minZ = vertices[i].z;
+
+                    if (vertices[i].z > maxZ)
+                        maxZ = vertices[i].z;
+                }
+
+                float localmaxX=0;
+                float localmaxY=0;
+                float localminX = 0;
+                float localminY = 0;
+                if(Mathf.Abs(maxX-minX) < 0.5f)
+                {
+                    //Debug.Log(" no X !!!");
+                    localmaxY = maxY;
+                    localminY = minY;
+
+                    localmaxX = maxZ;
+                    localminX = minZ;
+                }
+                else if(Mathf.Abs(maxY - minY)<0.5f)
+                {
+                    //Debug.Log(" no Y !!!");
+                    localmaxX = maxX;
+                    localminX = minX;
+
+                    localmaxY = maxZ; 
+                    localminY = minZ;
+                }
+                else
+                {
+                    //Debug.Log(" no Z !!!");
+                    localmaxX = maxX;
+                    localminX = minX;
+
+                    localmaxY = maxY;
+                    localminY = minY;
+                }
+
+                //Debug.Log("maxX = "+maxX+" --- min X = "+minX+" --- max Y = "+maxY+" --- min Y = "+minY + " --- max Z = " + maxZ + " --- min Z = " + minZ);
+                float CenterX = (localminX + localmaxX) / 2;
+                float CenterY = (localminY + localmaxY) / 2;
+                float distX = localmaxX - localminX;
+                float distY = localmaxY - localminY;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    float X = 0;
+                    float Y = 0;
+
+                    if (Mathf.Abs(maxX - minX)<0.5f)
+                    {
+                        X = vertices[i].z;
+                        Y = vertices[i].y;
+                    }
+                    else if (Mathf.Abs(maxY - minY)<0.5f)
+                    {
+                        X = vertices[i].x;
+                        Y = vertices[i].z;
+                    }
+                    else
+                    {
+                        X = vertices[i].x;
+                        Y = vertices[i].y;
+                    }
+
+                    if (!world)
+                    {
+                        UVs[i].x = (X - localminX) / distX;
+                        UVs[i].y = (Y - localminY) / distY;
+                    }
+                    else
+                    {
+                        UVs[i].x = X;
+                        UVs[i].y = Y;
+                    }
+                }
+            }
+
+            for (int i = 0; i < UVs.Length; i ++)
+            {
+                UVs[i] = new Vector2(UVs[i].x / UVX, UVs[i].y / UVY);
+            }
+
+                for (int i = 0; i < triangles.Length; i += 3)
+            {
+                if (1==2)//world)
                 {
                     /*float distX = Vector3.Magnitude(vertices[triangles[i]] - vertices[triangles[i + 1]]);
                     float distY = Vector3.Magnitude(vertices[triangles[i]] - vertices[triangles[i + 2]]);
@@ -184,19 +313,19 @@ public class UVSet : FunctionItem, IFunctionItem
                     distX2 = Vector3.Magnitude(vertices[triangles[i + 2]] - vertices[triangles[i + 1]]);
                     distY2 = Vector3.Magnitude(vertices[triangles[i + 1]] - vertices[triangles[i + 2]]);
 
-                    if (i % 6 > 0)//Second triangle of polygon
+                    /*if (i % 6 > 0)//Second triangle of polygon
                     {
                         UVs[triangles[i]] = new Vector2((UVs[triangles[i]].x / UVX) * distX, (UVs[triangles[i]].y / UVY) * distY);
                     }
                     else
-                    {
+                    {*/
 
                         UVs[triangles[i]] = new Vector2((UVs[triangles[i]].x / UVX) * distX, (UVs[triangles[i]].y / UVY) * distY);
                         UVs[triangles[i + 1]] = new Vector2((UVs[triangles[i + 1]].x / UVX) * distX, (UVs[triangles[i + 1]].y / UVY) * distY2);
                         UVs[triangles[i + 2]] = new Vector2((UVs[triangles[i + 2]].x / UVX) * distX2, (UVs[triangles[i + 2]].y / UVY) * distY);
-                    }
+                    //}
                 }
-                else
+                else if(3==4)
                 {
                     if (i % 6 > 0)//Second triangle of polygon
                     {
@@ -218,14 +347,6 @@ public class UVSet : FunctionItem, IFunctionItem
             WI.wallPartItems[j].mesh.uv = UVs;
 
         }
-
-
-
-
-
-
-
-
 
         return WI;
     }

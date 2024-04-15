@@ -47,21 +47,21 @@ public class HorizontalRepeat : FunctionItem, IFunctionItem
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
 
-        FloatAttrebute ta1 = new FloatAttrebute(at1Rect);
+        FloatAttrebute ta1 = new FloatAttrebute(at1Rect, this);
         ta1.mFloat = inBetween;
         ta1.SetName("Dist");
         attrebutes.Add(ta1);
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 20, rect.width, rect.height);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at2Rect, this);
         fl1.mFloat = fromLeft;
         fl1.SetName("Left");
         attrebutes.Add(fl1);
 
         Rect at3Rect = new Rect(position.x, rect.height / 2 + position.y + 40, rect.width, rect.height);
 
-        FloatAttrebute fl2 = new FloatAttrebute(at3Rect);
+        FloatAttrebute fl2 = new FloatAttrebute(at3Rect, this);
         fl2.mFloat = fromRight;
         fl2.SetName("Right");
         attrebutes.Add(fl2);

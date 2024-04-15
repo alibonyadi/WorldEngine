@@ -29,7 +29,7 @@ public class AddColor : FunctionItem, IFunctionItem
 
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
-        RandomColorAttrebute colorAtt1 = new RandomColorAttrebute(at1Rect);
+        RandomColorAttrebute colorAtt1 = new RandomColorAttrebute(at1Rect,this);
         colorAtt1.mColor = Color.white;
         colorAtt1.SetName("Random Color");
         attrebutes.Add(colorAtt1);

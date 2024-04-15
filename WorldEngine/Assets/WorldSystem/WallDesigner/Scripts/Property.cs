@@ -39,6 +39,80 @@ namespace WallDesigner
             }
         }
 
+        public SerializedProperty SaveNodes(int index)
+        {
+            SerializedProperty allNodes= new SerializedProperty();
+            allNodes.getnodeCount = GetNodes.Count;
+            allNodes.givennodeCount = GiveNodes.Count;
+            for (int i=0;i<GetNodes.Count;i++)
+            {
+                //SerializedProperty serializedProperty = new SerializedProperty();
+                if (GetNodes[i].ConnectedNode!=null)
+                {
+                    allNodes.hasGetConnected.Add(true);
+                    GivePropertyNode gpn = (GivePropertyNode)GetNodes[i].ConnectedNode;
+                    int connectedGetNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(gpn.AttachedProperty.attrebute.GetFunctionItem());
+                    allNodes.getnodeConnectedFI.Add(connectedGetNodeNumber);
+                    allNodes.getnodeConnectedAttrebute.Add(gpn.AttachedProperty.attrebute.GetFunctionItem().GetAttrebuteIndex(gpn.AttachedProperty.attrebute));
+                    allNodes.getnodeItems.Add(GetNodes[i].ConnectedNode.id);
+                }
+                else//create Fake
+                {
+                    allNodes.hasGetConnected.Add(false);
+                    int connectedGetNodeNumber = 0;
+                    allNodes.getnodeConnectedFI.Add(connectedGetNodeNumber);
+                    allNodes.getnodeConnectedAttrebute.Add(index);
+                    allNodes.getnodeItems.Add(0);
+                }
+            }
+
+            for(int i=0;i<GiveNodes.Count;i++)
+            {
+                if (GiveNodes[i].ConnectedNode != null)
+                {
+                    allNodes.hasGiveConnected.Add(true);
+                    GetPropertyNode gpn = (GetPropertyNode)GiveNodes[i].ConnectedNode;
+                    int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(gpn.AttachedProperty.attrebute.GetFunctionItem());
+                    allNodes.givenodeConnectedFI.Add(connectedGiveNodeNumber);
+                    allNodes.givenodeConnectedAttrebute.Add(gpn.AttachedProperty.attrebute.GetFunctionItem().GetAttrebuteIndex(gpn.AttachedProperty.attrebute));
+                    allNodes.givenodeItems.Add(GiveNodes[i].ConnectedNode.id);
+                }
+                else // Create Fake Give
+                {
+                    allNodes.hasGiveConnected.Add(false);
+                    int connectedGiveNodeNumber = 0;
+                    allNodes.givenodeConnectedFI.Add(connectedGiveNodeNumber);
+                    allNodes.givenodeConnectedAttrebute.Add(index);
+                    allNodes.givenodeItems.Add(0);
+                }
+            }
+            return allNodes;
+        }
+
+        public void LoadNodes(SerializedProperty item,List<FunctionItem> functionItems)
+        {
+            for (int i = 0; i < item.getnodeCount; i++)
+            {
+                //Debug.Log(attrebute.GetFunctionItem().Name+" -- att name = " + attrebute +" -- get node "+i);
+                if (item.hasGetConnected[i])
+                {
+                    //Debug.Log("FI = "+item.getnodeConnectedFI[i]+" -- function Item = "+ functionItems[item.getnodeConnectedFI[i]]);
+                    //Debug.Log("att = "+ item.getnodeConnectedAttrebute[i]+" -- attrebute ="+ functionItems[item.getnodeConnectedFI[i]].attrebutes[item.getnodeConnectedAttrebute[i]]);
+                    //Debug.Log(" property = " + functionItems[item.getnodeConnectedFI[i]].attrebutes[item.getnodeConnectedAttrebute[i]].GetProperty());
+                    //Debug.Log("node = "+ item.getnodeItems[i]);
+
+                    GetNodes[i].ConnectedNode = functionItems[item.getnodeConnectedFI[i]].attrebutes[item.getnodeConnectedAttrebute[i]].GetProperty().GiveNodes[item.getnodeItems[i]];
+                }
+            }
+
+            for(int i=0;i<item.givennodeCount;i++)
+            {
+                //Debug.Log(attrebute.GetFunctionItem().Name+" -- give node "+i);
+                if (item.hasGiveConnected[i])
+                    GiveNodes[i].ConnectedNode = functionItems[item.givenodeConnectedFI[i]].attrebutes[item.givenodeConnectedAttrebute[i]].GetProperty().GetNodes[item.givenodeItems[i]];
+            }
+        }
+
         private void DrawGiveNode(int index)
         {
             GiveNodes[index].position = new Vector3(rect.x + rect.width + 5, rect.y + 5 + (15 * index) + 5, 0);
@@ -74,7 +148,7 @@ namespace WallDesigner
             }
         }
 
-        public Attrebute Execute()
+        public virtual Attrebute Execute()
         {
             Attrebute item = attrebute;
             if (GetNodes[0].ConnectedNode != null)

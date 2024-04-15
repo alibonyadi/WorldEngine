@@ -127,6 +127,8 @@ public class CombineItems : FunctionItem, IFunctionItem
         int submeshCount1 = mesh1.subMeshCount;
         int submeshCount2 = mesh2.subMeshCount;
 
+        //Debug.Log("Mesh 1 V count = "+mesh1.vertexCount+" -- mesh1 submeshes = "+submeshCount1);
+        //Debug.Log("Mesh 2 V count = " + mesh2.vertexCount+" -- mesh 2 subs = "+submeshCount2);
         CombineInstance[] combineInstances1 = new CombineInstance[submeshCount1+ submeshCount2];
         //CombineInstance[] combineInstances2 = new CombineInstance[submeshCount2];
 

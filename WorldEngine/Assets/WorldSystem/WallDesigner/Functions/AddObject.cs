@@ -33,7 +33,7 @@ public class AddObject : FunctionItem, IFunctionItem
         CalculateRect();
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
-        GetFileAttrebute att1 = new GetFileAttrebute(at1Rect);
+        GetFileAttrebute att1 = new GetFileAttrebute(at1Rect,this);
         att1.folderlocation = Application.dataPath + "\\Resources";
         att1.extension = "";
         att1.SetName(Name);

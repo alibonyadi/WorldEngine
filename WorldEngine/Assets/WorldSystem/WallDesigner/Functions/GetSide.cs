@@ -291,7 +291,8 @@ public class GetSide : FunctionItem, IFunctionItem
             output.wallPartItems = side;
         else if((int)id == 2)
             output.wallPartItems = alleySide;
-
+        output.isInEditMode = wallItem.isInEditMode;
+        output.Caller = wallItem.Caller;
         return output;
     }
 

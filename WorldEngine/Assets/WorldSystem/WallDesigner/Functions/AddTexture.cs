@@ -31,7 +31,7 @@ public class AddTexture : FunctionItem, IFunctionItem
 
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
-        TextureAttribute att1 = new TextureAttribute(at1Rect);
+        TextureAttribute att1 = new TextureAttribute(at1Rect,this);
         att1.SetName(Name);
         //Debug.Log(att1.texture.ToString());
         attrebutes.Add(att1);

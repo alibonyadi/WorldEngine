@@ -33,14 +33,14 @@ public class Module : FunctionItem, IFunctionItem
         CalculateRect();
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
-        GetFileAttrebute att1 = new GetFileAttrebute(at1Rect);
+        GetFileAttrebute att1 = new GetFileAttrebute(at1Rect, this);
         att1.folderlocation = Application.dataPath + "\\WorldSystem\\BuildingEditor\\Modules";
         att1.SetName(Name);
         att1.extension = "wall,Building,mudule";
         attrebutes.Add(att1);
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y+20, rect.width, rect.height);
-        IntAttrebute att2 = new IntAttrebute(at2Rect);
+        IntAttrebute att2 = new IntAttrebute(at2Rect, this);
         att2.mInt = repeatCount;
         att2.SetMinMax(1, 10);
         att2.SetName(Name);
@@ -169,6 +169,7 @@ public class Module : FunctionItem, IFunctionItem
         for (int i = 0; i < functionItems.Count; i++)
         {
             functions[i].LoadNodeConnections(functionItems[i], functions);
+            functions[i].LoadProperty(functionItems[i],functions);
         }
 
         if (endItem == null)
@@ -179,6 +180,9 @@ public class Module : FunctionItem, IFunctionItem
 
         WallItem item = new WallItem();
         item = (WallItem)endItem.myFunction(mMesh, 0);
+        item.Caller = wpi.Caller;
+        item.isInEditMode = wpi.isInEditMode;
+        item.buildingDirection = wpi.buildingDirection;
         //WallItem output = new WallItem();
         //output.Add(item);
         return item;

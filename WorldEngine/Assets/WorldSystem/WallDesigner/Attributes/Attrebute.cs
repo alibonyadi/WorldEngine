@@ -12,21 +12,34 @@ namespace WallDesigner
         protected Rect rect = new Rect();
         protected string name;
         protected Property property;
+        protected FunctionItem functionItem;
 
-        public Attrebute(Rect r)
+        public FunctionItem GetFunctionItem() => functionItem;
+
+        public Attrebute(Rect r,FunctionItem fi)
         {
             rect = r;
             name = "name";
+            property = new Property(r);
+            functionItem = fi;
         }
 
+        public SerializedProperty SaveProperty(int index)
+        {
+            return property.SaveNodes(index);
+        }
 
+        public void LoadProperty(SerializedProperty item,List<FunctionItem> functionItems)
+        {
+            property.LoadNodes(item, functionItems);
+        }
+
+        public Property GetProperty() => property;
 
         public virtual void Draw(Vector2 position)
         {
             property.Draw(position);
         }
-
-
 
         public void SetName(string n)
         {

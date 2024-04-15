@@ -10,11 +10,12 @@ namespace WallDesigner
         float Min=0;
         float Max=10;
 
-        public FloatAttrebute(Rect r) : base(r)
+        public FloatAttrebute(Rect r,FunctionItem fi) : base(r,fi)
         {
             rect = r;
             property = new Property(rect);
             property.attrebute = this;
+            functionItem = fi;
 
             GetPropertyNode getPropertyNode = new GetPropertyNode();
             getPropertyNode.AttachedProperty = property;
@@ -23,7 +24,6 @@ namespace WallDesigner
             GivePropertyNode givePropertyNode = new GivePropertyNode();
             givePropertyNode.AttachedProperty = property;
             property.GiveNodes.Add(givePropertyNode);
-
 
             PropertyManager.Instance.AddProperty(property);
 

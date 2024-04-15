@@ -112,6 +112,7 @@ public class RandomGets : FunctionItem, IFunctionItem
      
     public object Execute(object mMesh, object id)
     {
+        //Debug.Log("ER!!");
         WallItem output = new WallItem();
         List<WallItem> tempList = new List<WallItem>();
         int counter = 0;

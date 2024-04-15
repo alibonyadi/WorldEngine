@@ -32,14 +32,14 @@ public class GetIndex : FunctionItem, IFunctionItem
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
 
-        ToggleAttribute ta1 = new ToggleAttribute(at1Rect);
+        ToggleAttribute ta1 = new ToggleAttribute(at1Rect,this);
         ta1.mToggle = false;
         ta1.SetName("From Last");
         attrebutes.Add(ta1);
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 20, rect.width, rect.height);
 
-        IntAttrebute fl1 = new IntAttrebute(at2Rect);
+        IntAttrebute fl1 = new IntAttrebute(at2Rect, this);
         fl1.mInt = Index;
         fl1.SetMinMax(0,15);
         fl1.SetName("Index");

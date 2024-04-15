@@ -28,13 +28,13 @@ public class DrawPlane : FunctionItem, IFunctionItem
         CalculateRect();
         //rect = new Rect(position.x, position.y, rect.width, rect.height);
         Rect at1Rect = new Rect(position.x, rect.height/2+position.y,rect.width,rect.height);
-        FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at1Rect, this);
         fl1.mFloat = width;
         fl1.SetMinMax(0, 40);
         fl1.SetName("width");
         attrebutes.Add(fl1);
         Rect at2Rect = new Rect(position.x, rect.height/2+position.y + 15, rect.width, rect.height);
-        FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl2 = new FloatAttrebute(at2Rect, this);
         fl2.mFloat = height;
         fl2.SetMinMax(0, 40);
         fl2.SetName("heigh");
@@ -91,14 +91,12 @@ public class DrawPlane : FunctionItem, IFunctionItem
             item.getnodeConnectedFI.Add(connectedGetNodeNumber);
             item.getnodeItems.Add(GetNodes[0].ConnectedNode.id);
         }
-
         if (GiveNodes[0].ConnectedNode != null)
         {
             int connectedGiveNodeNumber = WallEditorController.Instance.GetAllCreatedItems().IndexOf(GiveNodes[0].ConnectedNode.AttachedFunctionItem);
             item.givenodeConnectedFI.Add(connectedGiveNodeNumber);
             item.givenodeItems.Add(GiveNodes[0].ConnectedNode.id);
         }
-
         return item;
     }
 
@@ -152,18 +150,15 @@ public class DrawPlane : FunctionItem, IFunctionItem
         vertices[2] = new Vector3(-width / 2, 0, -height / 2);
         vertices[3] = new Vector3(width / 2, 0, -height / 2);
 
-
         normals[0] = new Vector3(0, 1, 0);
         normals[1] = new Vector3(0, 1, 0);
         normals[2] = new Vector3(0, 1, 0);
         normals[3] = new Vector3(0, 1, 0);
 
-
         uv[0] = new Vector2(0, 1);
         uv[1] = new Vector2(1, 1);
         uv[2] = new Vector2(0, 0);
         uv[3] = new Vector2(1, 0);
-
 
         triangles[0] = 0;
         triangles[1] = 1;
@@ -171,8 +166,6 @@ public class DrawPlane : FunctionItem, IFunctionItem
         triangles[3] = 3;
         triangles[4] = 2;
         triangles[5] = 1;
-
-
 
         mesh.vertices = vertices;
         mesh.uv = uv;

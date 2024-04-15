@@ -6,7 +6,10 @@ public class Extrude : FunctionItem, IFunctionItem
 {
     float extrudeDistance = 1.0f;
     float insetDistance = 0.0f;
-
+    private bool isFirstTime = true;
+    private int tempId = -1;
+    private List<float> distances = new List<float>();
+    private List<float> insets = new List<float>();
     public Extrude(int gets, int gives)
     {
         Init();
@@ -32,7 +35,7 @@ public class Extrude : FunctionItem, IFunctionItem
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at1Rect, this);
         fl1.mFloat = extrudeDistance;
         fl1.SetMinMax(-5, 40);
         fl1.SetName("Extrude");
@@ -40,7 +43,7 @@ public class Extrude : FunctionItem, IFunctionItem
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 15, rect.width, rect.height);
 
-        FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl2 = new FloatAttrebute(at2Rect, this);
         fl2.mFloat = insetDistance;
         fl2.SetMinMax(0, 4);
         fl2.SetName("Inset");
@@ -119,19 +122,40 @@ public class Extrude : FunctionItem, IFunctionItem
         if (GetNodes[0].ConnectedNode != null)
             item = (WallItem)GetNodes[0].ConnectedNode.AttachedFunctionItem.myFunction(item, GetNodes[0].ConnectedNode.id);
 
-
-        FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
-        extrudeDistance = (float)fl1.GetValue();
-
-        FloatAttrebute fl2 = (FloatAttrebute)attrebutes[1];
-        insetDistance = (float)fl2.GetValue();
-
         WallItem output = new WallItem();
+
+        if ((int)id == tempId)
+        {
+            isFirstTime = true;
+            distances.Clear();
+            insets.Clear();
+        }
 
         for (int j = 0; j < item.wallPartItems.Count; j++)
         {
             if (item.wallPartItems[j] == null)
                 continue;
+
+
+            if (isFirstTime)
+            {
+                FloatAttrebute fl1 = (FloatAttrebute)attrebutes[0];
+                extrudeDistance = (float)fl1.GetValue();
+                distances.Add(extrudeDistance);
+                //Debug.Log("extrude Recieved first float as "+extrudeDistance);
+
+                FloatAttrebute fl2 = (FloatAttrebute)attrebutes[1];
+                insetDistance = (float)fl2.GetValue();
+                insets.Add(insetDistance);
+
+                //isFirstTime = false;
+            }
+            else
+            {
+                extrudeDistance = distances[j];
+                insetDistance = insets[j];
+            }
+
 
             Mesh originalMesh = item.wallPartItems[j].mesh;
             Mesh extrudedMesh = new Mesh();
@@ -155,6 +179,7 @@ public class Extrude : FunctionItem, IFunctionItem
                 extrudedVertices[i] += normals[i] * extrudeDistance;
             }
 
+            //Debug.Log("j = " + j + " --- originalMesh = " + originalMesh.vertices.Length);
             extrudedMesh.vertices = extrudedVertices;
             extrudedMesh.normals = normals;
             extrudedMesh.triangles = triangles;
@@ -166,11 +191,10 @@ public class Extrude : FunctionItem, IFunctionItem
 
             int OrginaltriangleCount = triangles.Length / 3;
 
-
             List<Vector3> sideVertices = new List<Vector3>();
             List<int> sideTriangles = new List<int>();
             List<Vector2> sideUVs = new List<Vector2>();
-
+            //Debug.Log("v = " + vertices.Length + " --- org = " + OrginaltriangleCount);
             int index = vertices.Length / OrginaltriangleCount;
 
             for (int i = 0; i < triangles.Length; i += 3)
@@ -186,9 +210,6 @@ public class Extrude : FunctionItem, IFunctionItem
                     sideVertices.Add(exvertex1);//1     w = 1 -- h = 1
                     sideVertices.Add(vertex2);//2       w = 0 -- h = 0
                     sideVertices.Add(vertex1);//3       w = 1 -- h = 0
-
-                    
-                    
 
                     int v1 = sideVertices.Count - 4;
                     int v2 = sideVertices.Count - 3;
@@ -250,28 +271,59 @@ public class Extrude : FunctionItem, IFunctionItem
                     Vector3 exvertex1 = extrudedVertices[triangles[i + 1]];
                     Vector3 exvertex2 = extrudedVertices[triangles[i + 2]];
 
-                    sideVertices.Add(vertex1);//0 w = 0 -- h = 0
-                    sideVertices.Add(vertex2);//1 w = 1 -- h = 0
-                    sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
-                    sideVertices.Add(exvertex2);//3 w = 1 -- h =1
+                    if (1 == 2)
+                    {
+                        sideVertices.Add(vertex1);//0 w = 0 -- h = 0
+                        sideVertices.Add(vertex2);//1 w = 1 -- h = 0
+                        sideVertices.Add(exvertex1);//2 w = 0 -- h = 1
+                        sideVertices.Add(exvertex2);//3 w = 1 -- h =1
 
-                    int v1 = sideVertices.Count - 4;
-                    int v2 = sideVertices.Count - 3;
-                    int v3 = sideVertices.Count - 2;
-                    int v4 = sideVertices.Count - 1;
+                        sideUVs.Add(new Vector2(0, 0));
+                        sideUVs.Add(new Vector2(1, 0));
+                        sideUVs.Add(new Vector2(0, 1));
+                        sideUVs.Add(new Vector2(1, 1));
 
-                    sideUVs.Add(new Vector2(0, 0));
-                    sideUVs.Add(new Vector2(1, 0));
-                    sideUVs.Add(new Vector2(0, 1));
-                    sideUVs.Add(new Vector2(1, 1));
+                        int v1 = sideVertices.Count - 4;
+                        int v2 = sideVertices.Count - 3;
+                        int v3 = sideVertices.Count - 2;
+                        int v4 = sideVertices.Count - 1;
 
-                    sideTriangles.Add(v2);
-                    sideTriangles.Add(v3);
-                    sideTriangles.Add(v1);
 
-                    sideTriangles.Add(v3);
-                    sideTriangles.Add(v2);
-                    sideTriangles.Add(v4);
+                        sideTriangles.Add(v2);
+                        sideTriangles.Add(v3);
+                        sideTriangles.Add(v1);
+
+                        sideTriangles.Add(v3);
+                        sideTriangles.Add(v2);
+                        sideTriangles.Add(v4);
+                    }
+                    else
+                    {
+                        sideVertices.Add(exvertex2);//0 w = 0 -- h = 0
+                        sideVertices.Add(exvertex1);//1 w = 1 -- h = 0
+                        sideVertices.Add(vertex2);//2 w = 0 -- h = 1
+                        sideVertices.Add(vertex1);//3 w = 1 -- h =1
+
+                        sideUVs.Add(new Vector2(0, 1));
+                        sideUVs.Add(new Vector2(1, 1));
+                        sideUVs.Add(new Vector2(0, 0));
+                        sideUVs.Add(new Vector2(1, 0));
+
+                        int v1 = sideVertices.Count - 4;
+                        int v2 = sideVertices.Count - 3;
+                        int v3 = sideVertices.Count - 2;
+                        int v4 = sideVertices.Count - 1;
+
+                        sideTriangles.Add(v1);
+                        sideTriangles.Add(v2);
+                        sideTriangles.Add(v3);
+
+                        sideTriangles.Add(v4);
+                        sideTriangles.Add(v3);
+                        sideTriangles.Add(v2);
+                    }
+
+                    
                 }
             }
 
@@ -374,8 +426,14 @@ public class Extrude : FunctionItem, IFunctionItem
             itemTemp.material = AddMaterial.CopyMaterials(item.wallPartItems[j]);
             output.wallPartItems.Add(itemTemp);
         }
-        
-        return output;
+
+        if (isFirstTime)
+        {
+            isFirstTime = false;
+            tempId = (int)id;
+        }
+
+            return output;
     }
 
 

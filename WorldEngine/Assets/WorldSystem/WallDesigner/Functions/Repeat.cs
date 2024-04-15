@@ -35,7 +35,7 @@ public class Repeat : FunctionItem, IFunctionItem
 
         CalculateRect();
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
-        IntAttrebute fl1 = new IntAttrebute(at1Rect);
+        IntAttrebute fl1 = new IntAttrebute(at1Rect, this);
         fl1.mInt = count;
         fl1.SetName("Counter");
         attrebutes.Add(fl1);

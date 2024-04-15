@@ -29,7 +29,7 @@ public class LocalMove : FunctionItem, IFunctionItem
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at1Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at1Rect, this);
         fl1.mFloat = X;
         fl1.SetMinMax(-5, 5);
         fl1.SetName("X");
@@ -37,7 +37,7 @@ public class LocalMove : FunctionItem, IFunctionItem
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 15, rect.width, rect.height);
 
-        FloatAttrebute fl2 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl2 = new FloatAttrebute(at2Rect, this);
         fl2.mFloat = Y;
         fl2.SetMinMax(-5, 5);
         fl2.SetName("Y");
@@ -45,7 +45,7 @@ public class LocalMove : FunctionItem, IFunctionItem
 
         Rect at3Rect = new Rect(position.x, rect.height / 2 + position.y + 30, rect.width, rect.height);
 
-        FloatAttrebute fl3 = new FloatAttrebute(at3Rect);
+        FloatAttrebute fl3 = new FloatAttrebute(at3Rect, this);
         fl3.mFloat = Z;
         fl3.SetMinMax(-5, 5);
         fl3.SetName("Z");

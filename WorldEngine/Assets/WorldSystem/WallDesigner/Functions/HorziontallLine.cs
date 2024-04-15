@@ -36,14 +36,14 @@ public class HorziontallLine : FunctionItem, IFunctionItem
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
         
-        ToggleAttribute ta1 = new ToggleAttribute(at1Rect);
+        ToggleAttribute ta1 = new ToggleAttribute(at1Rect, this);
         ta1.mToggle = true;
         ta1.SetName("fromTop");
         attrebutes.Add(ta1);
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y +20, rect.width, rect.height);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at2Rect, this);
         fl1.mFloat = distance;
         fl1.SetName("Distance");
         attrebutes.Add(fl1);

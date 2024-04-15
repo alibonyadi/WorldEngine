@@ -17,7 +17,8 @@ public class SaveLoadManager
         List<SerializedFunctionItem> functionItems = new List<SerializedFunctionItem>();
         foreach(FunctionItem item in WallEditorController.Instance.GetAllCreatedItems())
         {
-            functionItems.Add(item.SaveSerialize());
+            SerializedFunctionItem SFI = item.SaveSerialize();
+            functionItems.Add(item.SaveProperty(SFI));
         }
         string path = EditorUtility.SaveFilePanel("Save Wall Item", Application.dataPath + "/WorldSystem/WallDesigner/CreatedFunctions", "Wall", "wall");
         if (path != "" ) 
@@ -55,9 +56,11 @@ public class SaveLoadManager
             for (int i = 0; i < functionItems.Count; i++)
             {
                 functions[i].LoadNodeConnections(functionItems[i], functions);
+                functions[i].LoadProperty(functionItems[i],functions);
             }
         }
     }
+
     public static void SaveToXml(string path, List<SerializedFunctionItem> functionItems)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(List<SerializedFunctionItem>));
@@ -66,6 +69,7 @@ public class SaveLoadManager
             serializer.Serialize(writer, functionItems);
         }
     }
+
     public static List<SerializedFunctionItem> LoadSerializedFunctionItemList(string filePath)
     {
         List<SerializedFunctionItem> itemList = new List<SerializedFunctionItem>();

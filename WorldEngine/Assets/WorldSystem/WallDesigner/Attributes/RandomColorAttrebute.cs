@@ -15,9 +15,10 @@ namespace WallDesigner
         float B = 1;
         float A = 1;
 
-        public RandomColorAttrebute(Rect r) : base(r)
+        public RandomColorAttrebute(Rect r, FunctionItem fi) : base(r, fi)
         {
             rect = r;
+            functionItem = fi;
         }
 
         public void SetColor(Color c)

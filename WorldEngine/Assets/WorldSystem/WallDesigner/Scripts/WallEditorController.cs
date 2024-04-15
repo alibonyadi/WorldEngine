@@ -113,7 +113,7 @@ namespace WallDesigner
                 Type type = Type.GetType(className);
                 if (type != null && type.IsSubclassOf(typeof(FunctionItem)))
                 {
-                    FunctionItem item = (FunctionItem)Activator.CreateInstance( type,1,1);
+                    FunctionItem item = (FunctionItem)Activator.CreateInstance( type,1,1); 
                     allFunctions.Add(item);
                 }
                 if (allFunctions[allFunctions.Count - 1].GetType() == typeof(EndCalculate))

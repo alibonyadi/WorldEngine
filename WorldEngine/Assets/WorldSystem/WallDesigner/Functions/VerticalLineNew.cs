@@ -38,14 +38,14 @@ public class VerticalLineNew : FunctionItem, IFunctionItem
 
         Rect at1Rect = new Rect(position.x, rect.height / 2 + position.y, rect.width, rect.height);
 
-        ToggleAttribute ta1 = new ToggleAttribute(at1Rect);
+        ToggleAttribute ta1 = new ToggleAttribute(at1Rect, this);
         ta1.mToggle = true;
         ta1.SetName("fromLeft");
         attrebutes.Add(ta1);
 
         Rect at2Rect = new Rect(position.x, rect.height / 2 + position.y + 20, rect.width, rect.height);
 
-        FloatAttrebute fl1 = new FloatAttrebute(at2Rect);
+        FloatAttrebute fl1 = new FloatAttrebute(at2Rect, this);
         fl1.mFloat = distance;
         fl1.SetName("Distance");
         attrebutes.Add(fl1);
@@ -189,11 +189,11 @@ public class VerticalLineNew : FunctionItem, IFunctionItem
             }
 
 
-
+            int temp4Index = 0;
             for (int i = 0; i < triangles.Length; i += 3)
             {
                 Vector3 v = new Vector3();
-                if (is6VertexPolygon == false)
+                if (!is6VertexPolygon)
                 {
                     if (i % 6 > 0)//Second triangle of polygon
                     {
@@ -237,15 +237,17 @@ public class VerticalLineNew : FunctionItem, IFunctionItem
 
                         UpperNormals.Add(normals[triangles[i]]);
 
-                        upperTriangles.Add(upperTriangles.Count);
-                        upperTriangles.Add(upperTriangles.Count - 2);
-                        upperTriangles.Add(upperTriangles.Count - 4);
+                        upperTriangles.Add(temp4Index);
+                        upperTriangles.Add(temp4Index - 1);
+                        upperTriangles.Add(temp4Index - 2);
 
                         lowerNormals.Add(normals[triangles[i]]);
 
-                        lowerTriangles.Add(lowerTriangles.Count);
-                        lowerTriangles.Add(lowerTriangles.Count - 2);
-                        lowerTriangles.Add(lowerTriangles.Count - 4);
+                        lowerTriangles.Add(temp4Index);
+                        lowerTriangles.Add(temp4Index - 1);
+                        lowerTriangles.Add(temp4Index - 2);
+
+                        temp4Index += 1;
                     }
                     else
                     {
@@ -296,17 +298,20 @@ public class VerticalLineNew : FunctionItem, IFunctionItem
                         UpperNormals.Add(normals[triangles[i + 1]]);
                         UpperNormals.Add(normals[triangles[i + 2]]);
 
-                        upperTriangles.Add(upperTriangles.Count);
-                        upperTriangles.Add(upperTriangles.Count);
-                        upperTriangles.Add(upperTriangles.Count);
+                        upperTriangles.Add(temp4Index);
+                        upperTriangles.Add(temp4Index+1);
+                        upperTriangles.Add(temp4Index+2);
 
                         lowerNormals.Add(normals[triangles[i]]);
                         lowerNormals.Add(normals[triangles[i + 1]]);
                         lowerNormals.Add(normals[triangles[i + 2]]);
 
-                        lowerTriangles.Add(lowerTriangles.Count);
-                        lowerTriangles.Add(lowerTriangles.Count);
-                        lowerTriangles.Add(lowerTriangles.Count);
+                        lowerTriangles.Add(temp4Index);
+                        lowerTriangles.Add(temp4Index+1);
+                        lowerTriangles.Add(temp4Index+2);
+
+                        temp4Index += 3;
+
                     }
 
 

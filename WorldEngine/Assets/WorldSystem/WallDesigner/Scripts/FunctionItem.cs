@@ -46,6 +46,11 @@ namespace WallDesigner
             attrebutes = new List<Attrebute>();
         }
 
+        public int GetAttrebuteIndex(Attrebute att)
+        {
+            return attrebutes.IndexOf(att);
+        }
+
         public virtual SerializedFunctionItem SaveSerialize()
         {
             SerializedFunctionItem item = new SerializedFunctionItem();
@@ -54,6 +59,18 @@ namespace WallDesigner
             item.ClassName = ClassName;
 
             return item;
+        }
+
+        public SerializedFunctionItem SaveProperty(SerializedFunctionItem item)
+        {
+            SerializedFunctionItem serializedFunctionItem = item;
+
+            for (int i=0;i<attrebutes.Count;i++)
+            {
+                serializedFunctionItem.properties.Add(attrebutes[i].SaveProperty(i));
+            }
+
+            return serializedFunctionItem;
         }
 
         public virtual void LoadSerializedAttributes(SerializedFunctionItem item)
@@ -65,6 +82,14 @@ namespace WallDesigner
         public virtual void LoadNodeConnections(SerializedFunctionItem item, List<FunctionItem> functionItems)
         {
 
+        }
+
+        public void LoadProperty(SerializedFunctionItem item, List<FunctionItem> functionItems)
+        {
+            for (int i = 0; i < attrebutes.Count; i++)
+            {
+                attrebutes[i].LoadProperty(item.properties[i], functionItems);
+            }
         }
 
         public string GetName() => Name;

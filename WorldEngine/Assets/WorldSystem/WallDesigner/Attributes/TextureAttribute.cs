@@ -13,9 +13,22 @@ namespace WallDesigner
         [NonSerialized]
         public Texture2D texture;
 
-        public TextureAttribute(Rect r) : base(r)
+        public TextureAttribute(Rect r,FunctionItem fi) : base(r, fi)
         {
             rect = r;
+            functionItem = fi;
+            property = new Property(rect);
+            property.attrebute = this;
+            /*
+            GetPropertyNode getPropertyNode = new GetPropertyNode();
+            getPropertyNode.AttachedProperty = property;
+            property.GetNodes.Add(getPropertyNode);
+
+            GivePropertyNode givePropertyNode = new GivePropertyNode();
+            givePropertyNode.AttachedProperty = property;
+            property.GiveNodes.Add(givePropertyNode);*/
+
+            PropertyManager.Instance.AddProperty(property);
         }
 
         public override void Draw(Vector2 position)

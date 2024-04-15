@@ -8,9 +8,10 @@ namespace WallDesigner
     {
         public bool mToggle;
         public bool tempToggle;
-        public ToggleAttribute(Rect r) : base(r)
+        public ToggleAttribute(Rect r,FunctionItem fi) : base(r,fi)
         {
             rect = r;
+            functionItem = fi;
             property = new Property(rect);
             property.attrebute = this;
 
@@ -21,7 +22,6 @@ namespace WallDesigner
             GivePropertyNode givePropertyNode = new GivePropertyNode();
             givePropertyNode.AttachedProperty = property;
             property.GiveNodes.Add(givePropertyNode);
-
 
             PropertyManager.Instance.AddProperty(property);
         }

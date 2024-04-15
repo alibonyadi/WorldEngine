@@ -21,12 +21,15 @@ public class DrawOnLinePath : MonoBehaviour
     private List<Vector3> tempBackVertex = new List<Vector3>();
 
     List<FunctionItem> functions = new List<FunctionItem>();
+    [SerializeField]
+    [HideInInspector]
     private FunctionItem endItem;
+    [SerializeField]
+    [HideInInspector]
     private FunctionItem InputItem;
 
     [SerializeField]
     private UnityEngine.Object prucedure;
-
 
     private void Awake()
     {

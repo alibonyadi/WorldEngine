@@ -15,9 +15,10 @@ namespace WallDesigner
         public string folderlocation;
         public string extension;
         public byte[] rawData;
-        public GetFileAttrebute(Rect r) : base(r)
+        public GetFileAttrebute(Rect r,FunctionItem fi) : base(r,fi)
         {
             rect = r;
+            functionItem = fi;
         }
 
         public override void Draw(Vector2 position)
